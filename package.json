@@ -1,0 +1,24 @@
+{
+  "name": "fast-dom",
+  "version": "1.0.0",
+  "main": "lib/fast-dom.cjs.js",
+  "module": "lib/fast-dom.esm.js",
+  "browser": "lib/fast-dom.umd.js",
+  "types": "lib/index.d.ts",
+  "repository": "git@github.com:PxyUp/test.git",
+  "author": "Iurii Panarin <tduble94@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "serve": "rollup --config rollup.config.dev.js",
+    "build:github": "rollup --config rollup.config.prod.js",
+    "build:lib": "rollup --config rollup.config.lib.js"
+  },
+  "devDependencies": {
+    "rollup": "^1.7.0",
+    "rollup-plugin-bundle-html": "^0.1.5",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-typescript2": "^0.20.1",
+    "typescript": "^3.3.4000"
+  }
+}
