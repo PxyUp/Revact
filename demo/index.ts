@@ -7,6 +7,10 @@ import { createObsFor } from "./for_obs/for_obs";
 import { createSimpleFor } from "./simple_for/for";
 import { createSimpleForContainer } from "./simple_for_component/forComponent";
 import { createTimer } from "./timer/timer";
+import { createTodo } from "./todo/todo";
+
+const simpleTodo = document.getElementById("todo")
+simpleTodo.appendChild(generateNode(createTodo()))
 
 const simpleTimerConainer = document.getElementById("timer")
 simpleTimerConainer.appendChild(generateNode(createTimer()))

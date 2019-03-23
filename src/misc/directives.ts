@@ -11,7 +11,7 @@ export function fdReactiveValue(value: any) {
     return new Observer(value)
 }
 
-const mapFn = (item: any, itemFn: ((e: any) => any) | object, inputs: { [key: string]: any } = {}) => {
+const mapFn = (item: any, itemFn: ((e: any) => any) | object, inputs: { [key: string]: any } = {}, index: number, ) => {
     if (typeof itemFn === 'function') {
         const inputOverride = {} as any
         Object.keys(inputs).forEach((key) => {
@@ -22,16 +22,16 @@ const mapFn = (item: any, itemFn: ((e: any) => any) | object, inputs: { [key: st
                 inputOverride[key] = value
             }
         })
-        return itemFn(inputOverride)
+        return itemFn({ ...inputOverride, index})
     }
-    return { ...itemFn, textValue: (itemFn as any).textValue(item) }
+    return { ...itemFn, textValue: (itemFn as any).textValue(item), index }
 }
 
 export function fdFor(iteration: Observer<Array<any>> | Array<any>, itemFn: ((e: any) => any) | object, inputs: { [key: string]: any } = {}) {
     if (Array.isArray(iteration)) {
-        return iteration.map((item: any) => mapFn(item, itemFn, inputs))
+        return iteration.map((item: any, index) => mapFn(item, itemFn, inputs, index))
     }
-    let responseArray = iteration.value.map((item: any) => mapFn(item, itemFn, inputs));
+    let responseArray = iteration.value.map((item: any, index) => mapFn(item, itemFn, inputs, index));
 
     iteration.addSubscribers((value) => {
         let parent: HTMLElement = (responseArray as any)._parent;
@@ -44,7 +44,7 @@ export function fdFor(iteration: Observer<Array<any>> | Array<any>, itemFn: ((e:
         if (!value.length) {
             return;
         }
-        responseArray = value.map((item: any) => mapFn(item, itemFn, inputs));
+        responseArray = value.map((item: any, index) => mapFn(item, itemFn, inputs, index));
 
         responseArray.forEach((item) => {
             parent.appendChild(generateNode(item))
