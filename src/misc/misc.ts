@@ -5,6 +5,10 @@ export function setNodeAttrs(
     attrs: { [key: string]: string },
   ) {
     Object.keys(attrs).forEach(key => {
+      if (!attrs[key]) {
+        node.removeAttribute(key)
+        return;
+      }
       node.setAttribute(key, attrs[key]);
     });
   }
