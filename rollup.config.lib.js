@@ -1,3 +1,4 @@
+import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
@@ -11,15 +12,21 @@ export default [
             name: 'fast-dom',
         },
         plugins: [
-            typescript(),
+            typescript({
+                tsconfig: 'tsconfig.lib.json'
+            }),
             terser(),
+            copy({
+                "./package.json": "./lib/package.json",
+                verbose: true
+            }),
         ],
     },
     {
         input: "src/index.ts",
         output: [
-			{ file: pkg.main, format: 'cjs' },
-			{ file: pkg.module, format: 'es' }
+			{ file: './lib/' + pkg.main, format: 'cjs' },
+			{ file: './lib/' + pkg.module, format: 'es' }
 		],
         plugins: [
             typescript(),

@@ -2,6 +2,7 @@ import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from "../
 
 import { FastDomNode } from "../interfaces/node";
 import { Observer } from "../observer/observer";
+import { fdClasses } from "../observer/fdClasses";
 
 const instance = Symbol("instance");
 
@@ -23,11 +24,27 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
       rootNode.textContent = node.textValue;
     }
   }
-
+  let fdClassesNode: fdClasses;
   if (node.classList) {
-    node.classList.forEach(item => {
-      rootNode.classList.add(item);
-    });
+    if(Array.isArray(node.classList)) {
+      node.classList.forEach(item => {
+        rootNode.classList.add(item);
+      });
+    } else {
+      fdClassesNode = node.classList
+      const clsObs = (node.classList.value as Observer<{[key: string]: boolean}>)
+      Object.keys((clsObs.value)).forEach((key) => {
+        const value = clsObs.value[key]
+        return value ? rootNode.classList.add(key) : rootNode.classList.remove(key)
+      })
+      clsObs.addSubscribers((newClasses) => {
+        Object.keys((newClasses)).forEach((key) => {
+          const value = newClasses[key]
+          return value ? rootNode.classList.add(key) : rootNode.classList.remove(key)
+        })
+      })
+    }
+
   }
 
   if (node.attrs) {
@@ -81,11 +98,17 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         if (parent) {
           parent.replaceChild(rootNode, comment)
           callDeep(node, 'reInit', false)
+          if (fdClassesNode) {
+            fdClassesNode.reInit();
+          }
           addNodeListener(rootNode, node.listeners)
         }
       } else {
         if (parent) {
           removeNodeListener(rootNode, node.listeners);
+          if (fdClassesNode) {
+            fdClassesNode.destroy();
+          }
           callDeep(node, 'destroy', true)
           parent.replaceChild(comment, rootNode)
         }

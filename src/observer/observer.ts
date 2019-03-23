@@ -4,7 +4,7 @@ export class Observer<T> {
     private subscribers: Array<(e:T) => void> = []
     private firstState: T
     private isDestroy = false;
-    constructor(private _value?: T) {
+    constructor(private _value?: T, private forces: boolean = false) {
         this.firstState = _value;
     }
 
@@ -35,7 +35,7 @@ export class Observer<T> {
         if(this.isDestroy) {
             return;
         }
-        if (this._value === value) {
+        if (this._value === value && !this.forces) {
             return;
         }
         this._value = value;

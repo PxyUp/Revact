@@ -1,10 +1,10 @@
 {
   "name": "fast-dom",
-  "version": "1.0.0",
-  "main": "lib/fast-dom.cjs.js",
-  "module": "lib/fast-dom.esm.js",
-  "browser": "lib/fast-dom.umd.js",
-  "types": "lib/index.d.ts",
+  "version": "0.0.0-alpha",
+  "main": "fast-dom.cjs.js",
+  "module": "fast-dom.esm.js",
+  "browser": "fast-dom.umd.js",
+  "types": "index.d.ts",
   "repository": "git@github.com:PxyUp/test.git",
   "author": "Iurii Panarin <tduble94@gmail.com>",
   "license": "MIT",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "rollup": "^1.7.0",
     "rollup-plugin-bundle-html": "^0.1.5",
+    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
