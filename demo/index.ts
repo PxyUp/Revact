@@ -3,8 +3,13 @@ import { fdFor, fdIf, fdReactiveValue, generateNode } from "../src";
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
 import { createIf } from "./simple_if/if";
+import { createObsFor } from "./for_obs/for_obs";
 import { createSimpleFor } from "./simple_for/for";
 import { createSimpleForContainer } from "./simple_for_component/forComponent";
+import { createTimer } from "./timer/timer";
+
+const simpleTimerConainer = document.getElementById("timer")
+simpleTimerConainer.appendChild(generateNode(createTimer()))
 
 const simpleCounterConainer = document.getElementById("counter")
 simpleCounterConainer.appendChild(generateNode(createCounter()))
@@ -25,3 +30,6 @@ simpleForConainer.appendChild(generateNode(createSimpleFor()))
 
 const simpleForComponentConainer = document.getElementById("simple_for_component")
 simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()))
+
+const obsForComponentConainer = document.getElementById("simple_for_obs")
+obsForComponentConainer.appendChild(generateNode(createObsFor()))

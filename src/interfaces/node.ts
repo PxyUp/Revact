@@ -6,7 +6,7 @@ export interface FastDomNode {
     attrs?: { [key: string]: any };
     parent?: HTMLElement;
     classList?: Array<string>;
-    children?: Array<FastDomNode | HTMLElement | Comment>;
+    children?: Array<FastDomNode | HTMLElement | Comment | Array<any>>;
     listeners? : { [key: string]: any | Array<any> }
     textValue?: Observer<any> | string;
     instance?: any;

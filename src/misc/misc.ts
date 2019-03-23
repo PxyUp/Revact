@@ -42,3 +42,9 @@ export function setNodeAttrs(
       });
     });
   }
+
+  export function removeAllChild(node: HTMLElement) {
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
+  }

@@ -1,8 +1,8 @@
 import { FastDomNode } from "../interfaces/node";
 import { Observer } from "../observer/observer";
 
-export function createComponent(classProvider: any, dep?: any, inputs?: {[key: string]: Observer<any> | any}): FastDomNode {
-    const instance = new classProvider(dep, inputs);
+export function createComponent(classProvider: any, inputs?: {[key: string]: Observer<any> | any}): FastDomNode {
+    const instance = new classProvider(inputs);
     instance.template.instance = instance
     return instance.template
 }
