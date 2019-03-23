@@ -1,5 +1,7 @@
 # Faster Dom
-The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development
+The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development.
+
+Library use requestAnimationFrame over change detection, it is mean if you will apply two classes in one time, will be just one render.
 
 # About library
 1. Size - **1.38 kB**  gzip, **4.1 kB** no gzip
