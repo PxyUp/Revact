@@ -2,6 +2,7 @@ import { fdFor, fdIf, fdReactiveValue, generateNode } from "../src";
 
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
+import { createExampleAttr } from "./attrs/attrs";
 import { createIf } from "./simple_if/if";
 import { createObsFor } from "./for_obs/for_obs";
 import { createSimpleFor } from "./simple_for/for";
@@ -37,3 +38,6 @@ simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()))
 
 const obsForComponentConainer = document.getElementById("simple_for_obs")
 obsForComponentConainer.appendChild(generateNode(createObsFor()))
+
+const attrsComponentConainer = document.getElementById("attrs")
+attrsComponentConainer.appendChild(generateNode(createExampleAttr()))

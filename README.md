@@ -26,7 +26,7 @@ timerContainer.appendChild(generateNode(createTimer()))
 
 *timer.ts*
 ```ts
-import { Component, FastDomNode, createComponent, fdClasses, fdIf, fdReactiveValue } from "faster-dom";
+import { Component, FastDomNode, createComponent, fdObject, fdIf, fdReactiveValue } from "faster-dom";
 
 export function createTimer() {
     return createComponent(Timer);
@@ -65,7 +65,7 @@ class Timer extends Component {
 
     template: FastDomNode = {
         tag: "div",
-        classList: new fdClasses({
+        classList: new fdObject({
             "odd": this.currentClass // will add class if obs have true/value
         }),
         textValue: this.counter,
@@ -95,11 +95,11 @@ class Timer extends Component {
 2. Life cycle(OnInit, OnDestroy)
 3. Inputs supports
 4. If conditions/ For directive
-5. Class dynamic binding
+5. Class dynamic/ Attribute binding
 6. Outputs
  
 # Future (you can help)
-1. Style bindings/ attribute binding
+1. Dynamic props
 2. Routing
 
 ## Help me please if interesting

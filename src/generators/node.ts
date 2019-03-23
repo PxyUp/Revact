@@ -2,7 +2,7 @@ import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from "../
 
 import { FastDomNode } from "../interfaces/node";
 import { Observer } from "../observer/observer";
-import { fdClasses } from "../observer/fdClasses";
+import { fdObject } from "../observer/fdObject";
 
 const instance = Symbol("instance");
 
@@ -24,7 +24,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
       rootNode.textContent = node.textValue;
     }
   }
-  let fdClassesNode: fdClasses;
+  let fdClassesNode: fdObject<boolean>;
   if (node.classList) {
     if(Array.isArray(node.classList)) {
       node.classList.forEach(item => {
@@ -46,10 +46,18 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     }
 
   }
-
+  let fdAttrsNode: fdObject<any>;
   if (node.attrs) {
-    // @TODO create dynamic attribute
-    setNodeAttrs(rootNode, node.attrs);
+    if(!(node.attrs instanceof fdObject)) {
+      setNodeAttrs(rootNode, node.attrs);
+    } else {
+      fdAttrsNode = node.attrs
+      const clsObs = (node.attrs.value as Observer<{[key: string]: any}>)
+      setNodeAttrs(rootNode, clsObs.value)
+      clsObs.addSubscribers((newAttrs) => {
+        setNodeAttrs(rootNode, newAttrs)
+      })
+    }
   }
 
   if (node.children) {
@@ -102,11 +110,17 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           if (fdClassesNode) {
             fdClassesNode.reInit();
           }
+          if (fdAttrsNode) {
+            fdAttrsNode.reInit();
+          }
           addNodeListener(rootNode, node.listeners)
         }
       } else {
         if (parent) {
           removeNodeListener(rootNode, node.listeners);
+          if (fdAttrsNode) {
+            fdAttrsNode.destroy();
+          }
           if (fdClassesNode) {
             fdClassesNode.destroy();
           }

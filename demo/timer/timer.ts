@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdClasses, fdIf, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdIf, fdObject, fdReactiveValue } from "../../src";
 
 export function createTimer() {
     return createComponent(Timer);
@@ -37,7 +37,7 @@ class Timer extends Component {
 
     template: FastDomNode = {
         tag: "div",
-        classList: new fdClasses({
+        classList: new fdObject<boolean>({
             "odd": this.currentClass
         }),
         textValue: this.counter,
