@@ -1,7 +1,7 @@
 # Faster Dom
-The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development.
+In general, I made a lightweight replacement of ReactJs(i hope in future Angular/Vue), which does not use the virtual dom comparison, but does change detection, and does the re-render of only the changed parts. I decided to abandon the html template in favor of their interpretation in js, with the help of this, tree shaking is achieved and the speed of work increases since the time to parse the template is zero. Plus, use requestAnimationFrame to changeDetection, which allows batch updates to do.
 
-Library use requestAnimationFrame over change detection, it is mean if you will apply two classes in one time, will be just one render.
+The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development.
 
 # How use
 ```bash
