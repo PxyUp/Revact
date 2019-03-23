@@ -1,5 +1,6 @@
 # Fast Dom
 With this library you can create quick and responsive interfaces.
+
 [![NPM](https://nodei.co/npm/faster-dom.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/faster-dom/)
 
 # Motivation
