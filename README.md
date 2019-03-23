@@ -96,7 +96,8 @@ class Timer extends Component {
 5. Class dynamic binding
 6. Outputs
  
-# Feature
+# Future (you can help)
 1. Style bindings/ attribute binding
+2. Routing
 
 ## Help me please if interesting
