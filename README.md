@@ -1,7 +1,7 @@
 # Faster Dom
-I made a lightweight replacement of ReactJs(i hope in future Angular/Vue), which does not use the virtual dom comparison, but does change detection, and does the re-render of only the changed parts. I decided to abandon the html template in favor of their interpretation in js, with the help of this, tree shaking is achieved and the speed of work increases since the time to parse the template is zero. Plus, use requestAnimationFrame to changeDetection, which allows batch updates to do.
+Lightweight replacement of React (i hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero. Use requestAnimationFrame for change detection, which allows batch updates to do.
 
-The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development.
+The library allows you to create quick and responsive interfaces using only JS / TS. With this you will get the minimum application size, speed and ease of development.
 
 # How use
 ```bash
@@ -79,6 +79,8 @@ class Timer extends Component {
 3. Speed - **Trying to guarantee 60 fps**
 4. Import naming of function/classes not finally *can be discussed*
 5. **Tree-shaking in components and in template !!!**
+
+# How it work
 
 
 # Motivation
