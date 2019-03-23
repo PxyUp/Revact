@@ -5,7 +5,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 # How use
 ```bash
-yarn add faster-dom@0.0.2-alpha
+yarn add faster-dom@0.0.3-alpha
 ```
 
 **[📺 DEMO](https://pxyup.github.io/FastDom/)**
