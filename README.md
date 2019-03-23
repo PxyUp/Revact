@@ -1,21 +1,12 @@
 # Faster Dom
-With this library you can create quick and responsive interfaces.
-
-[![NPM](https://nodei.co/npm/faster-dom.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/faster-dom/)
-
-# Motivation
-1. Speed of user interactive/Interface speed
-2. The large size of the Angular / React / VueJs
-3. Make a component approach to creating interfaces with optimal speed, and with the least number of possible hacks
-4. Supports tree-shaking in component template
-5. Component must/can be splited by file (template/reactive/listeners)
+The library allows you to create quick and responsive interfaces using only js / ts. With this you will get the minimum application size, speed and ease of development
 
 # About library
 1. Size - **1.38 kB**  gzip, **4.1 kB** no gzip
 2. The library rewrites only the changes and only where necessary, as a virtual house, only there is no comparison process
 3. Speed - **Trying to guarantee 60 fps**
 4. Import naming of function/classes not finally *can be discussed*
-5. Tree-shaking in components and in template
+5. **Tree-shaking in components and in template !!!**
 
 # How use
 ```bash
@@ -86,6 +77,13 @@ class Timer extends Component {
     }
 }
 ```
+
+# Motivation
+1. Speed of user interactive/Interface speed
+2. The large size of the Angular / React / VueJs
+3. Make a component approach to creating interfaces with optimal speed, and with the least number of possible hacks
+4. Supports tree-shaking in component template
+5. Component must/can be splited by file (template/reactive/listeners)
 
 # Current Status
 1. Event supports
