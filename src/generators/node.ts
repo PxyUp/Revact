@@ -48,6 +48,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   }
 
   if (node.attrs) {
+    // @TODO create dynamic attribute
     setNodeAttrs(rootNode, node.attrs);
   }
 
