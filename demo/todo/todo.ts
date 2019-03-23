@@ -70,6 +70,9 @@ class Todo extends Component {
     
 
     onClick = () => {
+        if (!this.inputValue.value) {
+            return;
+        }
         this.todoList.value = [...this.todoList.value,  this.inputValue.value]
         this.inputValue.value = '';
     }
