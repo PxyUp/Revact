@@ -18,6 +18,7 @@ export default [
             terser(),
             copy({
                 "./package.json": "./lib/package.json",
+                "./README.md": "./lib/README.md",
                 verbose: true
             }),
         ],
