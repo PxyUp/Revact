@@ -7,9 +7,9 @@ export default [
     {
         input: "src/index.ts",
         output: {
-            file: "./lib/fast-dom.js",
+            file: "./lib/faster-dom.js",
             format: 'umd',
-            name: 'fast-dom',
+            name: 'faster-dom',
         },
         plugins: [
             typescript({

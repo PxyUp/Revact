@@ -1,13 +1,22 @@
 {
-  "name": "fast-dom",
+  "name": "faster-dom",
   "version": "0.0.0-alpha",
-  "main": "fast-dom.cjs.js",
-  "module": "fast-dom.esm.js",
-  "browser": "fast-dom.umd.js",
+  "main": "faster-dom.cjs.js",
+  "module": "faster-dom.esm.js",
+  "browser": "faster-dom.umd.js",
   "types": "index.d.ts",
   "repository": "git@github.com:PxyUp/test.git",
   "author": "Iurii Panarin <tduble94@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "dom",
+    "fast",
+    "performance",
+    "reactive",
+    "virtual",
+    "js",
+    "class"
+  ],
   "scripts": {
     "serve": "rollup --config rollup.config.dev.js",
     "build:github": "rollup --config rollup.config.prod.js",
