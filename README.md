@@ -3,13 +3,6 @@ The library allows you to create quick and responsive interfaces using only js /
 
 Library use requestAnimationFrame over change detection, it is mean if you will apply two classes in one time, will be just one render.
 
-# About library
-1. Size - **1.38 kB**  gzip, **4.1 kB** no gzip
-2. The library rewrites only the changes and only where necessary, as a virtual house, only there is no comparison process
-3. Speed - **Trying to guarantee 60 fps**
-4. Import naming of function/classes not finally *can be discussed*
-5. **Tree-shaking in components and in template !!!**
-
 # How use
 ```bash
 yarn add faster-dom@0.0.2-alpha
@@ -79,6 +72,14 @@ class Timer extends Component {
     }
 }
 ```
+
+# About library
+1. Size - **1.38 kB**  gzip, **4.1 kB** no gzip
+2. The library rewrites only the changes and only where necessary, as a virtual house, only there is no comparison process
+3. Speed - **Trying to guarantee 60 fps**
+4. Import naming of function/classes not finally *can be discussed*
+5. **Tree-shaking in components and in template !!!**
+
 
 # Motivation
 1. Speed of user interactive/Interface speed
