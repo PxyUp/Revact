@@ -1,14 +1,27 @@
 import { Component, FastDomNode, createComponent, fdFor, fdReactiveValue } from "../../src";
 
+import { createCounter } from "../simple_counter/counter";
+import { createCounters } from "../simple_counters_one_input/counters";
+
 function createDiv(inputs = {}) {
     return createComponent(DivBlock, inputs)
 }
 
 class DivBlock extends Component {
+
+    get counter() {
+        return this.inputs.value;
+    }
     
     template: FastDomNode = {
         tag: "div",
-        textValue: this.inputs.value
+        children: [
+            {
+                tag: "span",
+                textValue: this.counter,
+            },
+            createCounters({ counter: this.counter})
+        ]
     }
 
     constructor(private inputs: any) {
@@ -16,11 +29,11 @@ class DivBlock extends Component {
     }
 
     onInit() {
-        console.log(`Init ${this.inputs.value}`)
+        console.log(`Init ${this.counter.value}`)
     }
 
     onDestroy() {
-        console.log(`Destroy ${this.inputs.value}`)
+        console.log(`Destroy ${this.counter.value}`)
     }
 }
 
@@ -30,7 +43,7 @@ export function createObsFor() {
     return {
         tag: "div",
         children: [
-            fdFor(obs, createDiv, { value: (e: any) => e })
+            fdFor(obs, createDiv, { value: (e: any) => fdReactiveValue(e) })
         ]
     }
 }

@@ -1,4 +1,4 @@
-import { addNodeListener, removeNodeListener, setNodeAttrs } from "../misc/misc";
+import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from "../misc/misc";
 
 import { FastDomNode } from "../interfaces/node";
 import { Observer } from "../observer/observer";
@@ -80,19 +80,13 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
       if (value) {
         if (parent) {
           parent.replaceChild(rootNode, comment)
-          // @TODO Call reInit from root to child deep
-          if (node.instance) {
-            node.instance.reInit()
-          }
+          callDeep(node, 'reInit', false)
           addNodeListener(rootNode, node.listeners)
         }
       } else {
         if (parent) {
           removeNodeListener(rootNode, node.listeners);
-          // @TODO Call destroy from child to root deep
-          if (node.instance) {
-            node.instance.destroy()
-          }
+          callDeep(node, 'destroy', true)
           parent.replaceChild(comment, rootNode)
         }
       }

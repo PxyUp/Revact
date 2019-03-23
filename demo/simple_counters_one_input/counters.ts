@@ -12,6 +12,15 @@ class CountersShared extends Component {
     onClick = () => {
         this.counter.value += 1;
     }
+    
+
+    onInit() {
+        console.log("init CountersShared")
+    }
+
+    onDestroy() {
+        console.log("destroy CountersShared")
+    }
 
     template: FastDomNode = {
         tag: "button",

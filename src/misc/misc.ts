@@ -1,3 +1,5 @@
+import { FastDomNode } from "../interfaces/node";
+
 export function setNodeAttrs(
     node: HTMLElement | Element,
     attrs: { [key: string]: string },
@@ -47,4 +49,27 @@ export function setNodeAttrs(
     while (node.firstChild) {
       node.removeChild(node.firstChild);
     }
+  }
+
+  export function callDeep(node: FastDomNode, method: string, direction:  boolean) {
+    if (direction) {
+      if(node.children) {
+        node.children.forEach((item: any) => {
+          callDeep(item, method, direction)
+        })
+      }
+      if (node.instance) {
+        node.instance[method]();
+      }
+      return;
+    }
+    if (node.instance) {
+      node.instance[method]();
+    }
+    if(node.children) {
+      node.children.forEach((item: any) => {
+        callDeep(item, method, direction)
+      })
+    }
+    return;
   }
