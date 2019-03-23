@@ -1,9 +1,9 @@
 {
   "name": "faster-dom",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "main": "faster-dom.cjs.js",
   "module": "faster-dom.esm.js",
-  "browser": "faster-dom.umd.js",
+  "browser": "faster-dom.js",
   "types": "index.d.ts",
   "repository": "git@github.com:PxyUp/test.git",
   "author": "Iurii Panarin <tduble94@gmail.com>",

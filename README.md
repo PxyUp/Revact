@@ -19,7 +19,7 @@ With this library you can create quick and responsive interfaces.
 
 # How use
 ```bash
-yarn add faster-dom@0.0.1-alpha
+yarn add faster-dom@0.0.2-alpha
 ```
 
 **[📺 DEMO](https://pxyup.github.io/FastDom/)**
