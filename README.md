@@ -28,9 +28,11 @@ import {
 class Timer extends Component {
     private timer: number;
 
-    // Put here all reactive values, when component will be destroyed, they will be destroy too automatically
+    // Put here all reactive values, when component will be destroyed
+    // They will be destroy too automatically
     protected reactive = {
-        // create reactive value, if you provide here object, you on change need always return new one, not link on previous
+        // create reactive value
+        // if you provide here object/array, you on change need always return new one, not link on previous
         counter: fdReactiveValue(0),
         // create reactive for true/false
         classOdd: fdIf(true),
