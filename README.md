@@ -116,9 +116,11 @@ timerContainer.appendChild(generateNode(createTimer()));
 2. Lifecycle hooks `onInit` and `onDestroy`.
 3. The support of inputs.
 4. `if` condition and `for` directive.
-5. Dynamic classes and attributes bindings.
+5. Routing classes and attributes bindings.
 
 ### TODO (conributing is appreciated)
-1. Routing.
+1. Reactive styles.
+2. Proper types annotation
+2. Routing.
 
 > Help me please if you are interested.
