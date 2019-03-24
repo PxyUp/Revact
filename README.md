@@ -94,7 +94,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 
 ## Features
 1. Size - **4.1 kB** or **1.38 kB** gzipped.
-2. The library rewrites only changes and only when it is necessary. It uses a virtual DOM, only if there isn't any comparison process.
+2. The library rewrites only changes and only when it is necessary.
 3. Performance - **going to guarantee 60 fps**.
 4. Names of imported functions and classes are not finally and *can be discussed*.
 5. There is **a tree-shaking for components and templates !!!**.    
