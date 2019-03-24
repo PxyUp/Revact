@@ -91,6 +91,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 5. There is **a tree-shaking for components and templates !!!**.    
 
 ## How it works
+> Here will be good api
 
 ### Motivation
 
