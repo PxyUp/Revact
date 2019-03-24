@@ -23,9 +23,9 @@ export class Component {
     this.onInit();
   }
 
-  destroy() {
+  destroy(...args: any) {
     Object.keys(this.reactive).forEach(key => {
-      this.reactive[key].destroy();
+      this.reactive[key].destroy(...args);
     });
     this.onDestroy();
   }

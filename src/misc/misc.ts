@@ -52,24 +52,24 @@ export function removeAllChild(node: HTMLElement) {
   }
 }
 
-export function callDeep(node: FastDomNode, method: string, direction: boolean) {
+export function callDeep(node: FastDomNode, method: string, direction: boolean, ...args: any) {
   if (direction) {
     if (node.children) {
       node.children.forEach((item: any) => {
-        callDeep(item, method, direction);
+        callDeep(item, method, direction, ...args);
       });
     }
     if (node.instance) {
-      node.instance[method]();
+      node.instance[method](...args);
     }
     return;
   }
   if (node.instance) {
-    node.instance[method]();
+    node.instance[method](...args);
   }
   if (node.children) {
     node.children.forEach((item: any) => {
-      callDeep(item, method, direction);
+      callDeep(item, method, direction, ...args);
     });
   }
   return;

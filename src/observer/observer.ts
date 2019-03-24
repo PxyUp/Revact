@@ -11,11 +11,14 @@ export class Observer<T> {
     return this._value;
   }
 
-  destroy() {
+  destroy(force = false) {
     if (this.setterTimeout) {
       cancelAnimationFrame(this.setterTimeout);
     }
     this.isDestroy = true;
+    if (force) {
+      delete this.subscribers;
+    }
   }
 
   reInit() {

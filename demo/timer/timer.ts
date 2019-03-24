@@ -1,9 +1,5 @@
 import { Component, FastDomNode, createComponent, fdIf, fdObject, fdReactiveValue } from "../../src";
 
-export function createTimer() {
-    return createComponent(Timer);
-}
-
 class Timer extends Component {
     private timer: number;
     
@@ -43,3 +39,8 @@ class Timer extends Component {
         textValue: this.counter,
     }
 }
+
+export function createTimer() {
+    return createComponent(Timer);
+}
+

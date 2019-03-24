@@ -47,7 +47,7 @@ export function fdFor(
     let parent: HTMLElement = (responseArray as any)._parent;
     if (responseArray.length) {
       responseArray.forEach(item => {
-        callDeep(item, 'destroy', true);
+        callDeep(item, 'destroy', true, true);
       });
       removeAllChild(parent);
     }
