@@ -24,19 +24,22 @@ import {
     fdIf,
     fdReactiveValue,
 } from 'faster-dom';
-
+// Extends your class from Component
 class Timer extends Component {
     private timer: number;
 
+    // Put here all reactive values, when component will be destroyed, they will be destroy too automatically
     protected reactive = {
+        // create reactive value, if you provide here object, you on change need always return new one, not link on previous
         counter: fdReactiveValue(0),
+        // create reactive for true/false
         classOdd: fdIf(true),
     }
-
+    // Create shortcuts, not required
     get counter () {
         return this.reactive.counter;
     }
-
+    // Create shortcuts, not required
     get currentClass () {
         return this.reactive.classOdd;
     }
@@ -44,7 +47,8 @@ class Timer extends Component {
     onInit () {
         const timer = () => {
             this.timer = window.setTimeout(() => {
-                this.counter.value += 1;
+                this.counter.value += 1; // increase counter on '1'
+                // If counter value odd then 'true'
                 this.currentClass.value = this.counter.value % 2 === 0 ? true : false;
                 timer();
             }, 1000);
@@ -54,14 +58,17 @@ class Timer extends Component {
     }
 
     onDestroy () {
+        // Use destroy hook for clear timeout
         clearTimeout(this.timer);
     }
-
+    // Provide template
     template: FastDomNode = {
         tag: 'div',
+        // Create reactive class
         classList: new fdObject({
             odd: this.currentClass, // will add class if obs have true/value
         }),
+        // Create reactive textValue
         textValue: this.counter,
     }
 }
@@ -77,7 +84,7 @@ import { generateNode } from 'faster-dom';
 import { createTimer } from './timer';
 
 const timerContainer = document.getElementById('timer');
-
+// create real node element from component
 timerContainer.appendChild(generateNode(createTimer()));
 ```
 
