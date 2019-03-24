@@ -1,10 +1,10 @@
-import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from "../misc/misc";
+import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from '../misc/misc';
 
-import { FastDomNode } from "../interfaces/node";
-import { Observer } from "../observer/observer";
-import { fdObject } from "../observer/fdObject";
+import { FastDomNode } from '../interfaces/node';
+import { Observer } from '../observer/observer';
+import { fdObject } from '../observer/fdObject';
 
-const instance = Symbol("instance");
+const instance = Symbol('instance');
 
 export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   if (node.skip === true) {
@@ -16,9 +16,9 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   if (node.textValue) {
     if (typeof node.textValue === 'object') {
       const obs = node.textValue;
-      obs.addSubscribers((value) => {
+      obs.addSubscribers(value => {
         rootNode.textContent = value;
-      })
+      });
       rootNode.textContent = obs.value;
     } else {
       rootNode.textContent = node.textValue;
@@ -26,37 +26,36 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   }
   let fdClassesNode: fdObject<boolean>;
   if (node.classList) {
-    if(Array.isArray(node.classList)) {
+    if (Array.isArray(node.classList)) {
       node.classList.forEach(item => {
         rootNode.classList.add(item);
       });
     } else {
-      fdClassesNode = node.classList
-      const clsObs = (node.classList.value as Observer<{[key: string]: boolean}>)
-      Object.keys((clsObs.value)).forEach((key) => {
-        const value = clsObs.value[key]
-        return value ? rootNode.classList.add(key) : rootNode.classList.remove(key)
-      })
-      clsObs.addSubscribers((newClasses) => {
-        Object.keys((newClasses)).forEach((key) => {
-          const value = newClasses[key]
-          return value ? rootNode.classList.add(key) : rootNode.classList.remove(key)
-        })
-      })
+      fdClassesNode = node.classList;
+      const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
+      Object.keys(clsObs.value).forEach(key => {
+        const value = clsObs.value[key];
+        return value ? rootNode.classList.add(key) : rootNode.classList.remove(key);
+      });
+      clsObs.addSubscribers(newClasses => {
+        Object.keys(newClasses).forEach(key => {
+          const value = newClasses[key];
+          return value ? rootNode.classList.add(key) : rootNode.classList.remove(key);
+        });
+      });
     }
-
   }
   let fdAttrsNode: fdObject<any>;
   if (node.attrs) {
-    if(!(node.attrs instanceof fdObject)) {
+    if (!(node.attrs instanceof fdObject)) {
       setNodeAttrs(rootNode, node.attrs);
     } else {
-      fdAttrsNode = node.attrs
-      const clsObs = (node.attrs.value as Observer<{[key: string]: any}>)
-      setNodeAttrs(rootNode, clsObs.value)
-      clsObs.addSubscribers((newAttrs) => {
-        setNodeAttrs(rootNode, newAttrs)
-      })
+      fdAttrsNode = node.attrs;
+      const clsObs = node.attrs.value as Observer<{ [key: string]: any }>;
+      setNodeAttrs(rootNode, clsObs.value);
+      clsObs.addSubscribers(newAttrs => {
+        setNodeAttrs(rootNode, newAttrs);
+      });
     }
   }
 
@@ -66,12 +65,12 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         return;
       }
       if (Array.isArray(item)) {
-        item.forEach((el) => {
+        item.forEach(el => {
           if (!el.tag) {
             rootNode.appendChild(el as HTMLHtmlElement);
             return;
           }
-          const child = generateNode({ ...el as FastDomNode, parent: rootNode as any });
+          const child = generateNode({ ...(el as FastDomNode), parent: rootNode as any });
           if (child) {
             rootNode.appendChild(child);
           }
@@ -83,7 +82,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         rootNode.appendChild(item as HTMLHtmlElement);
         return;
       }
-      const child = generateNode({ ...item as FastDomNode, parent: rootNode as any });
+      const child = generateNode({ ...(item as FastDomNode), parent: rootNode as any });
       if (child) {
         rootNode.appendChild(child);
       }
@@ -96,24 +95,24 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.instance) {
     (rootNode as any)[instance] = node.instance;
-    node.instance.onInit()
+    node.instance.onInit();
   }
 
   if (typeof node.skip === 'object') {
-    const comment = document.createComment("")
-    node.skip.addSubscribers((value) => {
-      const parent = node.parent ? node.parent : null as HTMLElement;
+    const comment = document.createComment('');
+    node.skip.addSubscribers(value => {
+      const parent = node.parent ? node.parent : (null as HTMLElement);
       if (value) {
         if (parent) {
-          parent.replaceChild(rootNode, comment)
-          callDeep(node, 'reInit', false)
+          parent.replaceChild(rootNode, comment);
+          callDeep(node, 'reInit', false);
           if (fdClassesNode) {
             fdClassesNode.reInit();
           }
           if (fdAttrsNode) {
             fdAttrsNode.reInit();
           }
-          addNodeListener(rootNode, node.listeners)
+          addNodeListener(rootNode, node.listeners);
         }
       } else {
         if (parent) {
@@ -124,14 +123,14 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           if (fdClassesNode) {
             fdClassesNode.destroy();
           }
-          callDeep(node, 'destroy', true)
-          parent.replaceChild(comment, rootNode)
+          callDeep(node, 'destroy', true);
+          parent.replaceChild(comment, rootNode);
         }
       }
-    })
+    });
 
     if (node.skip.value) {
-      return rootNode
+      return rootNode;
     } else {
       return comment;
     }
