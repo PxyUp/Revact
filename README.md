@@ -1,17 +1,8 @@
 # Faster Dom ![npm](https://img.shields.io/npm/v/faster-dom.svg)
 
-Lightweight replacement of React (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero. Use `requestAnimationFrame` for change detection, which allows batch updates to do.
+Lightweight replacement of React + MobX (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero. Use `requestAnimationFrame` for change detection, which allows batch updates to do.
 
 The library allows you to create quick and responsive interfaces using only JS / TS. With this you will get the minimum application size, speed and ease of development.
-
-**[📺 DEMO](https://pxyup.github.io/FastDom/)**
-
-## Features
-1. Size - **4.1 kB** or **1.38 kB** gzipped.
-2. The library rewrites only changes and only when it is necessary. It uses a virtual DOM, only if there isn't any comparison process.
-3. Performance - **going to guarantee 60 fps**.
-4. Names of imported functions and classes are not finally and *can be discussed*.
-5. There is **a tree-shaking for components and templates !!!**.
 
 ## Usage
 ```sh
@@ -37,7 +28,7 @@ import {
 class Timer extends Component {
     private timer: number;
 
-    public reactive = {
+    protected reactive = {
         counter: fdReactiveValue(0),
         classOdd: fdIf(true),
     }
@@ -90,6 +81,15 @@ const timerContainer = document.getElementById('timer');
 timerContainer.appendChild(generateNode(createTimer()));
 ```
 
+**[📺 DEMO](https://pxyup.github.io/FastDom/)**
+
+## Features
+1. Size - **4.1 kB** or **1.38 kB** gzipped.
+2. The library rewrites only changes and only when it is necessary. It uses a virtual DOM, only if there isn't any comparison process.
+3. Performance - **going to guarantee 60 fps**.
+4. Names of imported functions and classes are not finally and *can be discussed*.
+5. There is **a tree-shaking for components and templates !!!**.    
+
 ## How it works
 
 ### Motivation
@@ -107,11 +107,8 @@ timerContainer.appendChild(generateNode(createTimer()));
 3. The support of inputs.
 4. `if` condition and `for` directive.
 5. Dynamic classes and attributes bindings.
-6. Outputs.
 
 ### TODO (conributing is appreciated)
-
-1. Dynamic properties.
-2. Routing.
+1. Routing.
 
 > Help me please if you are interested.
