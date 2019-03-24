@@ -11,7 +11,8 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     return null;
   }
 
-  const rootNode = document.createElement(node.tag);
+  const rootNode =
+    node.tag !== 'textNode' ? document.createElement(node.tag) : document.createTextNode('');
 
   if (node.textValue) {
     if (typeof node.textValue === 'object') {
@@ -25,72 +26,78 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     }
   }
   let fdClassesNode: fdObject<boolean>;
-  if (node.classList) {
-    if (Array.isArray(node.classList)) {
-      node.classList.forEach(item => {
-        rootNode.classList.add(item);
-      });
-    } else {
-      fdClassesNode = node.classList;
-      const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
-      Object.keys(clsObs.value).forEach(key => {
-        const value = clsObs.value[key];
-        return value ? rootNode.classList.add(key) : rootNode.classList.remove(key);
-      });
-      clsObs.addSubscribers(newClasses => {
-        Object.keys(newClasses).forEach(key => {
-          const value = newClasses[key];
-          return value ? rootNode.classList.add(key) : rootNode.classList.remove(key);
-        });
-      });
-    }
-  }
   let fdAttrsNode: fdObject<any>;
-  if (node.attrs) {
-    if (!(node.attrs instanceof fdObject)) {
-      setNodeAttrs(rootNode, node.attrs);
-    } else {
-      fdAttrsNode = node.attrs;
-      const clsObs = node.attrs.value as Observer<{ [key: string]: any }>;
-      setNodeAttrs(rootNode, clsObs.value);
-      clsObs.addSubscribers(newAttrs => {
-        setNodeAttrs(rootNode, newAttrs);
+  if (node.tag !== 'textNode') {
+    if (node.classList) {
+      if (Array.isArray(node.classList)) {
+        node.classList.forEach(item => {
+          (rootNode as HTMLElement).classList.add(item);
+        });
+      } else {
+        fdClassesNode = node.classList;
+        const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
+        Object.keys(clsObs.value).forEach(key => {
+          const value = clsObs.value[key];
+          return value
+            ? (rootNode as HTMLElement).classList.add(key)
+            : (rootNode as HTMLElement).classList.remove(key);
+        });
+        clsObs.addSubscribers(newClasses => {
+          Object.keys(newClasses).forEach(key => {
+            const value = newClasses[key];
+            return value
+              ? (rootNode as HTMLElement).classList.add(key)
+              : (rootNode as HTMLElement).classList.remove(key);
+          });
+        });
+      }
+    }
+    if (node.attrs) {
+      if (!(node.attrs instanceof fdObject)) {
+        setNodeAttrs(rootNode as HTMLElement, node.attrs);
+      } else {
+        fdAttrsNode = node.attrs;
+        const clsObs = node.attrs.value as Observer<{ [key: string]: any }>;
+        setNodeAttrs(rootNode as HTMLElement, clsObs.value);
+        clsObs.addSubscribers(newAttrs => {
+          setNodeAttrs(rootNode as HTMLElement, newAttrs);
+        });
+      }
+    }
+
+    if (node.children) {
+      node.children.forEach((item: any) => {
+        if (!item) {
+          return;
+        }
+        if (Array.isArray(item)) {
+          item.forEach(el => {
+            if (!el.tag) {
+              rootNode.appendChild(el as HTMLHtmlElement);
+              return;
+            }
+            const child = generateNode({ ...(el as FastDomNode), parent: rootNode as any });
+            if (child) {
+              rootNode.appendChild(child);
+            }
+          });
+          (item as any)._parent = rootNode;
+          return;
+        }
+        if (!item.tag) {
+          rootNode.appendChild(item as HTMLHtmlElement);
+          return;
+        }
+        const child = generateNode({ ...(item as FastDomNode), parent: rootNode as any });
+        if (child) {
+          rootNode.appendChild(child);
+        }
       });
     }
-  }
 
-  if (node.children) {
-    node.children.forEach((item: any) => {
-      if (!item) {
-        return;
-      }
-      if (Array.isArray(item)) {
-        item.forEach(el => {
-          if (!el.tag) {
-            rootNode.appendChild(el as HTMLHtmlElement);
-            return;
-          }
-          const child = generateNode({ ...(el as FastDomNode), parent: rootNode as any });
-          if (child) {
-            rootNode.appendChild(child);
-          }
-        });
-        (item as any)._parent = rootNode;
-        return;
-      }
-      if (!item.tag) {
-        rootNode.appendChild(item as HTMLHtmlElement);
-        return;
-      }
-      const child = generateNode({ ...(item as FastDomNode), parent: rootNode as any });
-      if (child) {
-        rootNode.appendChild(child);
-      }
-    });
-  }
-
-  if (node.listeners) {
-    addNodeListener(rootNode, node.listeners);
+    if (node.listeners) {
+      addNodeListener(rootNode as HTMLElement, node.listeners);
+    }
   }
 
   if (node.instance) {
@@ -112,11 +119,15 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           if (fdAttrsNode) {
             fdAttrsNode.reInit();
           }
-          addNodeListener(rootNode, node.listeners);
+          if (node.tag !== 'textNode') {
+            addNodeListener(rootNode as HTMLElement, node.listeners);
+          }
         }
       } else {
         if (parent) {
-          removeNodeListener(rootNode, node.listeners);
+          if (node.tag !== 'textNode') {
+            removeNodeListener(rootNode as HTMLElement, node.listeners);
+          }
           if (fdAttrsNode) {
             fdAttrsNode.destroy();
           }

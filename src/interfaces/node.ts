@@ -2,7 +2,7 @@ import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 
 export interface FastDomNode {
-  tag: string;
+  tag: string | 'textNode';
   skip?: Observer<boolean> | boolean;
   attrs?: { [key: string]: any } | fdObject<any>;
   parent?: HTMLElement;
