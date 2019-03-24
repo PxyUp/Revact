@@ -19,6 +19,7 @@ export default [
             copy({
                 "./package.json": "./lib/package.json",
                 "./README.md": "./lib/README.md",
+                './LICENSE': './lib/LICENSE',
                 verbose: true
             }),
         ],
