@@ -3,11 +3,17 @@ import { FastDomNode } from '../interfaces/node';
 
 export function setNodeAttrs(node: HTMLElement | Element, attrs: { [key: string]: string }) {
   Object.keys(attrs).forEach(key => {
-    if (!attrs[key]) {
+    if (!attrs[key] && attrs[key] !== '') {
       node.removeAttribute(key);
       return;
     }
     node.setAttribute(key, attrs[key]);
+  });
+}
+
+export function setProps(node: any, props: { [key: string]: string }) {
+  Object.keys(props).forEach(key => {
+    node[key] = props[key];
   });
 }
 

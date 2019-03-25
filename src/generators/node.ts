@@ -1,4 +1,10 @@
-import { addNodeListener, callDeep, removeNodeListener, setNodeAttrs } from '../misc/misc';
+import {
+  addNodeListener,
+  callDeep,
+  removeNodeListener,
+  setNodeAttrs,
+  setProps,
+} from '../misc/misc';
 
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
@@ -29,6 +35,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   }
   let fdClassesNode: fdObject<boolean>;
   let fdAttrsNode: fdObject<any>;
+  let fdPropsNode: fdObject<any>;
   if (node.tag !== 'textNode') {
     if (node.classList) {
       if (Array.isArray(node.classList)) {
@@ -54,14 +61,28 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         });
       }
     }
+
+    if (node.props) {
+      if (!(node.props instanceof fdObject)) {
+        setProps(rootNode as HTMLElement, node.props);
+      } else {
+        fdPropsNode = node.props;
+        const propsObs = node.props.value as Observer<{ [key: string]: any }>;
+        setProps(rootNode as HTMLElement, propsObs.value);
+        propsObs.addSubscribers(newProps => {
+          setProps(rootNode as HTMLElement, newProps);
+        });
+      }
+    }
+
     if (node.attrs) {
       if (!(node.attrs instanceof fdObject)) {
         setNodeAttrs(rootNode as HTMLElement, node.attrs);
       } else {
         fdAttrsNode = node.attrs;
-        const clsObs = node.attrs.value as Observer<{ [key: string]: any }>;
-        setNodeAttrs(rootNode as HTMLElement, clsObs.value);
-        clsObs.addSubscribers(newAttrs => {
+        const attrsObs = node.attrs.value as Observer<{ [key: string]: any }>;
+        setNodeAttrs(rootNode as HTMLElement, attrsObs.value);
+        attrsObs.addSubscribers(newAttrs => {
           setNodeAttrs(rootNode as HTMLElement, newAttrs);
         });
       }
@@ -118,6 +139,9 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           if (fdClassesNode) {
             fdClassesNode.reInit();
           }
+          if (fdPropsNode) {
+            fdPropsNode.reInit();
+          }
           if (fdAttrsNode) {
             fdAttrsNode.reInit();
           }
@@ -132,6 +156,9 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           }
           if (fdAttrsNode) {
             fdAttrsNode.destroy();
+          }
+          if (fdPropsNode) {
+            fdPropsNode.reInit();
           }
           if (fdClassesNode) {
             fdClassesNode.destroy();
