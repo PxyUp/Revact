@@ -4,6 +4,7 @@ export class fdObject<T> {
   protected obsArr: Array<Observer<T>> = [];
   protected values: { [key: string]: T } = {};
   protected obs = new Observer(this.values, true);
+  private isDestroyed = false;
   constructor(dict: { [key: string]: Observer<T> | T } = {}) {
     Object.keys(dict).forEach(key => {
       const item = dict[key] as Observer<T> | T;
@@ -26,6 +27,7 @@ export class fdObject<T> {
   }
 
   reInit() {
+    this.isDestroyed = false;
     this.obs.reInit();
     this.obsArr.forEach(item => {
       item.reInit();
@@ -33,9 +35,13 @@ export class fdObject<T> {
   }
 
   destroy(force = false) {
+    if (this.isDestroyed) {
+      return;
+    }
     this.obs.destroy(force);
     this.obsArr.forEach(item => {
       item.destroy(force);
     });
+    this.isDestroyed = true;
   }
 }
