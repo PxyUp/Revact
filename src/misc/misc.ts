@@ -1,3 +1,4 @@
+import { Component } from '../generators/index';
 import { FastDomNode } from '../interfaces/node';
 
 export function setNodeAttrs(node: HTMLElement | Element, attrs: { [key: string]: string }) {
@@ -49,6 +50,19 @@ export function removeNodeListener(
 export function removeAllChild(node: HTMLElement) {
   while (node.firstChild) {
     node.removeChild(node.firstChild);
+  }
+}
+
+export function removeAllListenersComponent(fdNodes: FastDomNode) {
+  if (fdNodes.listeners) {
+    removeNodeListener(fdNodes.domNode as HTMLElement, fdNodes.listeners);
+  }
+  if (fdNodes.children) {
+    fdNodes.children.forEach((item: FastDomNode) => {
+      if (!item.instance && item.tag) {
+        removeAllListenersComponent(item);
+      }
+    });
   }
 }
 

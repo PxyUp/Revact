@@ -14,6 +14,8 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   const rootNode =
     node.tag !== 'textNode' ? document.createElement(node.tag) : document.createTextNode('');
 
+  node.domNode = rootNode;
+
   if (node.textValue) {
     if (typeof node.textValue === 'object') {
       const obs = node.textValue;
@@ -76,7 +78,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
               rootNode.appendChild(el as HTMLHtmlElement);
               return;
             }
-            const child = generateNode({ ...(el as FastDomNode), parent: rootNode as any });
+            const child = generateNode(Object.assign(item, { parent: rootNode as any }) as any);
             if (child) {
               rootNode.appendChild(child);
             }
@@ -88,7 +90,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           rootNode.appendChild(item as HTMLHtmlElement);
           return;
         }
-        const child = generateNode({ ...(item as FastDomNode), parent: rootNode as any });
+        const child = generateNode(Object.assign(item, { parent: rootNode as any }));
         if (child) {
           rootNode.appendChild(child);
         }

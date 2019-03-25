@@ -49,6 +49,7 @@ export function fdFor(
       responseArray.forEach(item => {
         callDeep(item, 'destroy', true, true);
       });
+
       removeAllChild(parent);
     }
     if (!value.length) {

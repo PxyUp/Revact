@@ -1,5 +1,6 @@
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
+import { removeAllListenersComponent } from '../misc/misc';
 
 export function createComponent(
   classProvider: any,
@@ -24,6 +25,10 @@ export class Component {
   }
 
   destroy(...args: any) {
+    const force = args[0];
+    if (force === true) {
+      removeAllListenersComponent(this.template);
+    }
     Object.keys(this.reactive).forEach(key => {
       this.reactive[key].destroy(...args);
     });

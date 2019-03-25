@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdIf, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdFor, fdIf, fdReactiveValue, generateNode } from "../../src";
 
 import { createCounters } from "../simple_counters_one_input/counters";
 
