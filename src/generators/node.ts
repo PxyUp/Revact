@@ -78,7 +78,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
               rootNode.appendChild(el as HTMLHtmlElement);
               return;
             }
-            const child = generateNode(Object.assign(item, { parent: rootNode as any }) as any);
+            const child = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
             if (child) {
               rootNode.appendChild(child);
             }
