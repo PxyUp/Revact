@@ -6,7 +6,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.12-alpha
+yarn add faster-dom@0.0.13-alpha
 ```
 
 *index.html*
