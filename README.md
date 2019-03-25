@@ -29,7 +29,7 @@ class Timer extends Component {
     private timer: number;
 
     // Put here all reactive values, when component will be destroyed
-    // They will be destroy too automatically
+    // They will be destroy automatically
     protected reactive = {
         // create reactive value
         // if you provide here object/array, you on change need always return new one, not link on previous
@@ -37,6 +37,13 @@ class Timer extends Component {
         // create reactive for true/false
         classOdd: fdIf(true),
     }
+    // All fdObjects(for attrs/prop/classList binding) must be here for auto destroy
+    fdObjects = {
+        classList: new fdObject<boolean>({
+            "odd": this.currentClass
+        }),
+    }
+
     // Create shortcuts, not required
     get counter () {
         return this.reactive.counter;
@@ -67,9 +74,7 @@ class Timer extends Component {
     template: FastDomNode = {
         tag: 'div',
         // Create reactive class
-        classList: new fdObject({
-            odd: this.currentClass, // will add class if obs have true/value
-        }),
+        classList: this.fdObjects.classList,
         // Create reactive textValue
         textValue: this.counter,
     }
