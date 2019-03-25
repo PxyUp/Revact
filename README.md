@@ -91,6 +91,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 ```
 
 **[📺 DEMO](https://pxyup.github.io/FastDom/)**
+**[📺 DEMO at StackBlitz](https://stackblitz.com/edit/typescript-wgjbzf)**
 
 ## Features
 1. Size - **4.1 kB** or **1.38 kB** gzipped.
