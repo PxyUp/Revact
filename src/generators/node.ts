@@ -22,7 +22,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   node.domNode = rootNode;
 
-  if (node.textValue) {
+  if (node.textValue !== null || node.textValue !== undefined) {
     if (typeof node.textValue === 'object') {
       const obs = node.textValue;
       obs.addSubscribers(value => {
