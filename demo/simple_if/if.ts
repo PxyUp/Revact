@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdIf, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdIf, fdValue } from "../../src";
 
 import { createTimer } from "../timer/timer";
 
@@ -9,7 +9,7 @@ export function createIf() {
 class IfWithChild extends Component {
     reactive = {
         show: fdIf(true),
-        text: fdReactiveValue("Here timer")
+        text: fdValue("Here timer")
     }
 
     get show() {

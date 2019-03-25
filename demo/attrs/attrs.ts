@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdIf, fdObject, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdIf, fdObject, fdValue } from "../../src";
 
 export function createExampleAttr() {
     return createComponent(DynamicAttr)
@@ -7,8 +7,17 @@ export function createExampleAttr() {
 class DynamicAttr extends Component {
 
     reactive = {
-        src: fdReactiveValue("https://www.w3schools.com/html/pic_trulli.jpg"),
+        src: fdValue("https://www.w3schools.com/html/pic_trulli.jpg"),
         disabled: fdIf(false),
+    }
+
+    fdObjects = {
+        imgAttrs: new fdObject({
+            src: this.src
+        }),
+        btnAttrs: new fdObject({
+            disabled: this.disabled
+        }),
     }
 
     get src() {
@@ -47,9 +56,7 @@ class DynamicAttr extends Component {
                     },
                     {
                         tag: "button",
-                        attrs: new fdObject({
-                            disabled: this.disabled
-                        }),
+                        attrs: this.fdObjects.btnAttrs,
                         textValue: "I am button",
                         listeners: {
                             click: this.btnClick
@@ -80,9 +87,7 @@ class DynamicAttr extends Component {
                 children: [
                     {
                         tag: "img",
-                        attrs: new fdObject({
-                            src: this.src
-                        })
+                        attrs: this.fdObjects.imgAttrs
                     }
                 ]
             }

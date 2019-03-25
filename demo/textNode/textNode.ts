@@ -1,8 +1,8 @@
-import { Component, FastDomNode, createComponent, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdValue } from "../../src";
 
 class TextComponent extends Component {
     reactive = {
-        counter: fdReactiveValue(-10),
+        counter: fdValue(-10),
     }
 
     get counter() {

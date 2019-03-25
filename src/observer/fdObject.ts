@@ -32,10 +32,10 @@ export class fdObject<T> {
     });
   }
 
-  destroy() {
-    this.obs.destroy();
+  destroy(force = false) {
+    this.obs.destroy(force);
     this.obsArr.forEach(item => {
-      item.destroy();
+      item.destroy(force);
     });
   }
 }

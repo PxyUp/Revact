@@ -6,7 +6,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.11-alpha
+yarn add faster-dom@0.0.12-alpha
 ```
 
 *index.html*
@@ -22,7 +22,7 @@ import {
     createComponent,
     fdObject,
     fdIf,
-    fdReactiveValue,
+    fdValue,
 } from 'faster-dom';
 // Extends your class from Component
 class Timer extends Component {
@@ -33,7 +33,7 @@ class Timer extends Component {
     protected reactive = {
         // create reactive value
         // if you provide here object/array, you on change need always return new one, not link on previous
-        counter: fdReactiveValue(0),
+        counter: fdValue(0),
         // create reactive for true/false
         classOdd: fdIf(true),
     }

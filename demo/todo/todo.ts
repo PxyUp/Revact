@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdObject, fdReactiveValue, generateNode } from "../../src";
+import { Component, FastDomNode, createComponent, fdFor, fdObject, fdValue, generateNode } from "../../src";
 
 function createTodoItem(inputs: any) {
     return createComponent(TodoItem, inputs)
@@ -51,8 +51,14 @@ export function createTodo() {
 class Todo extends Component {
 
     reactive = {
-        inputValue: fdReactiveValue(''),
-        todoList: fdReactiveValue([])
+        inputValue: fdValue(''),
+        todoList: fdValue([])
+    }
+
+    fdObjects = {
+        inputValueProp: new fdObject({
+            value: this.inputValue,
+        }),
     }
     
     
@@ -82,9 +88,7 @@ class Todo extends Component {
         attrs: {
             placeholder: "Write here",
         },
-        props: new fdObject({
-            value: this.inputValue,
-        }),
+        props: this.fdObjects.inputValueProp,
         listeners: {
             input: this.onInput,
         } 

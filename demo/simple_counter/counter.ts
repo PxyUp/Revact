@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdValue } from "../../src";
 
 export function createCounter() {
     return createComponent(Counter);
@@ -6,7 +6,7 @@ export function createCounter() {
 
 class Counter extends Component {
     reactive = {
-        counter: fdReactiveValue(0)
+        counter: fdValue(0)
     }
 
     get counter() {

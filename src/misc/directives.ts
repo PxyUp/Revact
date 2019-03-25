@@ -4,10 +4,10 @@ import { Observer } from '../observer/observer';
 import { generateNode } from '../generators/node';
 
 export function fdIf(value?: boolean) {
-  return new Observer(value);
+  return fdValue(value);
 }
 
-export function fdReactiveValue(value: any) {
+export function fdValue(value: any) {
   return new Observer(value);
 }
 

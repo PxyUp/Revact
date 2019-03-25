@@ -1,5 +1,6 @@
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
+import { fdObject } from '../observer/fdObject';
 import { removeAllListenersComponent } from '../misc/misc';
 
 export function createComponent(
@@ -13,11 +14,15 @@ export function createComponent(
 
 export class Component {
   protected reactive: { [key: string]: Observer<any> } = {};
+  protected fdObjects: { [key: string]: fdObject<any> } = {};
   protected template: FastDomNode;
   protected onDestroy() {}
   protected onInit() {}
 
   reInit() {
+    Object.keys(this.fdObjects).forEach(key => {
+      this.fdObjects[key].reInit();
+    });
     Object.keys(this.reactive).forEach(key => {
       this.reactive[key].reInit();
     });
@@ -29,6 +34,9 @@ export class Component {
     if (force === true) {
       removeAllListenersComponent(this.template);
     }
+    Object.keys(this.fdObjects).forEach(key => {
+      this.fdObjects[key].destroy(...args);
+    });
     Object.keys(this.reactive).forEach(key => {
       this.reactive[key].destroy(...args);
     });

@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdIf, fdReactiveValue, generateNode } from "../../src";
+import { Component, FastDomNode, createComponent, fdFor, fdIf, fdValue, generateNode } from "../../src";
 
 import { createCounters } from "../simple_counters_one_input/counters";
 
@@ -36,14 +36,14 @@ class DivBlock extends Component {
     }
 }
 
-const obs = fdReactiveValue([])
+const obs = fdValue([])
 
 export function createObsFor() {
     return {
         tag: "div",
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            fdFor(obs, createDiv, { value: (e: any) => fdReactiveValue(e) }) // we do map from obs to reactive value
+            fdFor(obs, createDiv, { value: (e: any) => fdValue(e) }) // we do map from obs to reactive value
         ]
     }
 }

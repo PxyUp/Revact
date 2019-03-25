@@ -1,4 +1,4 @@
-import { fdFor, fdIf, fdReactiveValue, generateNode } from "../src";
+import { fdFor, fdIf, fdValue, generateNode } from "../src";
 
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
@@ -22,7 +22,7 @@ simpleCounterConainer.appendChild(generateNode(createCounter()))
 simpleCounterConainer.appendChild(generateNode(createCounter()))
 
 const simpleCounterSharedConainer = document.getElementById("counter_input")
-const sharedValue = fdReactiveValue(0);
+const sharedValue = fdValue(0);
 simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))
 simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))
 simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))

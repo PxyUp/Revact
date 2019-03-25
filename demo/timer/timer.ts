@@ -1,11 +1,17 @@
-import { Component, FastDomNode, createComponent, fdIf, fdObject, fdReactiveValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdIf, fdObject, fdValue } from "../../src";
 
 class Timer extends Component {
     private timer: number;
     
     reactive = {
-        counter: fdReactiveValue(0),
+        counter: fdValue(0),
         classOdd: fdIf(true),
+    }
+
+    fdObjects = {
+        classList: new fdObject<boolean>({
+            "odd": this.currentClass
+        }),
     }
 
     get counter() {
@@ -33,9 +39,7 @@ class Timer extends Component {
 
     template: FastDomNode = {
         tag: "div",
-        classList: new fdObject<boolean>({
-            "odd": this.currentClass
-        }),
+        classList: this.fdObjects.classList,
         textValue: this.counter,
     }
 }
