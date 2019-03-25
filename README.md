@@ -119,7 +119,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 4. `if` condition and `for` directive.
 5. Routing classes and attributes bindings.
 
-### TODO (conributing is appreciated)
+### TODO (contributing is appreciated)
 1. Reactive styles.
 2. Proper types annotation
 2. Routing.
