@@ -6,7 +6,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.18-alpha
+yarn add faster-dom@0.0.19-alpha
 ```
 
 *index.html*
@@ -104,7 +104,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 3. Performance - **going to guarantee 60 fps**.
 4. Names of imported functions and classes are not finally and *can be discussed*.
 5. There is **a tree-shaking for components and templates !!!**. 
-6. **Router** support!   
+6. **Router + Resolver** support!   
 
 ## How it works
 > Here will be good api
@@ -124,7 +124,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 3. The support of inputs.
 4. `if` condition and `for` directive.
 5. Reactive classes and attributes bindings.
-
+6. Supports router
 
 ### TODO (contributing is appreciated)
 1. Reactive styles.
