@@ -1,4 +1,19 @@
 import { FastDomNode } from '../interfaces/node';
+import { ModuleRouter } from '../generators/router';
+import { RouterPath } from '../interfaces/router';
+
+const PARAMETER_REGEXP = /([:*])(\w+)/g;
+const WILDCARD_REGEXP = /\*/g;
+const REPLACE_VARIABLE_REGEXP = '([^/]+)';
+const REPLACE_WILDCARD = '(?:.*)';
+const FOLLOWED_BY_SLASH_REGEXP = '(?:/$|$)';
+const MATCH_REGEXP_FLAGS = '';
+
+const isPushStateAvailable = !!(
+  typeof window !== 'undefined' &&
+  window.history &&
+  window.history.pushState
+);
 
 export function setNodeAttrs(node: HTMLElement | Element, attrs: { [key: string]: string }) {
   Object.keys(attrs).forEach(key => {
@@ -98,4 +113,75 @@ export function callDeep(node: FastDomNode, method: string, direction: boolean, 
     });
   }
   return;
+}
+
+export function getOnlyURL(url: string, useHash = false, hash = '#') {
+  let onlyURL = url;
+  let split;
+  var cleanGETParam = (str: string) => str.split(/\?(.*)?$/)[0];
+
+  if (typeof hash === 'undefined') {
+    // To preserve BC
+    hash = '#';
+  }
+
+  if (isPushStateAvailable && !useHash) {
+    onlyURL = cleanGETParam(url).split(hash)[0];
+  } else {
+    split = url.split(hash);
+    onlyURL = split.length > 1 ? cleanGETParam(split[1]) : cleanGETParam(split[0]);
+  }
+
+  return onlyURL;
+}
+
+export function regExpResultToParams(match: Array<any>, names: Array<string>) {
+  if (names.length === 0) return null;
+  if (!match) return null;
+  return match.slice(1, match.length).reduce((params: any, value: any, index: number) => {
+    if (params === null) params = {};
+    params[names[index]] = decodeURIComponent(value);
+    return params;
+  }, null);
+}
+
+export function clean(s: RegExp | string): RegExp | string {
+  if (s instanceof RegExp) return s;
+  return s.replace(/\/+$/, '').replace(/^\/+/, '^/');
+}
+
+export function findMatchedRoutes(url: string, routes: Array<RouterPath> = []) {
+  return routes
+    .map(route => {
+      const { regexp, paramNames } = replaceDynamicURLParts(clean(route.path));
+      const match = url.match(regexp);
+      const params = regExpResultToParams(match, paramNames);
+
+      return match ? { match, route, params } : false;
+    })
+    .filter(m => m);
+}
+
+export function matchRoute(url: string, routes: Array<RouterPath> = []) {
+  return findMatchedRoutes(getOnlyURL(url), routes)[0] || false;
+}
+
+export function replaceDynamicURLParts(route: RegExp | string) {
+  const paramNames: Array<any> = [];
+  let regexp;
+
+  if (route instanceof RegExp) {
+    regexp = route;
+  } else {
+    regexp = new RegExp(
+      route
+        .replace(PARAMETER_REGEXP, function(full, dots, name) {
+          paramNames.push(name);
+          return REPLACE_VARIABLE_REGEXP;
+        })
+        .replace(WILDCARD_REGEXP, REPLACE_WILDCARD) + FOLLOWED_BY_SLASH_REGEXP,
+      MATCH_REGEXP_FLAGS,
+    );
+  }
+  return { regexp, paramNames };
 }
