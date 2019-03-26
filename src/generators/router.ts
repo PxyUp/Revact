@@ -1,13 +1,21 @@
 import { FastDomNode, Paths } from '../interfaces/index';
-import { callDeep, removeAllChild } from '../misc/misc';
+import { RouteParams, RouterPath } from '../interfaces/router';
+import { callDeep, clean, findMatchedRoutes, matchRoute, removeAllChild } from '../misc/misc';
 
 import { Component } from './component';
-import { RouterPath } from '../interfaces/router';
 import { fdIf } from '../misc/directives';
 import { generateNode } from './node';
 
-class ModuleRouter extends Component {
-  private _paths: { [key: string]: RouterPath } = {};
+function getUrlDepth(url: string) {
+  return url.replace(/\/$/, '').split('/').length;
+}
+
+function compareUrlDepth(urlA: RouterPath, urlB: RouterPath) {
+  return getUrlDepth(urlB.path as string) - getUrlDepth(urlA.path as string);
+}
+
+export class ModuleRouter extends Component {
+  private _arrPaths: Array<RouterPath> = [];
   private _cUrl: string = '';
   private _currentComp: FastDomNode = null;
 
@@ -17,41 +25,51 @@ class ModuleRouter extends Component {
   };
 
   public setPaths(paths: Paths = {}) {
-    const _paths = {} as { [key: string]: RouterPath };
     Object.keys(paths).forEach(path => {
-      _paths[(this.baseHref + path).replace(/[\\\\/]+/g, '/')] = {
+      this._arrPaths.push({
         component: paths[path].component,
         title: paths[path].title,
-        path: path,
-      };
+        path: clean(this.baseHref + path),
+        resolver: paths[path].resolver,
+      });
     });
-    this._paths = _paths;
+    this._arrPaths.sort(compareUrlDepth);
   }
 
   private onPopState = (e: PopStateEvent) => {
-    this.applyUrl(e.isTrusted ? e.state : this.baseHref + e.state);
+    this.applyUrl((e.isTrusted ? e.state : this.baseHref + e.state).replace(/[\\\\/]+/g, '/'));
   };
 
   private applyUrl = (url: string) => {
-    const key = Object.keys(this._paths).find(path => path === url.replace(/[\\\\/]+/g, '/'));
-    if (!key) {
+    const foundRoute = matchRoute(url, this._arrPaths);
+    if (!foundRoute) {
       return;
     }
-    const pathItem = this._paths[key];
+    const pathItem = foundRoute.route;
     if (this._currentComp) {
       callDeep(this._currentComp, 'destroy', true, true);
     }
     removeAllChild(this.template.domNode as HTMLElement);
+    if (pathItem.resolver) {
+      const resolver = pathItem.resolver(foundRoute.params);
+      resolver.then((params: RouteParams) => {
+        this.createComponent(url, pathItem, params);
+      });
+      return;
+    }
+    this.createComponent(url, pathItem);
+  };
+
+  createComponent(url: string, pathItem: RouterPath, params?: RouteParams) {
     if (pathItem.title) {
       document.title = pathItem.title;
     }
-    this._cUrl = pathItem.path;
-    const component = pathItem.component();
+    this._cUrl = url;
+    const component = pathItem.component(params);
     this.template.domNode.appendChild(generateNode(component));
     this._currentComp = component;
-    const newState = (this.baseHref + pathItem.path).replace(/[\\\\/]+/g, '/');
-    window.history.pushState(newState, document.title, newState);
-  };
+    window.history.pushState(this._cUrl, document.title, this._cUrl);
+  }
 
   onInit() {
     window.addEventListener('popstate', this.onPopState);
