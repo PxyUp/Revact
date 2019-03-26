@@ -52,11 +52,8 @@ class ModuleRouter extends Component {
       component.instance.onInit();
     }
     this._currentComp = component;
-    window.history.pushState(
-      this.baseHref + pathItem.path,
-      document.title,
-      this.baseHref + pathItem.path,
-    );
+    const newState = (this.baseHref + pathItem.path).replace(/[\\\\/]+/g, '/');
+    window.history.pushState(newState, document.title, newState);
   };
 
   onInit() {
@@ -84,11 +81,7 @@ class ModuleRouter extends Component {
   }
 }
 
-export const Router = new ModuleRouter(
-  window.location.pathname.length === 1
-    ? window.location.pathname.slice(0, window.location.pathname.length - 1)
-    : window.location.pathname,
-);
+export const Router = new ModuleRouter(window.location.pathname);
 
 export function createRouter(paths: Paths) {
   Router.setPaths(paths);
