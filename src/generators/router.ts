@@ -33,8 +33,7 @@ class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
-    console.log(url, this._paths);
-    const key = Object.keys(this._paths).find(path => path === url);
+    const key = Object.keys(this._paths).find(path => path === url.replace(/[\\\\/]+/g, '/'));
     if (!key) {
       return;
     }
