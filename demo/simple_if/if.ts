@@ -54,7 +54,7 @@ class IfWithChild extends Component {
            },
            {
                 tag: "div",
-                skip: this.show,
+                show: this.show,
                 textValue: "You will sometimes"
             }, {
                 tag: "div",
@@ -65,7 +65,7 @@ class IfWithChild extends Component {
                     },
                     {
                         ...createTimer(),
-                        skip: this.show,
+                        show: this.show,
                     }
                 ]
             }

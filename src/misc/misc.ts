@@ -1,4 +1,3 @@
-import { Component } from '../generators/index';
 import { FastDomNode } from '../interfaces/node';
 
 export function setNodeAttrs(node: HTMLElement | Element, attrs: { [key: string]: string }) {
@@ -21,7 +20,7 @@ export function addNodeListener(
   node: HTMLElement | Document,
   listeners: { [key: string]: any | Array<any> },
 ) {
-  if (!listeners) {
+  if (!node || !listeners) {
     return;
   }
   Object.keys(listeners).forEach(event => {
@@ -39,7 +38,7 @@ export function removeNodeListener(
   node: HTMLElement | Document,
   listeners: { [key: string]: any | Array<any> },
 ) {
-  if (!listeners) {
+  if (!node || !listeners) {
     return;
   }
   Object.keys(listeners).forEach(event => {
@@ -54,6 +53,9 @@ export function removeNodeListener(
 }
 
 export function removeAllChild(node: HTMLElement) {
+  if (!node) {
+    return;
+  }
   while (node.firstChild) {
     node.removeChild(node.firstChild);
   }
@@ -73,6 +75,9 @@ export function removeAllListenersComponent(fdNodes: FastDomNode) {
 }
 
 export function callDeep(node: FastDomNode, method: string, direction: boolean, ...args: any) {
+  if (!node) {
+    return;
+  }
   if (direction) {
     if (node.children) {
       node.children.forEach((item: any) => {

@@ -3,7 +3,7 @@ import { fdObject } from '../observer/fdObject';
 
 export interface FastDomNode {
   tag: string | 'textNode';
-  skip?: Observer<boolean> | boolean;
+  show?: Observer<boolean> | boolean;
   attrs?: { [key: string]: any } | fdObject<any>;
   props?: { [key: string]: any } | fdObject<any>;
   parent?: HTMLElement;
