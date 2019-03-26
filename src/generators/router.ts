@@ -19,7 +19,7 @@ class ModuleRouter extends Component {
   public setPaths(paths: Paths = {}) {
     const _paths = {} as { [key: string]: RouterPath };
     Object.keys(paths).forEach(path => {
-      _paths[path] = {
+      _paths[this.baseHref + path] = {
         component: paths[path].component,
         title: paths[path].title,
         path: path,
@@ -33,7 +33,7 @@ class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
-    const key = Object.keys(this._paths).find(path => path === url);
+    const key = Object.keys(this._paths).find(path => path === this.baseHref + url);
     if (!key) {
       return;
     }
@@ -52,12 +52,16 @@ class ModuleRouter extends Component {
       component.instance.onInit();
     }
     this._currentComp = component;
-    window.history.pushState(pathItem.path, document.title, pathItem.path);
+    window.history.pushState(
+      this.baseHref + pathItem.path,
+      document.title,
+      this.baseHref + pathItem.path,
+    );
   };
 
   onInit() {
     window.addEventListener('popstate', this.onPopState);
-    this.goToUrl(window.location.pathname);
+    this.goToUrl('/');
   }
 
   onDestroy() {
@@ -74,9 +78,15 @@ class ModuleRouter extends Component {
       }),
     );
   }
+
+  constructor(private baseHref: string) {
+    super();
+  }
 }
 
-export const Router = new ModuleRouter();
+export const Router = new ModuleRouter(
+  window.location.pathname.slice(0, window.location.pathname.length - 1),
+);
 
 export function createRouter(paths: Paths) {
   Router.setPaths(paths);

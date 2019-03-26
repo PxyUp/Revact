@@ -16,15 +16,15 @@ class ExampleRouter extends Component {
     }
 
     timerClick = () => {
-        Router.goToUrl('/timer')
+        Router.goToUrl('timer')
     }
 
     todoClick = () => {
-        Router.goToUrl('/todo')
+        Router.goToUrl('todo')
     }
 
     ifClick = () => {
-        Router.goToUrl('/if')
+        Router.goToUrl('if')
     }
 
     template: FastDomNode = {
@@ -63,15 +63,15 @@ class ExampleRouter extends Component {
                     component: createCounter,
                     title: "Home app",
                 },
-                '/timer': {
+                'timer': {
                     component: createTimer,
                     title: "Timer app",
                 },
-                '/todo': {
+                'todo': {
                     component: createTodo,
                     title: "Todo app",
                 },
-                '/if': {
+                'if': {
                     component: createIf,
                     title: "If conditions",
                 }
