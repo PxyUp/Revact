@@ -61,15 +61,19 @@ class ExampleRouter extends Component {
             createRouter({
                 '/': {
                     component: createCounter,
+                    title: "Home app",
                 },
                 '/timer': {
                     component: createTimer,
+                    title: "Timer app",
                 },
                 '/todo': {
-                    component: createTodo
+                    component: createTodo,
+                    title: "Todo app",
                 },
                 '/if': {
                     component: createIf,
+                    title: "If conditions",
                 }
             }),
         ]
