@@ -13,7 +13,7 @@ import { fdObject } from '../observer/fdObject';
 const instance = Symbol('instance');
 
 export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
-  if (node.skip === true) {
+  if (node.show === false) {
     return null;
   }
 
@@ -125,16 +125,17 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.instance) {
     (rootNode as any)[instance] = node.instance;
-    node.instance.onInit();
   }
 
-  if (typeof node.skip === 'object') {
+  if (typeof node.show === 'object') {
     const comment = document.createComment('');
-    node.skip.addSubscribers(value => {
+    node.show.addSubscribers(value => {
       const parent = node.parent ? node.parent : (null as HTMLElement);
       if (value) {
         if (parent) {
-          parent.replaceChild(rootNode, comment);
+          if (comment.parentNode === parent) {
+            parent.replaceChild(rootNode, comment);
+          }
           callDeep(node, 'reInit', false);
           if (fdClassesNode) {
             fdClassesNode.reInit();
@@ -164,12 +165,17 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
             fdClassesNode.destroy();
           }
           callDeep(node, 'destroy', true);
-          parent.replaceChild(comment, rootNode);
+          if (rootNode.parentNode === parent) {
+            parent.replaceChild(comment, rootNode);
+          }
         }
       }
     });
 
-    if (node.skip.value) {
+    if (node.show.value) {
+      if (node.instance) {
+        node.instance.onInit();
+      }
       return rootNode;
     } else {
       return comment;

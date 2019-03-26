@@ -29,7 +29,7 @@ class Timer extends Component {
                 this.currentClass.value = this.counter.value % 2 === 0 ? true : false 
                 timer()
             }, 1000)
-        } 
+        }
         timer();
     }
 

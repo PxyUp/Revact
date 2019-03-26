@@ -17,7 +17,7 @@ export class Observer<T> {
     }
     this.isDestroy = true;
     if (force) {
-      delete this.subscribers;
+      this.subscribers = [];
     }
   }
 

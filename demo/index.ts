@@ -1,8 +1,9 @@
-import { fdFor, fdIf, fdValue, generateNode } from "../src";
+import { createRouter, fdFor, fdIf, fdValue, generateNode } from "../src";
 
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
 import { createExampleAttr } from "./attrs/attrs";
+import { createExampleRouter } from "./router/router";
 import { createIf } from "./simple_if/if";
 import { createObsFor } from "./for_obs/for_obs";
 import { createSimpleFor } from "./simple_for/for";
@@ -45,3 +46,6 @@ attrsComponentConainer.appendChild(generateNode(createExampleAttr()))
 
 const textNodeComponentConainer = document.getElementById("text_node")
 textNodeComponentConainer.appendChild(generateNode(createTextNode()))
+
+const routerConainer = document.getElementById("router")
+routerConainer.appendChild(generateNode(createExampleRouter()))
