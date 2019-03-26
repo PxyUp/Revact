@@ -1,9 +1,8 @@
 import { FastDomNode, Paths } from '../interfaces/index';
 import { RouteParams, RouterPath } from '../interfaces/router';
-import { callDeep, clean, findMatchedRoutes, matchRoute, removeAllChild } from '../misc/misc';
+import { callDeep, clean, matchRoute, removeAllChild } from '../misc/misc';
 
 import { Component } from './component';
-import { fdIf } from '../misc/directives';
 import { generateNode } from './node';
 
 function getUrlDepth(url: string) {
@@ -41,6 +40,7 @@ export class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
+    console.log(url, this._arrPaths);
     const foundRoute = matchRoute(url, this._arrPaths);
     if (!foundRoute) {
       return;
