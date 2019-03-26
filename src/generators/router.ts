@@ -85,7 +85,9 @@ class ModuleRouter extends Component {
 }
 
 export const Router = new ModuleRouter(
-  window.location.pathname.slice(0, window.location.pathname.length - 1),
+  window.location.pathname.length === 1
+    ? window.location.pathname.slice(0, window.location.pathname.length - 1)
+    : window.location.pathname,
 );
 
 export function createRouter(paths: Paths) {
