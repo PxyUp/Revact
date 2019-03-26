@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent } from "../../src";
+import { Component, ComponentsInputs, FastDomNode, createComponent } from "../../src";
 
 export function createCounters(inputs: any) {
     return createComponent(CountersShared, inputs);
@@ -29,7 +29,7 @@ class CountersShared extends Component {
             click: this.onClick
         }
     }
-    constructor(private input: any) {
+    constructor(private input: ComponentsInputs) {
         super()
     }
 }

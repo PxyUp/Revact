@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdObject, fdValue, generateNode } from "../../src";
+import { Component, ComponentsInputs, FastDomNode, createComponent, fdFor, fdObject, fdValue } from "../../src";
 
 function createTodoItem(inputs: any) {
     return createComponent(TodoItem, inputs)
@@ -39,7 +39,7 @@ class TodoItem extends Component {
         ]
     }
 
-    constructor(private input: any) {
+    constructor(private input: ComponentsInputs) {
         super();
     }
 }

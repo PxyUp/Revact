@@ -1,13 +1,15 @@
+import { ClassConstructor, ComponentsInputs } from '../interfaces/component';
+
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 import { removeAllListenersComponent } from '../misc/misc';
 
-export function createComponent(
-  classProvider: any,
-  inputs?: { [key: string]: Observer<any> | any },
+export function createComponent<T>(
+  classProvider: ClassConstructor<T>,
+  inputs: ComponentsInputs = {},
 ): FastDomNode {
-  const instance = new classProvider(inputs);
+  const instance = new classProvider(inputs) as any;
   instance.template.instance = instance;
   return instance.template;
 }
@@ -15,7 +17,7 @@ export function createComponent(
 export class Component {
   protected reactive: { [key: string]: Observer<any> } = {};
   protected fdObjects: { [key: string]: fdObject<any> } = {};
-  protected template: FastDomNode;
+  public template: FastDomNode;
   protected onDestroy() {}
   protected onInit() {}
 

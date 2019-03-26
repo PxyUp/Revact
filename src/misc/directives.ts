@@ -1,5 +1,6 @@
 import { callDeep, removeAllChild } from './misc';
 
+import { ComponentsInputs } from '../interfaces/component';
 import { Observer } from '../observer/observer';
 import { generateNode } from '../generators/node';
 
@@ -14,7 +15,7 @@ export function fdValue(value: any) {
 const mapFn = (
   item: any,
   itemFn: ((e: any) => any) | object,
-  inputs: { [key: string]: any } = {},
+  inputs: ComponentsInputs = {},
   index: number,
 ) => {
   if (typeof itemFn === 'function') {
@@ -35,7 +36,7 @@ const mapFn = (
 export function fdFor(
   iteration: Observer<Array<any>> | Array<any>,
   itemFn: ((e: any) => any) | object,
-  inputs: { [key: string]: any } = {},
+  inputs: ComponentsInputs = {},
 ) {
   if (Array.isArray(iteration)) {
     return iteration.map((item: any, index) => mapFn(item, itemFn, inputs, index));
