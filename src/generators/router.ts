@@ -80,8 +80,5 @@ export const Router = new ModuleRouter();
 
 export function createRouter(paths: Paths) {
   Router.setPaths(paths);
-  setTimeout(() => {
-    Router.onInit();
-  });
   return Router.template;
 }
