@@ -29,11 +29,11 @@ class ModuleRouter extends Component {
   }
 
   private onPopState = (e: PopStateEvent) => {
-    this.applyUrl(e.state);
+    this.applyUrl(e.isTrusted ? e.state : this.baseHref + e.state);
   };
 
   private applyUrl = (url: string) => {
-    const key = Object.keys(this._paths).find(path => path === this.baseHref + url);
+    const key = Object.keys(this._paths).find(path => path === url);
     if (!key) {
       return;
     }
