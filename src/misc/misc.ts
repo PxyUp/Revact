@@ -1,7 +1,7 @@
 import { FastDomNode } from '../interfaces/node';
-import { ModuleRouter } from '../generators/router';
 import { RouterPath } from '../interfaces/router';
 
+// Thank you, very much https://github.com/krasimir/navigo
 const PARAMETER_REGEXP = /([:*])(\w+)/g;
 const WILDCARD_REGEXP = /\*/g;
 const REPLACE_VARIABLE_REGEXP = '([^/]+)';
@@ -115,6 +115,7 @@ export function callDeep(node: FastDomNode, method: string, direction: boolean, 
   return;
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function getOnlyURL(url: string, useHash = false, hash = '#') {
   let onlyURL = url;
   let split;
@@ -135,6 +136,7 @@ export function getOnlyURL(url: string, useHash = false, hash = '#') {
   return onlyURL;
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function regExpResultToParams(match: Array<any>, names: Array<string>) {
   if (names.length === 0) return null;
   if (!match) return null;
@@ -145,11 +147,13 @@ export function regExpResultToParams(match: Array<any>, names: Array<string>) {
   }, null);
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function clean(s: RegExp | string): RegExp | string {
   if (s instanceof RegExp) return s;
   return s.replace(/\/+$/, '').replace(/^\/+/, '^/');
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function findMatchedRoutes(url: string, routes: Array<RouterPath> = []) {
   return routes
     .map(route => {
@@ -162,10 +166,12 @@ export function findMatchedRoutes(url: string, routes: Array<RouterPath> = []) {
     .filter(m => m);
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function matchRoute(url: string, routes: Array<RouterPath> = []) {
   return findMatchedRoutes(getOnlyURL(url), routes)[0] || false;
 }
 
+// Thank you, very much https://github.com/krasimir/navigo
 export function replaceDynamicURLParts(route: RegExp | string) {
   const paramNames: Array<any> = [];
   let regexp;
