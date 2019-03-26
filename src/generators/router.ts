@@ -19,7 +19,7 @@ class ModuleRouter extends Component {
   public setPaths(paths: Paths = {}) {
     const _paths = {} as { [key: string]: RouterPath };
     Object.keys(paths).forEach(path => {
-      _paths[this.baseHref + path] = {
+      _paths[(this.baseHref + path).replace(/[\\\\/]+/g, '/')] = {
         component: paths[path].component,
         title: paths[path].title,
         path: path,
