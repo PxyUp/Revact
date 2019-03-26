@@ -28,7 +28,7 @@ export class ModuleRouter extends Component {
       this._arrPaths.push({
         component: paths[path].component,
         title: paths[path].title,
-        path: clean(this.baseHref + path),
+        path: clean((this.baseHref + path).replace(/[\\\\/]+/g, '/')),
         resolver: paths[path].resolver,
       });
     });
