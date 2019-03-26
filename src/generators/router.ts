@@ -40,7 +40,6 @@ export class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
-    console.log(url, this._arrPaths);
     const foundRoute = matchRoute(url, this._arrPaths);
     if (!foundRoute) {
       return;
