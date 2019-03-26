@@ -125,6 +125,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.instance) {
     (rootNode as any)[instance] = node.instance;
+    node.instance.onInit();
   }
 
   if (typeof node.show === 'object') {
@@ -173,9 +174,6 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     });
 
     if (node.show.value) {
-      if (node.instance) {
-        node.instance.onInit();
-      }
       return rootNode;
     } else {
       return comment;

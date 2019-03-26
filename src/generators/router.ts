@@ -48,9 +48,6 @@ class ModuleRouter extends Component {
     this._cUrl = pathItem.path;
     const component = pathItem.component();
     this.template.domNode.appendChild(generateNode(component));
-    if (component.instance) {
-      component.instance.onInit();
-    }
     this._currentComp = component;
     const newState = (this.baseHref + pathItem.path).replace(/[\\\\/]+/g, '/');
     window.history.pushState(newState, document.title, newState);
