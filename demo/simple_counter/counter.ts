@@ -1,12 +1,14 @@
-import { Component, FastDomNode, createComponent, fdValue } from "../../src";
+import { Component, FastDomNode, createComponent, fdObject, fdValue } from "../../src";
 
 export function createCounter() {
     return createComponent(Counter);
 }
 
 class Counter extends Component {
+    width = 100;
+
     reactive = {
-        counter: fdValue(0)
+        counter: fdValue(0),
     }
 
     get counter() {

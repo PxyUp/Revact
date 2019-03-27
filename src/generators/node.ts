@@ -3,6 +3,7 @@ import {
   callDeep,
   removeNodeListener,
   setNodeAttrs,
+  setNodeStyle,
   setProps,
 } from '../misc/misc';
 
@@ -36,6 +37,8 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   let fdClassesNode: fdObject<boolean>;
   let fdAttrsNode: fdObject<any>;
   let fdPropsNode: fdObject<any>;
+  let fdStyleNode: fdObject<any> | Observer<string>;
+
   if (node.tag !== 'textNode') {
     if (node.classList) {
       if (Array.isArray(node.classList)) {
@@ -71,6 +74,27 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         setProps(rootNode as HTMLElement, propsObs.value);
         propsObs.addSubscriber(newProps => {
           setProps(rootNode as HTMLElement, newProps);
+        });
+      }
+    }
+
+    if (node.styles) {
+      if (!(node.styles instanceof fdObject)) {
+        if (node.styles instanceof Observer) {
+          fdStyleNode = node.styles;
+          setNodeStyle(rootNode as HTMLElement, fdStyleNode.value);
+          fdStyleNode.addSubscriber(newStyles => {
+            setNodeStyle(rootNode as HTMLElement, newStyles);
+          });
+        } else {
+          setNodeStyle(rootNode as HTMLElement, node.styles);
+        }
+      } else {
+        fdStyleNode = node.styles;
+        const styleObs = fdStyleNode.value as Observer<{ [key: string]: any }>;
+        setNodeStyle(rootNode as HTMLElement, styleObs.value);
+        styleObs.addSubscriber(newStyles => {
+          setNodeStyle(rootNode as HTMLElement, newStyles);
         });
       }
     }
@@ -138,6 +162,9 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
             parent.replaceChild(rootNode, comment);
           }
           callDeep(node, 'reInit', false);
+          if (fdStyleNode) {
+            fdClassesNode.reInit();
+          }
           if (fdClassesNode) {
             fdClassesNode.reInit();
           }
@@ -160,9 +187,12 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
             fdAttrsNode.destroy();
           }
           if (fdPropsNode) {
-            fdPropsNode.reInit();
+            fdPropsNode.destroy();
           }
           if (fdClassesNode) {
+            fdClassesNode.destroy();
+          }
+          if (fdStyleNode) {
             fdClassesNode.destroy();
           }
           callDeep(node, 'destroy', true);

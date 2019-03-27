@@ -6,6 +6,7 @@ export interface FastDomNode {
   show?: Observer<boolean> | boolean;
   attrs?: { [key: string]: any } | fdObject<any>;
   props?: { [key: string]: any } | fdObject<any>;
+  styles?: string | { [key: string]: any } | fdObject<any>;
   parent?: HTMLElement;
   classList?: Array<string> | fdObject<boolean>;
   children?: Array<FastDomNode | HTMLElement | Comment | Array<any>>;

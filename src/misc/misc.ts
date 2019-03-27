@@ -1,4 +1,5 @@
 import { FastDomNode } from '../interfaces/node';
+import { Observer } from '../observer/observer';
 import { Router } from '../generators/index';
 import { RouterPath } from '../interfaces/router';
 
@@ -15,6 +16,16 @@ const isPushStateAvailable = !!(
   window.history &&
   window.history.pushState
 );
+
+export function setNodeStyle(node: HTMLElement, styles: { [key: string]: string } | string) {
+  if (typeof styles === 'string') {
+    (node as HTMLElement).style.cssText = styles;
+    return;
+  }
+  Object.keys(styles).forEach((key: string) => {
+    (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+  });
+}
 
 export function setNodeAttrs(node: HTMLElement | Element, attrs: { [key: string]: string }) {
   Object.keys(attrs).forEach(key => {

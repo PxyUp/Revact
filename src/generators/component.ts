@@ -17,11 +17,15 @@ export function createComponent<T>(
 export class Component {
   protected reactive: { [key: string]: Observer<any> } = {};
   protected fdObjects: { [key: string]: fdObject<any> } = {};
+  protected fdStyles: { [key: string]: fdObject<any> | Observer<string> } = {};
   public template: FastDomNode;
   protected onDestroy() {}
   protected onInit() {}
 
   reInit() {
+    Object.keys(this.fdStyles).forEach(key => {
+      this.fdStyles[key].reInit();
+    });
     Object.keys(this.fdObjects).forEach(key => {
       this.fdObjects[key].reInit();
     });
@@ -41,6 +45,9 @@ export class Component {
     });
     Object.keys(this.reactive).forEach(key => {
       this.reactive[key].destroy(...args);
+    });
+    Object.keys(this.fdStyles).forEach(key => {
+      this.fdStyles[key].destroy(...args);
     });
     this.onDestroy();
   }

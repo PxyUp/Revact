@@ -8,9 +8,13 @@ import { createIf } from "./simple_if/if";
 import { createObsFor } from "./for_obs/for_obs";
 import { createSimpleFor } from "./simple_for/for";
 import { createSimpleForContainer } from "./simple_for_component/forComponent";
+import { createStyles } from "./styles/styles";
 import { createTextNode } from "./textNode/textNode";
 import { createTimer } from "./timer/timer";
 import { createTodo } from "./todo/todo";
+
+const simpleStyle = document.getElementById("styles")
+simpleStyle.appendChild(generateNode(createStyles()))
 
 const simpleTodo = document.getElementById("todo")
 simpleTodo.appendChild(generateNode(createTodo()))
