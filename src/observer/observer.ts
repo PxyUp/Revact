@@ -1,5 +1,4 @@
 export class Observer<T> {
-  private setterTimeout: number = null;
   private subscribers: Array<(e: T) => void> = [];
   private firstState: T;
   private isDestroy = false;
@@ -14,9 +13,6 @@ export class Observer<T> {
   destroy(force = false) {
     if (this.isDestroy) {
       return;
-    }
-    if (this.setterTimeout) {
-      cancelAnimationFrame(this.setterTimeout);
     }
     if (force) {
       this.subscribers = [];
@@ -52,13 +48,8 @@ export class Observer<T> {
     }
     this._value = value;
     if (this.subscribers.length) {
-      if (this.setterTimeout) {
-        cancelAnimationFrame(this.setterTimeout);
-      }
-      this.setterTimeout = requestAnimationFrame(() => {
-        this.subscribers.forEach(sub => {
-          sub(value);
-        });
+      this.subscribers.forEach(sub => {
+        sub(value);
       });
     }
   }

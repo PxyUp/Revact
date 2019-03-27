@@ -1,12 +1,12 @@
 # Faster Dom ![npm](https://img.shields.io/npm/v/faster-dom.svg)
 
-Lightweight replacement of React + MobX + React Router (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero. Use `requestAnimationFrame` for change detection, which allows batch updates to do.
+Lightweight replacement of React + MobX + React Router (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero.
 
 The library allows you to create quick and responsive interfaces using only JS / TS. With this you will get the minimum application size, speed and ease of development.
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.22-alpha
+yarn add faster-dom@0.0.23-alpha
 ```
 
 *index.html*
