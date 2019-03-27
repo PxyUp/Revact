@@ -3,6 +3,7 @@ import { RouteParams, RouterPath } from '../interfaces/router';
 import { callDeep, clean, matchRoute, removeAllChild } from '../misc/misc';
 
 import { Component } from './component';
+import { fdValue } from '../misc/directives';
 import { generateNode } from './node';
 
 function getUrlDepth(url: string) {
@@ -15,8 +16,8 @@ function compareUrlDepth(urlA: RouterPath, urlB: RouterPath) {
 
 export class ModuleRouter extends Component {
   private _arrPaths: Array<RouterPath> = [];
-  private _cUrl: string = null;
-  private _cState: RegExp | string = null;
+  private _cUrl = fdValue(null);
+  private _cState = fdValue(null);
   private _currentComp: FastDomNode = null;
 
   template: FastDomNode = {
@@ -41,6 +42,7 @@ export class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
+    console.log(url);
     const foundRoute = matchRoute(url, this._arrPaths);
     if (!foundRoute) {
       return;
@@ -60,16 +62,16 @@ export class ModuleRouter extends Component {
     this.createComponent(url, pathItem);
   };
 
-  createComponent(url: string, pathItem: RouterPath, params?: RouteParams) {
+  private createComponent(url: string, pathItem: RouterPath, params?: RouteParams) {
     if (pathItem.title) {
       document.title = pathItem.title;
     }
-    this._cUrl = url;
-    this._cState = pathItem.path;
+    this._cUrl.value = url;
+    this._cState.value = pathItem.path;
     const component = pathItem.component(params);
     this.template.domNode.appendChild(generateNode(component));
     this._currentComp = component;
-    window.history.pushState(this._cUrl, document.title, this._cUrl);
+    window.history.pushState(this._cUrl.value, document.title, this._cUrl.value);
   }
 
   onInit() {
@@ -82,7 +84,7 @@ export class ModuleRouter extends Component {
   }
 
   goToUrl(path: string) {
-    if (this._cUrl === (this.baseHref + path).replace(/[\\\\/]+/g, '/')) {
+    if (this._cUrl.value === (this.baseHref + path).replace(/[\\\\/]+/g, '/')) {
       return;
     }
     dispatchEvent(
@@ -90,6 +92,26 @@ export class ModuleRouter extends Component {
         state: path,
       }),
     );
+  }
+
+  public isCurrentRoute(url: string): boolean {
+    const item = matchRoute(url, [
+      {
+        path: this._cState.value,
+      } as any,
+    ]);
+    if (!item) {
+      return false;
+    }
+    return item.match[0] !== '' ? true : false;
+  }
+
+  public getCurrentRoute() {
+    return this._cUrl;
+  }
+
+  public getCurrentState() {
+    return this._cState;
   }
 
   constructor(private baseHref: string) {

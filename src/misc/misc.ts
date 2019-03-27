@@ -1,4 +1,5 @@
 import { FastDomNode } from '../interfaces/node';
+import { Router } from '../generators/index';
 import { RouterPath } from '../interfaces/router';
 
 // Thank you, very much https://github.com/krasimir/navigo

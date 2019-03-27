@@ -25,7 +25,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   if (node.textValue !== null || node.textValue !== undefined) {
     if (typeof node.textValue === 'object') {
       const obs = node.textValue;
-      obs.addSubscribers(value => {
+      obs.addSubscriber(value => {
         rootNode.textContent = value;
       });
       rootNode.textContent = obs.value;
@@ -51,7 +51,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
             ? (rootNode as HTMLElement).classList.add(key)
             : (rootNode as HTMLElement).classList.remove(key);
         });
-        clsObs.addSubscribers(newClasses => {
+        clsObs.addSubscriber(newClasses => {
           Object.keys(newClasses).forEach(key => {
             const value = newClasses[key];
             return value
@@ -69,7 +69,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         fdPropsNode = node.props;
         const propsObs = node.props.value as Observer<{ [key: string]: any }>;
         setProps(rootNode as HTMLElement, propsObs.value);
-        propsObs.addSubscribers(newProps => {
+        propsObs.addSubscriber(newProps => {
           setProps(rootNode as HTMLElement, newProps);
         });
       }
@@ -82,7 +82,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         fdAttrsNode = node.attrs;
         const attrsObs = node.attrs.value as Observer<{ [key: string]: any }>;
         setNodeAttrs(rootNode as HTMLElement, attrsObs.value);
-        attrsObs.addSubscribers(newAttrs => {
+        attrsObs.addSubscriber(newAttrs => {
           setNodeAttrs(rootNode as HTMLElement, newAttrs);
         });
       }
@@ -130,7 +130,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (typeof node.show === 'object') {
     const comment = document.createComment('');
-    node.show.addSubscribers(value => {
+    node.show.addSubscriber(value => {
       const parent = node.parent ? node.parent : (null as HTMLElement);
       if (value) {
         if (parent) {

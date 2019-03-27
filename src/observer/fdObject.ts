@@ -15,7 +15,7 @@ export class fdObject<T> {
       this.obsArr.push(item as Observer<T>);
       this.values[key] = (item as Observer<T>).value;
 
-      (item as Observer<T>).addSubscribers(value => {
+      (item as Observer<T>).addSubscriber(value => {
         this.values[key] = value;
         this.obs.value = this.values;
       });

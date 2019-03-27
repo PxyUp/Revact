@@ -43,7 +43,7 @@ export function fdFor(
   }
   let responseArray = iteration.value.map((item: any, index) => mapFn(item, itemFn, inputs, index));
 
-  iteration.addSubscribers(value => {
+  iteration.addSubscriber(value => {
     // @TODO create proper solution for for directive - need re-render just part
     let parent: HTMLElement = (responseArray as any)._parent;
     if (responseArray.length) {

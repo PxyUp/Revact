@@ -1,4 +1,4 @@
-import { Component, FastDomNode, Router, createComponent, createRouter } from "../../src";
+import { Component, FastDomNode, Router, createComponent, createRouter, fdFor, fdIf, fdObject, matchRoute } from "../../src";
 
 import { RouteParams } from "../../src/interfaces/router";
 import { createCounter } from "../simple_counter/counter";
@@ -10,8 +10,8 @@ export function createExampleRouter() {
     return createComponent(ExampleRouter)
 }
 
-export function createTextNode(inputs ={}) {
-    return createComponent(TextNode,inputs)
+export function createTextNode(inputs = {}) {
+    return createComponent(TextNode, inputs)
 }
 
 class TextNode extends Component {
@@ -28,85 +28,86 @@ class TextNode extends Component {
 
 class ExampleRouter extends Component {
 
-    goTextNodeBtn = () => {
-        Router.goToUrl(`/textNode/${Math.random()* 500 | 0}`)  
-    }
-
-    homeBtn = () => {
-        Router.goToUrl('/')
-    }
-
-    timerClick = () => {
-        Router.goToUrl('/timer')
-    }
-
-    todoClick = () => {
-        Router.goToUrl('/todo')
-    }
-
-    ifClick = () => {
-        Router.goToUrl('/if')
-    }
+    list = [
+        {
+            name: 'Home',
+            path: '/',
+            click: () => {
+                Router.goToUrl('/')
+            }
+        },
+        {
+            name: 'Timer',
+            path: '/timer',
+            click: () => {
+                Router.goToUrl('/timer')
+            }
+        },
+        {
+            name: 'Todo',
+            path: '/todo',
+            click: () => {
+                Router.goToUrl('/todo')
+            }
+        },
+        {
+            name: 'If',
+            path: '/if',
+            click: () => {
+                Router.goToUrl('/if')
+            }
+        },
+        {
+            name: 'TextNode',
+            path: `/textNode/*`,
+            click: () => {
+                Router.goToUrl(`/textNode/${Math.random() * 500 | 0}`)
+            }
+        },
+    ];
 
     template: FastDomNode = {
         tag: "div",
         children: [
-            {
-                tag: "button",
-                textValue: "Home",
-                listeners: {
-                    click: this.homeBtn
+            fdFor(this.list, (el) => {
+                const obs = fdIf(false);
+                Router.getCurrentRoute().addSubscriber(() => {
+                    obs.value = Router.isCurrentRoute(el.item.path);
+                })
+                return {
+                    tag: "button",
+                    textValue:  el.item.name,
+                    classList: new fdObject({
+                        current: obs,
+                    }),
+                    listeners: {
+                        click: () => el.item.click()
+                    }
                 }
-            },
-            {
-                tag: "button",
-                textValue: "Timer",
-                listeners: {
-                    click: this.timerClick
-                }
-            },
-            {
-                tag: "button",
-                textValue: "TextNode",
-                listeners: {
-                    click: this.goTextNodeBtn
-                }
-            },
-            {
-                tag: "button",
-                textValue: "Todo",
-                listeners: {
-                    click: this.todoClick
-                }
-            },
-            {
-                tag: "button",
-                textValue: "If",
-                listeners: {
-                    click: this.ifClick
-                }
-            },
+            }, {
+                item: (e: any) => e
+            }),
             createRouter({
                 '/': {
                     component: createCounter,
-                    title: "Home app",
+                    title: "Home",
                 },
                 '/textNode/:id': {
                     component: createTextNode,
-                    title: "Timer app",
+                    title: "TextNode with router param",
                     resolver: (params: RouteParams) => Promise.resolve(params),
                 },
                 '/timer': {
                     component: createTimer,
-                    title: "Timer app",
+                    title: "Timer",
                 },
                 '/todo': {
                     component: createTodo,
-                    title: "Todo app",
+                    title: "Todo",
                 },
                 '/if': {
                     component: createIf,
-                    title: "If conditions",
+                    title: "If",
                 }
             }),
         ]

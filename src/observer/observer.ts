@@ -26,11 +26,18 @@ export class Observer<T> {
     this.value = this.firstState;
   }
 
-  addSubscribers(subscriber: (e: T) => void) {
+  addSubscriber(subscriber: (e: T) => void) {
     if (this.isDestroy) {
       return;
     }
     this.subscribers.push(subscriber);
+  }
+
+  removeSubscriber(subscriber: (e: T) => void) {
+    const index = this.subscribers.indexOf(subscriber);
+    if (index > -1) {
+      this.subscribers.splice(index, 1);
+    }
   }
 
   set value(value: T) {
