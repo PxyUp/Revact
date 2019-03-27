@@ -42,7 +42,6 @@ export class ModuleRouter extends Component {
   };
 
   private applyUrl = (url: string) => {
-    console.log(url);
     const foundRoute = matchRoute(url, this._arrPaths);
     if (!foundRoute) {
       return;
@@ -95,7 +94,7 @@ export class ModuleRouter extends Component {
   }
 
   public isCurrentRoute(url: string): boolean {
-    const item = matchRoute(url, [
+    const item = matchRoute((this.baseHref + url).replace(/[\\\\/]+/g, '/'), [
       {
         path: this._cState.value,
       } as any,
