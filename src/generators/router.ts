@@ -15,7 +15,8 @@ function compareUrlDepth(urlA: RouterPath, urlB: RouterPath) {
 
 export class ModuleRouter extends Component {
   private _arrPaths: Array<RouterPath> = [];
-  private _cUrl: string = '';
+  private _cUrl: string = null;
+  private _cState: RegExp | string = null;
   private _currentComp: FastDomNode = null;
 
   template: FastDomNode = {
@@ -64,6 +65,7 @@ export class ModuleRouter extends Component {
       document.title = pathItem.title;
     }
     this._cUrl = url;
+    this._cState = pathItem.path;
     const component = pathItem.component(params);
     this.template.domNode.appendChild(generateNode(component));
     this._currentComp = component;
@@ -80,7 +82,7 @@ export class ModuleRouter extends Component {
   }
 
   goToUrl(path: string) {
-    if (this._cUrl === path) {
+    if (this._cUrl === (this.baseHref + path).replace(/[\\\\/]+/g, '/')) {
       return;
     }
     dispatchEvent(
