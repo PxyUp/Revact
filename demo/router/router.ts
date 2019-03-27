@@ -3,6 +3,7 @@ import { Component, FastDomNode, Router, createComponent, createRouter, fdFor, f
 import { RouteParams } from "../../src/interfaces/router";
 import { createCounter } from "../simple_counter/counter";
 import { createIf } from "../simple_if/if";
+import { createStyles } from "../styles/styles";
 import { createTimer } from "../timer/timer";
 import { createTodo } from "../todo/todo";
 
@@ -64,6 +65,13 @@ class ExampleRouter extends Component {
                 Router.goToUrl(`/textNode/${Math.random() * 500 | 0}`)
             }
         },
+        {
+            name: 'Styles',
+            path: `/styles`,
+            click: () => {
+                Router.goToUrl('/styles')
+            }
+        },
     ];
 
     template: FastDomNode = {
@@ -108,6 +116,10 @@ class ExampleRouter extends Component {
                 '/if': {
                     component: createIf,
                     title: "If",
+                },
+                '/styles': {
+                    component: createStyles,
+                    title: 'Styles'
                 }
             }),
         ]
