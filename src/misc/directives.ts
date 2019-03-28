@@ -59,6 +59,7 @@ export function fdFor(
 
         removeAllChild(parent);
       }
+      responseArray = value;
       (responseArray as any)._parent = parent;
       return;
     }
