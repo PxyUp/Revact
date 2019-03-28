@@ -16,8 +16,8 @@ function compareUrlDepth(urlA: RouterPath, urlB: RouterPath) {
 
 export class ModuleRouter extends Component {
   private _arrPaths: Array<RouterPath> = [];
-  private _cUrl = fdValue(null);
-  private _cState = fdValue(null);
+  private _cUrl = fdValue('');
+  private _cState = fdValue('');
   private _currentComp: FastDomNode = null;
 
   template: FastDomNode = {
@@ -35,6 +35,7 @@ export class ModuleRouter extends Component {
       });
     });
     this._arrPaths.sort(compareUrlDepth);
+    this.goToUrl('/');
   }
 
   private onPopState = (e: PopStateEvent) => {
@@ -50,6 +51,8 @@ export class ModuleRouter extends Component {
     if (this._currentComp) {
       callDeep(this._currentComp, 'destroy', true, true);
     }
+    this._cState.value = pathItem.path;
+    this._cUrl.value = url;
     removeAllChild(this.template.domNode as HTMLElement);
     if (pathItem.resolver) {
       const resolver = pathItem.resolver(foundRoute.params);
@@ -65,17 +68,12 @@ export class ModuleRouter extends Component {
     if (pathItem.title) {
       document.title = pathItem.title;
     }
-    this._cUrl.value = url;
-    this._cState.value = pathItem.path;
-    const component = pathItem.component(params);
-    this.template.domNode.appendChild(generateNode(component));
-    this._currentComp = component;
     window.history.pushState(this._cUrl.value, document.title, this._cUrl.value);
-  }
-
-  onInit() {
-    window.addEventListener('popstate', this.onPopState);
-    this.goToUrl('/');
+    const component = pathItem.component(params);
+    this._currentComp = component;
+    Promise.resolve().then(() => {
+      this.template.domNode.appendChild(generateNode(component));
+    });
   }
 
   onDestroy() {
@@ -115,6 +113,7 @@ export class ModuleRouter extends Component {
 
   constructor(private baseHref: string) {
     super();
+    window.addEventListener('popstate', this.onPopState);
   }
 }
 

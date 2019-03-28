@@ -79,7 +79,7 @@ class ExampleRouter extends Component {
         children: [
             fdFor(this.list, (el) => {
                 const obs = fdIf(false);
-                Router.getCurrentRoute().addSubscriber(() => {
+                Router.getCurrentRoute().addSubscriber((value) => {
                     obs.value = Router.isCurrentRoute(el.item.path);
                 })
                 return {

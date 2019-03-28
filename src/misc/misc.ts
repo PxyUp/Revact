@@ -131,7 +131,7 @@ export function callDeep(node: FastDomNode, method: string, direction: boolean, 
 export function getOnlyURL(url: string, useHash = false, hash = '#') {
   let onlyURL = url;
   let split;
-  var cleanGETParam = (str: string) => str.split(/\?(.*)?$/)[0];
+  const cleanGETParam = (str: string) => str.split(/\?(.*)?$/)[0];
 
   if (typeof hash === 'undefined') {
     // To preserve BC

@@ -12,7 +12,7 @@ export default {
     },
     plugins: [
         typescript(),
-          terser(),
+          //terser(),
           html({
             template: './demo/index.html',
             dest: "./docs",

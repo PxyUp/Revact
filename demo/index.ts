@@ -53,4 +53,3 @@ textNodeComponentConainer.appendChild(generateNode(createTextNode()))
 
 const routerConainer = document.getElementById("router")
 routerConainer.appendChild(generateNode(createExampleRouter()))
-Router.onInit();
