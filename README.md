@@ -112,7 +112,7 @@ timerContainer.appendChild(generateNode(createTimer()));
 
 **[CODE OF THE TESTS](https://github.com/PxyUp/js-framework-benchmark/pull/1/files)**
 
-![Test](https://github.com/PxyUp/FastDom/blob/master/test_one.jpg?raw=true)
+![Test](https://github.com/PxyUp/FastDom/blob/master/test_one.png?raw=true)
 
 ![Test](https://github.com/PxyUp/FastDom/blob/master/test_two.png?raw=true)
 
