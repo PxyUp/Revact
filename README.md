@@ -110,6 +110,8 @@ timerContainer.appendChild(generateNode(createTimer()));
 
 **Right now directive fdFor not optimized, on each change full rerender, and this have so much effect on (swap, remove, append)
 
+**[CODE OF THE TESTS](https://github.com/PxyUp/js-framework-benchmark/pull/1/files)**
+
 ![Test one](https://github.com/PxyUp/FastDom/blob/master/test_one.png?raw=true)
 
 ![Test one](https://github.com/PxyUp/FastDom/blob/master/test_two.png?raw=true)
