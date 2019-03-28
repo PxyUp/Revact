@@ -25,9 +25,17 @@ const mapFn = (
   index: number,
   keyFn?: (item: any) => string,
 ) => {
-  const isPrim = isPrimitive(item);
-  const newItem = isPrim ? { id: index, value: item } : item;
-  const skopedKeyFn = typeof keyFn === 'function' ? keyFn : () => newItem;
+  let isPrim = false;
+  let newItem: any;
+  let skopedKeyFn: (iten: any) => any;
+  if (keyFn) {
+    skopedKeyFn = keyFn;
+    newItem = item;
+  } else {
+    isPrim = isPrimitive(item);
+    newItem = isPrim ? { id: index, value: item } : item;
+    skopedKeyFn = () => newItem;
+  }
   if (typeof itemFn === 'function') {
     const inputOverride = {} as any;
     Object.keys(inputs).forEach(key => {
