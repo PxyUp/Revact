@@ -106,6 +106,14 @@ timerContainer.appendChild(generateNode(createTimer()));
 5. There is **a tree-shaking for components and templates !!!**. 
 6. **Router + Resolver** support!   
 
+## Performance
+
+**Right now directive fdFor not optimized, on each change full rerender, and this have so much effect on (swap, remove, append)
+
+![Test one](https://github.com/PxyUp/FastDom/blob/master/test_one.png?raw=true)
+
+![Test one](https://github.com/PxyUp/FastDom/blob/master/test_two.png?raw=true)
+
 ## How it works
 > Here will be good api
 
