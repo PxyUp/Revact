@@ -1,4 +1,10 @@
-import { callDeep, insertChildAtIndex, removeAllChild, removeChildAtIndex } from './misc';
+import {
+  callDeep,
+  insertChildAtIndex,
+  isPrimitive,
+  removeAllChild,
+  removeChildAtIndex,
+} from './misc';
 
 import { ComponentsInputs } from '../interfaces/component';
 import { Observer } from '../observer/observer';
@@ -8,8 +14,8 @@ export function fdIf(value?: boolean) {
   return fdValue(value);
 }
 
-export function fdValue(value: any) {
-  return new Observer(value);
+export function fdValue(value: any, force = false) {
+  return new Observer(value, force);
 }
 
 const mapFn = (
@@ -19,20 +25,26 @@ const mapFn = (
   index: number,
   keyFn?: (item: any) => string,
 ) => {
-  const skopedKeyFn = typeof keyFn === 'function' ? keyFn : () => index;
+  const isPrim = isPrimitive(item);
+  const newItem = isPrim ? { id: index, value: item } : item;
+  const skopedKeyFn = typeof keyFn === 'function' ? keyFn : () => newItem;
   if (typeof itemFn === 'function') {
     const inputOverride = {} as any;
     Object.keys(inputs).forEach(key => {
       const value = inputs[key];
       if (typeof value === 'function') {
-        inputOverride[key] = value(item);
+        inputOverride[key] = value(isPrim ? newItem.value : item);
       } else {
         inputOverride[key] = value;
       }
     });
-    return { ...itemFn({ ...inputOverride, index }), fdKey: skopedKeyFn(item) };
+    return { ...itemFn({ ...inputOverride, index }), fdKey: skopedKeyFn(newItem) };
   }
-  return { ...itemFn, textValue: (itemFn as any).textValue(item), fdKey: skopedKeyFn(item) };
+  return {
+    ...itemFn,
+    textValue: (itemFn as any).textValue(isPrim ? newItem.value : item),
+    fdKey: skopedKeyFn(newItem),
+  };
 };
 
 export function fdFor(

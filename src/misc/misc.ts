@@ -219,3 +219,8 @@ export function replaceDynamicURLParts(route: RegExp | string) {
   }
   return { regexp, paramNames };
 }
+
+export function isPrimitive(i: any) {
+  const type = typeof i;
+  return i == null || (type != 'object' && type != 'function');
+}

@@ -52,8 +52,5 @@ setTimeout(() => {
     obs.value = [1,2,3,4,5]
     setTimeout(() => {
         obs.value = [1]
-        setTimeout(() => {
-            obs.value = [1,2,3,4,5]
-        }, 3000)
     }, 3000)
 }, 3000)
