@@ -43,7 +43,7 @@ export function createObsFor() {
         tag: "div",
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            fdFor(obs, createDiv, { value: (e: any) => fdValue(e) }) // we do map from obs to reactive value
+            fdFor(obs, createDiv, { value: (e: any) => fdValue(e) }, (item: any) => item) // we do map from obs to reactive value
         ]
     }
 }
@@ -52,5 +52,8 @@ setTimeout(() => {
     obs.value = [1,2,3,4,5]
     setTimeout(() => {
         obs.value = [1]
+        setTimeout(() => {
+            obs.value = [1,2,3,4,5]
+        }, 3000)
     }, 3000)
 }, 3000)
