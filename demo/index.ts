@@ -1,4 +1,4 @@
-import { Router, createRouter, fdFor, fdIf, fdValue, generateNode } from "../src";
+import { bootstrap, fdValue } from "../src";
 
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
@@ -12,44 +12,49 @@ import { createStyles } from "./styles/styles";
 import { createTextNode } from "./textNode/textNode";
 import { createTimer } from "./timer/timer";
 import { createTodo } from "./todo/todo";
+import { Observer } from "../src/observer/observer";
 
-const simpleStyle = document.getElementById("styles")
-simpleStyle.appendChild(generateNode(createStyles()))
+// Simple Styles
+bootstrap('#styles', createStyles);
 
-const simpleTodo = document.getElementById("todo")
-simpleTodo.appendChild(generateNode(createTodo()))
+// Simple Todo
+bootstrap('#todo', createTodo);
 
-const simpleTimerConainer = document.getElementById("timer")
-simpleTimerConainer.appendChild(generateNode(createTimer()))
+// Simple timer
+bootstrap('#timer', createTimer);
 
-const simpleCounterConainer = document.getElementById("counter")
-simpleCounterConainer.appendChild(generateNode(createCounter()))
-simpleCounterConainer.appendChild(generateNode(createCounter()))
+// Simple Counter
+bootstrap('#counter', createCounter);
+bootstrap('#counter', createCounter);
 
-const simpleCounterSharedConainer = document.getElementById("counter_input")
+// Simple counters with one input
 const sharedValue = fdValue(0);
-simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))
-simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))
-simpleCounterSharedConainer.appendChild(generateNode(createCounters({counter: sharedValue})))
+interface SimpleCounter {
+  counter: Observer<number>;
+}
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
 
-const simpleIfConainer = document.getElementById("simple_if")
-simpleIfConainer.appendChild(generateNode(createIf()))
+// Simple If
+bootstrap('#simple_if', createIf);
 
-const simpleForConainer = document.getElementById("simple_for")
-simpleForConainer.appendChild(generateNode(createSimpleFor()))
+// Simple For
+bootstrap('#simple_for', createSimpleFor);
 
+// Simple For Component
+// const simpleForComponentConainer = document.getElementById("simple_for_component")
+// simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()))
+bootstrap('#simple_for_component', createSimpleForContainer);
 
-const simpleForComponentConainer = document.getElementById("simple_for_component")
-simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()))
+// Simple For Observer
+bootstrap('#simple_for_obs', createObsFor);
 
-const obsForComponentConainer = document.getElementById("simple_for_obs")
-obsForComponentConainer.appendChild(generateNode(createObsFor()))
+// Simple Attr
+bootstrap('#attrs', createExampleAttr);
 
-const attrsComponentConainer = document.getElementById("attrs")
-attrsComponentConainer.appendChild(generateNode(createExampleAttr()))
+// Simple Text Node
+bootstrap('#text_node', createTextNode);
 
-const textNodeComponentConainer = document.getElementById("text_node")
-textNodeComponentConainer.appendChild(generateNode(createTextNode()))
-
-const routerConainer = document.getElementById("router")
-routerConainer.appendChild(generateNode(createExampleRouter()))
+// Simple Router
+bootstrap('#router', createExampleRouter);

@@ -722,6 +722,31 @@
       return Router.template;
   }
 
+  /**
+   * Bootstrap a FastDOM application to your DOM.
+   * @param selector String
+   * @param factoryFn Function
+   * @param factoryArgs Array
+   * @example
+      import 'bootstrap' from 'faster-dom'
+      import { createMyComponent } from './MyComponent'
+      import { MyComponentPropOne, MyComponentPropTwo } from './types'
+
+      bootstrap<[
+        MyComponentPropOne,
+        MyComponentPropTwo
+      ]>('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
+
+   * </example>
+   */
+  function bootstrap(selector, factoryFn, ...factoryArgs) {
+      const selectorContainer = document.querySelector(selector);
+      if (!selectorContainer) {
+          throw Error(`FastDOM Bootstrap Error: No container found for selector "${selector}"`);
+      }
+      selectorContainer.appendChild(generateNode(factoryFn.apply(factoryFn, factoryArgs)));
+  }
+
   function createCounter() {
       return createComponent(Counter);
   }
@@ -1346,34 +1371,36 @@
       return createComponent(TextComponent);
   }
 
-  const simpleStyle = document.getElementById("styles");
-  simpleStyle.appendChild(generateNode(createStyles()));
-  const simpleTodo = document.getElementById("todo");
-  simpleTodo.appendChild(generateNode(createTodo()));
-  const simpleTimerConainer = document.getElementById("timer");
-  simpleTimerConainer.appendChild(generateNode(createTimer()));
-  const simpleCounterConainer = document.getElementById("counter");
-  simpleCounterConainer.appendChild(generateNode(createCounter()));
-  simpleCounterConainer.appendChild(generateNode(createCounter()));
-  const simpleCounterSharedConainer = document.getElementById("counter_input");
+  // Simple Styles
+  bootstrap('#styles', createStyles);
+  // Simple Todo
+  bootstrap('#todo', createTodo);
+  // Simple timer
+  bootstrap('#timer', createTimer);
+  // Simple Counter
+  bootstrap('#counter', createCounter);
+  bootstrap('#counter', createCounter);
+  // Simple counters with one input
   const sharedValue = fdValue(0);
-  simpleCounterSharedConainer.appendChild(generateNode(createCounters({ counter: sharedValue })));
-  simpleCounterSharedConainer.appendChild(generateNode(createCounters({ counter: sharedValue })));
-  simpleCounterSharedConainer.appendChild(generateNode(createCounters({ counter: sharedValue })));
-  const simpleIfConainer = document.getElementById("simple_if");
-  simpleIfConainer.appendChild(generateNode(createIf()));
-  const simpleForConainer = document.getElementById("simple_for");
-  simpleForConainer.appendChild(generateNode(createSimpleFor()));
-  const simpleForComponentConainer = document.getElementById("simple_for_component");
-  simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()));
-  const obsForComponentConainer = document.getElementById("simple_for_obs");
-  obsForComponentConainer.appendChild(generateNode(createObsFor()));
-  const attrsComponentConainer = document.getElementById("attrs");
-  attrsComponentConainer.appendChild(generateNode(createExampleAttr()));
-  const textNodeComponentConainer = document.getElementById("text_node");
-  textNodeComponentConainer.appendChild(generateNode(createTextNode$1()));
-  const routerConainer = document.getElementById("router");
-  routerConainer.appendChild(generateNode(createExampleRouter()));
+  bootstrap('#counter_input', createCounters, { counter: sharedValue });
+  bootstrap('#counter_input', createCounters, { counter: sharedValue });
+  bootstrap('#counter_input', createCounters, { counter: sharedValue });
+  // Simple If
+  bootstrap('#simple_if', createIf);
+  // Simple For
+  bootstrap('#simple_for', createSimpleFor);
+  // Simple For Component
+  // const simpleForComponentConainer = document.getElementById("simple_for_component")
+  // simpleForComponentConainer.appendChild(generateNode(createSimpleForContainer()))
+  bootstrap('#simple_for_component', createSimpleForContainer);
+  // Simple For Observer
+  bootstrap('#simple_for_obs', createObsFor);
+  // Simple Attr
+  bootstrap('#attrs', createExampleAttr);
+  // Simple Text Node
+  bootstrap('#text_node', createTextNode$1);
+  // Simple Router
+  bootstrap('#router', createExampleRouter);
 
 }));
 //# sourceMappingURL=bundle.js.map
