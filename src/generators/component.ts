@@ -5,11 +5,11 @@ import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 import { removeAllListenersComponent } from '../misc/misc';
 
-export function createComponent<T>(
+export function createComponent<T extends Component>(
   classProvider: ClassConstructor<T>,
   inputs: ComponentsInputs = {},
 ): FastDomNode {
-  const instance = new classProvider(inputs) as any;
+  const instance = new classProvider(inputs);
   instance.template.instance = instance;
   return instance.template;
 }
