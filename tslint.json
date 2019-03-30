@@ -1,0 +1,22 @@
+{
+    "extends": "tslint:recommended",
+    "rulesDirectory": "./src/",
+    "rules": {
+        "arrow-parens": false,
+        "quotemark": false,
+        "completed-docs": false,
+        "jsdoc-format": false,
+        "member-access": false,
+        "member-ordering": false,
+        "variable-name": false,
+        "ordered-imports": false,
+        "class-name": false,
+        "array-type": false,
+        "curly": false,
+        "no-empty": false,
+        "object-literal-sort-keys": false,
+        "interface-over-type-literal": false,
+        "interface-name" : false,
+        "adjacent-overload-signatures": false
+    }
+}

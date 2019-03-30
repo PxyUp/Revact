@@ -123,9 +123,9 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
               rootNode.appendChild(el as HTMLHtmlElement);
               return;
             }
-            const child = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
-            if (child) {
-              rootNode.appendChild(child);
+            const arrChild = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
+            if (arrChild) {
+              rootNode.appendChild(arrChild);
             }
           });
           (item as any)._parent = rootNode;

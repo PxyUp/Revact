@@ -70,7 +70,7 @@ export function fdFor(
 
   iteration.addSubscriber(value => {
     // @TODO create proper solution for for directive - need re-render just part
-    let parent: HTMLElement = (responseArray as any)._parent;
+    const parent: HTMLElement = (responseArray as any)._parent;
     if (value.length === 0) {
       if (responseArray.length) {
         responseArray.forEach(item => {

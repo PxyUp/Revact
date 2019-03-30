@@ -209,7 +209,7 @@ export function replaceDynamicURLParts(route: RegExp | string) {
   } else {
     regexp = new RegExp(
       route
-        .replace(PARAMETER_REGEXP, function(full, dots, name) {
+        .replace(PARAMETER_REGEXP, (full, dots, name) => {
           paramNames.push(name);
           return REPLACE_VARIABLE_REGEXP;
         })
@@ -222,5 +222,5 @@ export function replaceDynamicURLParts(route: RegExp | string) {
 
 export function isPrimitive(i: any) {
   const type = typeof i;
-  return i == null || (type != 'object' && type != 'function');
+  return i === null || (type !== 'object' && type !== 'function');
 }
