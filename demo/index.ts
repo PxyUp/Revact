@@ -32,9 +32,9 @@ const sharedValue = fdValue(0);
 interface SimpleCounter {
   counter: Observer<number>;
 }
-bootstrap<SimpleCounter>('#counter_input', createCounters, { counter: sharedValue });
-bootstrap<SimpleCounter>('#counter_input', createCounters, { counter: sharedValue });
-bootstrap<SimpleCounter>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
 
 // Simple If
 bootstrap('#simple_if', createIf);

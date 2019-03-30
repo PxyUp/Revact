@@ -7,10 +7,10 @@ import { generateNode } from './node';
  * @param factoryFn Function
  * @param factoryArgs Array
  */
-export function bootstrap<F = any>(
+export function bootstrap<F extends any[]>(
   selector: string,
-  factoryFn: (args?: Array<F>) => FastDomNode,
-  ...factoryArgs: Array<F>
+  factoryFn: (args?: F) => FastDomNode,
+  ...factoryArgs: F
 ): void {
   const selectorContainer = document.querySelector(selector);
 
