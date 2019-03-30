@@ -16,7 +16,7 @@ import { generateNode } from './node';
       MyComponentPropTwo
     ]>('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
 
- * </example>
+ *
  */
 export function bootstrap<F extends any[]>(
   selector: string,
