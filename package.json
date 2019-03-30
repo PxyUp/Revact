@@ -1,6 +1,6 @@
 {
   "name": "faster-dom",
-  "version": "0.0.29-alpha",
+  "version": "0.0.30-alpha",
   "main": "faster-dom.cjs.js",
   "module": "faster-dom.esm.js",
   "browser": "faster-dom.js",

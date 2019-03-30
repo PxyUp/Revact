@@ -6,7 +6,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.29-alpha
+yarn add faster-dom@0.0.30-alpha
 ```
 
 *index.html*
@@ -87,12 +87,10 @@ export function createTimer() {
 
 *index.ts*
 ```ts
-import { generateNode } from 'faster-dom';
+import { bootstrap } from 'faster-dom';
 import { createTimer } from './timer';
 
-const timerContainer = document.getElementById('timer');
-// create real node element from component
-timerContainer.appendChild(generateNode(createTimer()));
+bootstrap('#timer', createTimer);
 ```
 
 **[📺 DEMO](https://pxyup.github.io/FastDom/)**
