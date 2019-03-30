@@ -35,12 +35,16 @@ export class ModuleRouter extends Component {
       });
     });
     this._arrPaths.sort(compareUrlDepth);
-    this.goToUrl('/');
+    this.initRouter();
   }
 
   private onPopState = (e: PopStateEvent) => {
     this.applyUrl((e.isTrusted ? e.state : this.baseHref + e.state).replace(/[\\\\/]+/g, '/'));
   };
+
+  private initRouter() {
+    this.applyUrl(window.location.pathname.replace(/[\\\\/]+/g, '/'));
+  }
 
   private applyUrl = (url: string) => {
     const foundRoute = matchRoute(url, this._arrPaths);
