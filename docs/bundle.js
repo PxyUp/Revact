@@ -727,6 +727,17 @@
    * @param selector String
    * @param factoryFn Function
    * @param factoryArgs Array
+   * @example
+      import 'bootstrap' from 'faster-dom'
+      import { createMyComponent } from './MyComponent'
+      import { MyComponentPropOne, MyComponentPropTwo } from './types'
+
+      bootstrap<[
+        MyComponentPropOne,
+        MyComponentPropTwo
+      ]>('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
+
+   * </example>
    */
   function bootstrap(selector, factoryFn, ...factoryArgs) {
       const selectorContainer = document.querySelector(selector);

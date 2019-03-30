@@ -6,6 +6,17 @@ import { generateNode } from './node';
  * @param selector String
  * @param factoryFn Function
  * @param factoryArgs Array
+ * @example
+    import 'bootstrap' from 'faster-dom'
+    import { createMyComponent } from './MyComponent'
+    import { MyComponentPropOne, MyComponentPropTwo } from './types'
+
+    bootstrap<[
+      MyComponentPropOne,
+      MyComponentPropTwo
+    ]>('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
+
+ * </example>
  */
 export function bootstrap<F extends any[]>(
   selector: string,
