@@ -9,7 +9,7 @@
         "member-access": false,
         "member-ordering": false,
         "variable-name": false,
-        "semicolon": [true, "never"],
+        "semicolon": false,
         "ordered-imports": false,
         "class-name": false,
         "array-type": false,
