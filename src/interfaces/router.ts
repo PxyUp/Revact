@@ -12,14 +12,12 @@ export interface Route {
 }
 
 export interface RouterPath {
-  component: (inputs?: ComponentsInputs) => FastDomNode;
+  component: (...args: Array<any>) => FastDomNode;
   title?: string;
   path: string | RegExp;
   resolver?: RouteResolver;
 }
 
-export type RouteParams = {
-  [key: string]: string;
-};
+export type RouteParams = any;
 
 export type RouteResolver = (params?: RouteParams) => Promise<any>;
