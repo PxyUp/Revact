@@ -20,7 +20,7 @@ import { generateNode } from './node';
  */
 export function bootstrap<F extends any[]>(
   selector: string,
-  factoryFn: (args?: F) => FastDomNode,
+  factoryFn: (...args: F) => FastDomNode,
   ...factoryArgs: F
 ): void {
   const selectorContainer = document.querySelector(selector);
@@ -29,5 +29,5 @@ export function bootstrap<F extends any[]>(
     throw Error(`FastDOM Bootstrap Error: No container found for selector "${selector}"`);
   }
 
-  selectorContainer.appendChild(generateNode(factoryFn.apply(factoryFn, factoryArgs)));
+  selectorContainer.appendChild(generateNode(factoryFn.call(factoryFn, ...factoryArgs)));
 }

@@ -7,9 +7,9 @@ import { removeAllListenersComponent } from '../misc/misc';
 
 export function createComponent<T extends Component>(
   classProvider: ClassConstructor<T>,
-  inputs: ComponentsInputs = {},
+  ...args: Array<any>
 ): FastDomNode {
-  const instance = new classProvider(inputs);
+  const instance = new classProvider(...args);
   instance.template.instance = instance;
   return instance.template;
 }

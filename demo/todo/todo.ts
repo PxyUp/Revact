@@ -1,23 +1,12 @@
 import { Component, ComponentsInputs, FastDomNode, createComponent, fdFor, fdObject, fdValue } from "../../src";
 
-function createTodoItem(inputs: any) {
-    return createComponent(TodoItem, inputs)
+import { Observer } from "../../src/observer/observer";
+
+function createTodoItem(todoList: Observer<Array<string>>, index: number, value: string) {
+    return createComponent(TodoItem, todoList, index, value)
 }
 
 class TodoItem extends Component {
-
-    get todoList() {
-        return this.input.todoList
-    }
-
-    get index() {
-        return this.input.index
-    }
-    
-    get textValue() {
-        return this.input.value
-    }
-
     onClick = () => {
         this.todoList.value = this.todoList.value.filter((_: any, index: number) => index !== this.index)
     }
@@ -27,7 +16,7 @@ class TodoItem extends Component {
         children: [
             {
                 tag: "span",
-                textValue: this.textValue
+                textValue: this.value
             },
             {
                 tag: "button",
@@ -39,7 +28,7 @@ class TodoItem extends Component {
         ]
     }
 
-    constructor(private input: ComponentsInputs) {
+    constructor(private todoList: Observer<Array<string>>, private value: string, private index: number, ) {
         super();
     }
 }
@@ -60,8 +49,8 @@ class Todo extends Component {
             value: this.inputValue,
         }),
     }
-    
-    
+
+
     get inputValue() {
         return this.reactive.inputValue
     }
@@ -73,13 +62,13 @@ class Todo extends Component {
     onInput = (e: any) => {
         this.inputValue.value = e.target.value;
     }
-    
+
 
     onClick = () => {
         if (!this.inputValue.value) {
             return;
         }
-        this.todoList.value = [...this.todoList.value,  this.inputValue.value]
+        this.todoList.value = [...this.todoList.value, this.inputValue.value]
         this.inputValue.value = '';
     }
 
@@ -91,7 +80,7 @@ class Todo extends Component {
         props: this.fdObjects.inputValueProp,
         listeners: {
             input: this.onInput,
-        } 
+        }
     }
 
     template: FastDomNode = {
@@ -113,11 +102,10 @@ class Todo extends Component {
             {
                 tag: "div",
                 children: [
-                    fdFor(this.todoList, createTodoItem, {
-                        todoList: this.todoList,
-                        index: (e: any, i: number) => i,
-                        value: (e: number) => e 
-                    }) 
+                    fdFor(this.todoList, createTodoItem, [
+                        this.todoList,
+                        (e: number) => e
+                    ])
                 ]
             }
         ]

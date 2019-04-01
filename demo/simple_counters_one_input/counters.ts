@@ -1,14 +1,12 @@
 import { Component, ComponentsInputs, FastDomNode, createComponent } from "../../src";
 
-export function createCounters(inputs: any) {
-    return createComponent(CountersShared, inputs);
+import { Observer } from "../../src/observer/observer";
+
+export function createCounters(counter: Observer<number>) {
+    return createComponent(CountersShared, counter);
 }
 
 class CountersShared extends Component {
-    get counter() {
-        return this.input.counter;
-    }
-
     onClick = () => {
         this.counter.value += 1;
     }
@@ -29,7 +27,7 @@ class CountersShared extends Component {
             click: this.onClick
         }
     }
-    constructor(private input: ComponentsInputs) {
+    constructor(private counter: Observer<number>) {
         super()
     }
 }

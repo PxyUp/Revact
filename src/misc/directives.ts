@@ -7,6 +7,7 @@ import {
 } from './misc';
 
 import { ComponentsInputs } from '../interfaces/component';
+import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { generateNode } from '../generators/node';
 
@@ -20,8 +21,8 @@ export function fdValue(value: any, force = false) {
 
 const mapFn = (
   item: any,
-  itemFn: ((e: any) => any) | object,
-  inputs: ComponentsInputs = {},
+  itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
+  inputs: ComponentsInputs = [],
   index: number,
   keyFn?: (item: any) => string,
 ) => {
@@ -37,19 +38,21 @@ const mapFn = (
     skopedKeyFn = () => newItem;
   }
   if (typeof itemFn === 'function') {
-    const inputOverride = {} as any;
-    Object.keys(inputs).forEach(key => {
-      const value = inputs[key];
-      if (typeof value === 'function') {
-        inputOverride[key] = value(isPrim ? newItem.value : item);
-      } else {
-        inputOverride[key] = value;
-      }
-    });
-    return { ...itemFn({ ...inputOverride, index }), fdKey: skopedKeyFn(newItem) };
+    return {
+      ...itemFn(
+        ...inputs.map(inputValue => {
+          if (typeof inputValue === 'function') {
+            return inputValue(isPrim ? newItem.value : item);
+          }
+          return inputValue;
+        }),
+        index,
+      ),
+      fdKey: skopedKeyFn(newItem),
+    };
   }
   return {
-    ...itemFn,
+    ...(itemFn as FastDomNode),
     textValue: (itemFn as any).textValue(isPrim ? newItem.value : item),
     fdKey: skopedKeyFn(newItem),
   };
@@ -57,12 +60,12 @@ const mapFn = (
 
 export function fdFor(
   iteration: Observer<Array<any>> | Array<any>,
-  itemFn: ((e: any) => any) | object,
-  inputs: ComponentsInputs = {},
+  itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
+  inputs: ComponentsInputs = [],
   keyFn?: (e: any) => string,
 ) {
   if (Array.isArray(iteration)) {
-    return iteration.map((item: any, index) => mapFn(item, itemFn, inputs, index));
+    return iteration.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
   }
   let responseArray = iteration.value.map((item: any, index) =>
     mapFn(item, itemFn, inputs, index, keyFn),

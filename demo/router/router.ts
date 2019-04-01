@@ -77,24 +77,22 @@ class ExampleRouter extends Component {
     template: FastDomNode = {
         tag: "div",
         children: [
-            fdFor(this.list, (el) => {
+            fdFor(this.list, (item) => {
                 const obs = fdIf(false);
                 Router.getCurrentRoute().addSubscriber((value) => {
-                    obs.value = Router.isCurrentRoute(el.item.path);
+                    obs.value = Router.isCurrentRoute(item.path);
                 })
                 return {
                     tag: "button",
-                    textValue:  el.item.name,
+                    textValue: item.name,
                     classList: new fdObject({
                         current: obs,
                     }),
                     listeners: {
-                        click: () => el.item.click()
+                        click: () => item.click()
                     }
                 }
-            }, {
-                item: (e: any) => e
-            }),
+            }, [(e: any) => e]),
             createRouter({
                 '/': {
                     component: createCounter,

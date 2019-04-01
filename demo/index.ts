@@ -1,5 +1,6 @@
 import { bootstrap, fdValue } from "../src";
 
+import { Observer } from "../src/observer/observer";
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
 import { createExampleAttr } from "./attrs/attrs";
@@ -12,7 +13,6 @@ import { createStyles } from "./styles/styles";
 import { createTextNode } from "./textNode/textNode";
 import { createTimer } from "./timer/timer";
 import { createTodo } from "./todo/todo";
-import { Observer } from "../src/observer/observer";
 
 // Simple Styles
 bootstrap('#styles', createStyles);
@@ -29,12 +29,9 @@ bootstrap('#counter', createCounter);
 
 // Simple counters with one input
 const sharedValue = fdValue(0);
-interface SimpleCounter {
-  counter: Observer<number>;
-}
-bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
-bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
-bootstrap<[SimpleCounter]>('#counter_input', createCounters, { counter: sharedValue });
+bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
+bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
+bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
 
 // Simple If
 bootstrap('#simple_if', createIf);
