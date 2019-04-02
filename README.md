@@ -6,7 +6,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.33-alpha
+yarn add faster-dom@0.0.34-alpha
 ```
 
 *index.html*
@@ -137,8 +137,7 @@ bootstrap('#timer', createTimer);
 6. Supports router
 
 ### TODO (contributing is appreciated)
-1. Reactive styles.
-2. Proper types annotation
-3. Proper routing supports.
+1. Proper types annotation
+2. Html transpiler
 
 > Help me please if you are interested.

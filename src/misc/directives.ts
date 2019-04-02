@@ -95,28 +95,42 @@ export function fdFor<F extends any[]>(
       return;
     }
     const newArr = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
-    let removeCount = 0;
-    responseArray.forEach((item, index) => {
-      if (newArr.length <= index) {
-        callDeep(item, 'destroy', true, true);
-        removeChildAtIndex(parent, index - removeCount);
-        removeCount += 1;
+    const arr = Array(responseArray.length).fill(false);
+    const tempArr = newArr.map(item => [
+      item,
+      responseArray.findIndex(e => e.fdKey === item.fdKey),
+    ]);
+    tempArr.forEach((el, index) => {
+      const oldIndex = el[1] as number;
+      if (oldIndex > -1) {
+        arr[oldIndex] = true;
+      }
+    });
+    arr.forEach((item, index) => {
+      if (!item) {
+        callDeep(responseArray[index], 'destroy', true, true);
+        parent.removeChild(responseArray[index].domNode);
+      }
+    });
+    let increaseIndex = 0;
+    tempArr.forEach((el, index) => {
+      const item = el[0] as FastDomNode;
+      const oldIndex = el[1] as number;
+      if (oldIndex === -1) {
+        parent.appendChild(generateNode(item));
+        increaseIndex += 1;
         return;
       }
-      if (newArr[index].fdKey !== item.fdKey) {
-        callDeep(item, 'destroy', true, true);
-        removeChildAtIndex(parent, index - removeCount);
-        removeCount += 1;
+      if (responseArray[oldIndex].domNode !== parent.children[index + increaseIndex]) {
+        parent.insertBefore(
+          responseArray[oldIndex].domNode,
+          parent.children[index + increaseIndex],
+        );
+        increaseIndex += 1;
       }
     });
     newArr.forEach((item, index) => {
-      if (responseArray.length <= index) {
-        parent.appendChild(generateNode(item));
-        return;
-      }
-      if (responseArray[index].fdKey !== item.fdKey) {
-        insertChildAtIndex(parent, index, generateNode(item) as HTMLElement);
-      }
+      item.domNode = parent.children[index] as HTMLElement;
     });
     responseArray = newArr;
     (responseArray as any)._parent = parent;
