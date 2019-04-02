@@ -15,9 +15,9 @@ export function createComponent<T extends Component>(
 }
 
 export class Component {
-  protected reactive: { [key: string]: Observer<any> } = {};
-  protected fdObjects: { [key: string]: fdObject<any> } = {};
-  protected fdStyles: { [key: string]: fdObject<any> | Observer<string> } = {};
+  public reactive: { [key: string]: Observer<any> } = {};
+  public fdObjects: { [key: string]: fdObject<any> } = {};
+  public fdStyles: { [key: string]: fdObject<any> | Observer<string> } = {};
   public template: FastDomNode;
   protected onDestroy() {}
   protected onInit() {}
