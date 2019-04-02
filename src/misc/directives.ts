@@ -6,7 +6,6 @@ import {
   removeChildAtIndex,
 } from './misc';
 
-import { ComponentsInputs } from '../interfaces/component';
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { generateNode } from '../generators/node';
@@ -19,13 +18,13 @@ export function fdValue(value: any, force = false) {
   return new Observer(value, force);
 }
 
-const mapFn = (
+function mapFn<F extends Array<any>>(
   item: any,
   itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
-  inputs: ComponentsInputs = [],
+  inputs: F = [] as any,
   index: number,
   keyFn?: (item: any) => string,
-) => {
+) {
   let isPrim = false;
   let newItem: any;
   let skopedKeyFn: (iten: any) => any;
@@ -56,12 +55,12 @@ const mapFn = (
     textValue: (itemFn as any).textValue(isPrim ? newItem.value : item),
     fdKey: skopedKeyFn(newItem),
   };
-};
+}
 
-export function fdFor(
+export function fdFor<F extends any[]>(
   iteration: Observer<Array<any>> | Array<any>,
   itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
-  inputs: ComponentsInputs = [],
+  inputs: F = [] as any,
   keyFn?: (e: any) => string,
 ) {
   if (Array.isArray(iteration)) {

@@ -1,13 +1,12 @@
-import { ClassConstructor, ComponentsInputs } from '../interfaces/component';
-
+import { ClassConstructor } from '../interfaces/component';
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 import { removeAllListenersComponent } from '../misc/misc';
 
-export function createComponent<T extends Component>(
+export function createComponent<T extends Component, F extends any[]>(
   classProvider: ClassConstructor<T>,
-  ...args: Array<any>
+  ...args: F
 ): FastDomNode {
   const instance = new classProvider(...args);
   instance.template.instance = instance;

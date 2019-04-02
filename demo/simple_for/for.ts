@@ -7,7 +7,7 @@ export function createSimpleFor() {
             fdFor([1,2,3,4,5,6,7], {
                 tag: "div",
                 textValue: (e: any) => e,
-            })
+            } as any)
         ]
     }
 }
