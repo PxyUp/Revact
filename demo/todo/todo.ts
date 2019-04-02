@@ -8,7 +8,7 @@ function createTodoItem(todoList: Observer<Array<string>>, value: string, index:
 
 class TodoItem extends Component {
     onClick = () => {
-        this.todoList.value = this.todoList.value.filter((_: any, index: number) => index !== this.index)
+        this.todoList.value = this.todoList.value.filter((item: any) => item !== this.value)
     }
 
     template: FastDomNode = {
@@ -16,7 +16,7 @@ class TodoItem extends Component {
         children: [
             {
                 tag: "span",
-                textValue: this.value
+                textValue: this.value.label
             },
             {
                 tag: "button",
@@ -28,7 +28,7 @@ class TodoItem extends Component {
         ]
     }
 
-    constructor(private todoList: Observer<Array<string>>, private value: string, private index: number, ) {
+    constructor(private todoList: Observer<Array<string>>, private value: any) {
         super();
     }
 }
@@ -68,7 +68,7 @@ class Todo extends Component {
         if (!this.inputValue.value) {
             return;
         }
-        this.todoList.value = [...this.todoList.value, this.inputValue.value]
+        this.todoList.value = [...this.todoList.value, { label: this.inputValue.value}]
         this.inputValue.value = '';
     }
 
@@ -104,7 +104,7 @@ class Todo extends Component {
                 children: [
                     fdFor(this.todoList, createTodoItem, [
                         this.todoList,
-                        (e: number) => e
+                        (e: any) => e
                     ])
                 ]
             }
