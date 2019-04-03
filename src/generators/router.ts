@@ -70,7 +70,11 @@ export class ModuleRouter extends Component {
 
   private createComponent(url: string, pathItem: RouterPath, params?: RouteParams) {
     if (pathItem.title) {
-      document.title = pathItem.title;
+      if (typeof pathItem.title === 'function') {
+        document.title = pathItem.title(params);
+      } else {
+        document.title = pathItem.title;
+      }
     }
     window.history.pushState(this._cUrl.value, document.title, this._cUrl.value);
     const component = pathItem.component(params);

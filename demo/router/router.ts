@@ -100,8 +100,8 @@ class ExampleRouter extends Component {
                 },
                 '/textNode/:id': {
                     component: createTextNode,
-                    title: "TextNode with router param",
-                    resolver: (params: RouteParams) => Promise.resolve(params),
+                    resolver: (params: RouteParams) => Promise.resolve({ ...params, title: `Route title ${params.id}` }),
+                    title: (params: any) => `TextNode with ${params.title}`,
                 },
                 '/timer': {
                     component: createTimer,

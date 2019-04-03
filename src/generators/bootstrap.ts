@@ -1,4 +1,3 @@
-import { ClassConstructor } from '../interfaces/component';
 import { FastDomNode } from '../interfaces/node';
 import { generateNode } from './node';
 
