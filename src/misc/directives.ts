@@ -66,41 +66,50 @@ export function fdFor<F extends any[]>(
   if (Array.isArray(iteration)) {
     return iteration.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
   }
-  let responseArray = iteration.value.map((item: any, index) =>
-    mapFn(item, itemFn, inputs, index, keyFn),
-  );
+
+  const mapKeyFnIndex = new Map<any, number>();
+  let responseArray = iteration.value.map((item: any, index: number) => {
+    const el = mapFn(item, itemFn, inputs, index, keyFn);
+    mapKeyFnIndex.set(el.fdKey, index);
+    return el;
+  });
 
   iteration.addSubscriber(value => {
-    // @TODO create proper solution for for directive - need re-render just part
     const parent: HTMLElement = (responseArray as any)._parent;
     if (value.length === 0) {
       if (responseArray.length) {
+        removeAllChild(parent);
         responseArray.forEach(item => {
           callDeep(item, 'destroy', true, true);
         });
-
-        removeAllChild(parent);
       }
       responseArray = value;
+      mapKeyFnIndex.clear();
       (responseArray as any)._parent = parent;
       return;
     }
     if (responseArray.length === 0) {
-      responseArray = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
+      responseArray = value.map((item: any, index) => {
+        const el = mapFn(item, itemFn, inputs, index, keyFn);
+        mapKeyFnIndex.set(el.fdKey, index);
+        return el;
+      });
       responseArray.forEach(item => {
         parent.appendChild(generateNode(item));
       });
-
       (responseArray as any)._parent = parent;
       return;
     }
     const newArr = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
     const arr = Array(responseArray.length).fill(false);
-    const tempArr = newArr.map(item => [
-      item,
-      responseArray.findIndex(e => e.fdKey === item.fdKey),
-    ]);
-    tempArr.forEach((el, index) => {
+    const tempArr = newArr.map(item => {
+      const index = mapKeyFnIndex.get(item.fdKey);
+      if (index !== undefined) {
+        return [item, index];
+      }
+      return [item, -1];
+    });
+    tempArr.forEach(el => {
       const oldIndex = el[1] as number;
       if (oldIndex > -1) {
         arr[oldIndex] = true;
@@ -108,8 +117,8 @@ export function fdFor<F extends any[]>(
     });
     arr.forEach((item, index) => {
       if (!item) {
-        callDeep(responseArray[index], 'destroy', true, true);
         parent.removeChild(responseArray[index].domNode);
+        callDeep(responseArray[index], 'destroy', true, true);
       }
     });
     let increaseIndex = 0;
@@ -129,8 +138,10 @@ export function fdFor<F extends any[]>(
         increaseIndex += 1;
       }
     });
+    mapKeyFnIndex.clear();
     newArr.forEach((item, index) => {
       item.domNode = parent.children[index] as HTMLElement;
+      mapKeyFnIndex.set(item.fdKey, index);
     });
     responseArray = newArr;
     (responseArray as any)._parent = parent;
