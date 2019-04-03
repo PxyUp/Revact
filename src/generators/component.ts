@@ -4,9 +4,9 @@ import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 import { removeAllListenersComponent } from '../misc/misc';
 
-export function createComponent<T extends Component, F extends any[]>(
-  classProvider: ClassConstructor<T>,
-  ...args: F
+export function createComponent<T extends ClassConstructor<any>>(
+  classProvider: T,
+  ...args: T extends new (...args: infer A) => any ? A : never
 ): FastDomNode {
   const instance = new classProvider(...args);
   instance.template.instance = instance;

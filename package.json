@@ -1,6 +1,6 @@
 {
   "name": "faster-dom",
-  "version": "0.0.35-alpha",
+  "version": "0.0.36-alpha",
   "main": "faster-dom.cjs.js",
   "module": "faster-dom.esm.js",
   "browser": "faster-dom.js",
@@ -27,12 +27,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint && lint-staged"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "src/**/*.{ts,js,?css}": [
       "prettier --write",
+      "yarn lint",
       "git add"
     ]
   },

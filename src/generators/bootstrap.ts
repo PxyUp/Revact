@@ -1,3 +1,4 @@
+import { ClassConstructor } from '../interfaces/component';
 import { FastDomNode } from '../interfaces/node';
 import { generateNode } from './node';
 
@@ -18,10 +19,10 @@ import { generateNode } from './node';
 
  *
  */
-export function bootstrap<F extends any[]>(
+export function bootstrap<T extends (...args: any[]) => FastDomNode>(
   selector: string,
-  factoryFn: (...args: F) => FastDomNode,
-  ...factoryArgs: F
+  factoryFn: T,
+  ...factoryArgs: Parameters<T>
 ): void {
   const selectorContainer = document.querySelector(selector);
 

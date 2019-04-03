@@ -2,8 +2,8 @@ import { Component, FastDomNode, createComponent, fdFor, fdObject, fdValue } fro
 
 import { Observer } from "../../src/observer/observer";
 
-function createTodoItem(todoList: Observer<Array<string>>, value: string, index: number, ) {
-    return createComponent<TodoItem, [Observer<Array<string>>,string, number]>(TodoItem, todoList, value, index)
+function createTodoItem(todoList: Observer<Array<string>>, value: any) {
+    return createComponent(TodoItem, todoList, value)
 }
 
 class TodoItem extends Component {

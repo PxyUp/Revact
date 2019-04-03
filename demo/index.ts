@@ -29,9 +29,9 @@ bootstrap('#counter', createCounter);
 
 // Simple counters with one input
 const sharedValue = fdValue(0);
-bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
-bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
-bootstrap<[Observer<number>]>('#counter_input', createCounters, sharedValue );
+bootstrap('#counter_input', createCounters, sharedValue );
+bootstrap('#counter_input', createCounters, sharedValue );
+bootstrap('#counter_input', createCounters, sharedValue );
 
 // Simple If
 bootstrap('#simple_if', createIf);

@@ -1,4 +1,4 @@
-import { Component, ComponentsInputs, FastDomNode, createComponent } from "../../src";
+import { Component, FastDomNode, createComponent } from "../../src";
 
 import { Observer } from "../../src/observer/observer";
 
