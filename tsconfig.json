@@ -2,7 +2,7 @@
     "compilerOptions": {
       "noImplicitAny": true,
       "esModuleInterop": true,
-      "target": "es6"
+      "target": "es5"
     },
     "include": [
       "src/**/*"
