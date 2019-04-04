@@ -7,7 +7,7 @@ export default [
     {
         input: "src/index.ts",
         output: {
-            file: "./lib/faster-dom.js",
+            file: "./lib/faster-dom.umd.js",
             format: 'umd',
             name: 'faster-dom',
         },
@@ -27,12 +27,26 @@ export default [
     {
         input: "src/index.ts",
         output: [
-			{ file: './lib/' + pkg.main, format: 'cjs' },
 			{ file: './lib/' + pkg.module, format: 'es' }
 		],
         plugins: [
             typescript(),
-            terser(),
+        ],
+    },
+    {
+        input: "src/index.ts",
+        output: [
+			{ file: './lib/' + pkg.es2015, format: 'es' }
+		],
+        plugins: [
+            typescript({
+                tsconfig: 'tsconfig.lib.json',
+                tsconfigOverride: {
+                    compilerOptions: {
+                        target: "es2015"
+                    }
+                }
+            }),
         ],
     },
 ]
