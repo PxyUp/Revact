@@ -4,6 +4,8 @@ Lightweight replacement of React + MobX + React Router (I hope in future Angular
 
 The library allows you to create quick and responsive interfaces using only JS / TS. With this you will get the minimum application size, speed and ease of development.
 
+**[OFFICIAL BENCHMARK RESULTS](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
+
 ## Usage
 ```sh
 yarn add faster-dom@0.0.39-alpha
