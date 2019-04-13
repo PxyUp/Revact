@@ -224,3 +224,21 @@ export function isPrimitive(i: any) {
   const type = typeof i;
   return i === null || (type !== 'object' && type !== 'function');
 }
+
+export function renderList(
+  parent: HTMLElement | DocumentFragment,
+  children: Array<HTMLElement | Comment | Array<any>>,
+) {
+  if (children.length === 0) {
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  children.forEach((item: HTMLElement | Comment | Array<any>) => {
+    if (Array.isArray(item)) {
+      renderList(fragment, item);
+      return;
+    }
+    fragment.appendChild(item);
+  });
+  parent.appendChild(fragment);
+}

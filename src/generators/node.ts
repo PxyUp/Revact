@@ -2,6 +2,7 @@ import {
   addNodeListener,
   callDeep,
   removeNodeListener,
+  renderList,
   setNodeAttrs,
   setNodeStyle,
   setProps,
@@ -113,33 +114,37 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     }
 
     if (node.children) {
+      const tempArr = [] as Array<HTMLElement | Comment | Array<any>>;
       node.children.forEach((item: any) => {
         if (!item) {
           return;
         }
         if (Array.isArray(item)) {
+          const tempSubArr = [] as Array<HTMLElement | Comment>;
           item.forEach(el => {
             if (!el.tag) {
-              rootNode.appendChild(el as HTMLHtmlElement);
+              tempSubArr.push(el as HTMLHtmlElement);
               return;
             }
             const arrChild = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
             if (arrChild) {
-              rootNode.appendChild(arrChild);
+              tempSubArr.push(arrChild);
             }
           });
           (item as any)._parent = rootNode;
+          tempArr.push(tempSubArr);
           return;
         }
         if (!item.tag) {
-          rootNode.appendChild(item as HTMLHtmlElement);
+          tempArr.push(item);
           return;
         }
         const child = generateNode(Object.assign(item, { parent: rootNode as any }));
         if (child) {
-          rootNode.appendChild(child);
+          tempArr.push(child);
         }
       });
+      renderList(rootNode as HTMLElement, tempArr);
     }
 
     if (node.listeners) {
