@@ -112,11 +112,7 @@ bootstrap('#timer', createTimer);
 
 **[CODE OF THE TESTS](https://github.com/PxyUp/js-framework-benchmark/pull/1/files)**
 
-![Test](https://github.com/PxyUp/FastDom/blob/master/test_one.png?raw=true)
-
-![Test](https://github.com/PxyUp/FastDom/blob/master/test_two.png?raw=true)
-
-![Test](https://github.com/PxyUp/FastDom/blob/master/test_three.png?raw=true)
+**[OFFICIAL BENCHMARK RESULTS](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
 
 ## How it works
 > Here will be good api
