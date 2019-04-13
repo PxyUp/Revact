@@ -1,6 +1,4 @@
 import { FastDomNode } from '../interfaces/node';
-import { Observer } from '../observer/observer';
-import { Router } from '../generators/index';
 import { RouterPath } from '../interfaces/router';
 
 // Thank you, very much https://github.com/krasimir/navigo
@@ -17,13 +15,19 @@ const isPushStateAvailable = !!(
   window.history.pushState
 );
 
+export const asyncCall = (window as any).requestIdleCallback || requestAnimationFrame || setTimeout;
+
 export function setNodeStyle(node: HTMLElement, styles: { [key: string]: string } | string) {
   if (typeof styles === 'string') {
-    (node as HTMLElement).style.cssText = styles;
+    requestAnimationFrame(() => {
+      (node as HTMLElement).style.cssText = styles;
+    });
     return;
   }
-  Object.keys(styles).forEach((key: string) => {
-    (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+  requestAnimationFrame(() => {
+    Object.keys(styles).forEach((key: string) => {
+      (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+    });
   });
 }
 
@@ -223,4 +227,27 @@ export function replaceDynamicURLParts(route: RegExp | string) {
 export function isPrimitive(i: any) {
   const type = typeof i;
   return i === null || (type !== 'object' && type !== 'function');
+}
+
+/**
+ * Render list of elements using fragment
+ * @param parent Parent element
+ * @param children Array of child
+ */
+export function renderList(
+  parent: HTMLElement | DocumentFragment,
+  children: Array<HTMLElement | Comment | Array<any>>,
+) {
+  if (children.length === 0) {
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  children.forEach((item: HTMLElement | Comment | Array<any>) => {
+    if (Array.isArray(item)) {
+      renderList(fragment, item);
+      return;
+    }
+    fragment.appendChild(item);
+  });
+  parent.appendChild(fragment);
 }

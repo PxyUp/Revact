@@ -2,6 +2,7 @@ import {
   addNodeListener,
   callDeep,
   removeNodeListener,
+  renderList,
   setNodeAttrs,
   setNodeStyle,
   setProps,
@@ -11,7 +12,7 @@ import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 
-const instance = Symbol('instance');
+const instance = 'instance';
 
 export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   if (node.show === false) {
@@ -41,27 +42,31 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.tag !== 'textNode') {
     if (node.classList) {
-      if (Array.isArray(node.classList)) {
-        node.classList.forEach(item => {
-          (rootNode as HTMLElement).classList.add(item);
-        });
+      if (typeof node.classList === 'string') {
+        (rootNode as HTMLElement).className = node.classList;
       } else {
-        fdClassesNode = node.classList;
-        const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
-        Object.keys(clsObs.value).forEach(key => {
-          const value = clsObs.value[key];
-          return value
-            ? (rootNode as HTMLElement).classList.add(key)
-            : (rootNode as HTMLElement).classList.remove(key);
-        });
-        clsObs.addSubscriber(newClasses => {
-          Object.keys(newClasses).forEach(key => {
-            const value = newClasses[key];
+        if (Array.isArray(node.classList)) {
+          node.classList.forEach(item => {
+            (rootNode as HTMLElement).classList.add(item);
+          });
+        } else {
+          fdClassesNode = node.classList;
+          const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
+          Object.keys(clsObs.value).forEach(key => {
+            const value = clsObs.value[key];
             return value
               ? (rootNode as HTMLElement).classList.add(key)
               : (rootNode as HTMLElement).classList.remove(key);
           });
-        });
+          clsObs.addSubscriber(newClasses => {
+            Object.keys(newClasses).forEach(key => {
+              const value = newClasses[key];
+              return value
+                ? (rootNode as HTMLElement).classList.add(key)
+                : (rootNode as HTMLElement).classList.remove(key);
+            });
+          });
+        }
       }
     }
 
@@ -113,33 +118,37 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     }
 
     if (node.children) {
+      const tempArr = [] as Array<HTMLElement | Comment | Array<any>>;
       node.children.forEach((item: any) => {
         if (!item) {
           return;
         }
         if (Array.isArray(item)) {
+          const tempSubArr = [] as Array<HTMLElement | Comment>;
           item.forEach(el => {
             if (!el.tag) {
-              rootNode.appendChild(el as HTMLHtmlElement);
+              tempSubArr.push(el as HTMLHtmlElement);
               return;
             }
             const arrChild = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
             if (arrChild) {
-              rootNode.appendChild(arrChild);
+              tempSubArr.push(arrChild);
             }
           });
           (item as any)._parent = rootNode;
+          tempArr.push(tempSubArr);
           return;
         }
         if (!item.tag) {
-          rootNode.appendChild(item as HTMLHtmlElement);
+          tempArr.push(item);
           return;
         }
         const child = generateNode(Object.assign(item, { parent: rootNode as any }));
         if (child) {
-          rootNode.appendChild(child);
+          tempArr.push(child);
         }
       });
+      renderList(rootNode as HTMLElement, tempArr);
     }
 
     if (node.listeners) {

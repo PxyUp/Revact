@@ -1,10 +1,4 @@
-import {
-  callDeep,
-  insertChildAtIndex,
-  isPrimitive,
-  removeAllChild,
-  removeChildAtIndex,
-} from './misc';
+import { asyncCall, callDeep, isPrimitive, removeAllChild, renderList } from './misc';
 
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
@@ -76,11 +70,14 @@ export function fdFor<F extends any[]>(
 
   iteration.addSubscriber(value => {
     const parent: HTMLElement = (responseArray as any)._parent;
+    const oldLength = responseArray.length;
     if (value.length === 0) {
-      if (responseArray.length) {
+      if (oldLength) {
         removeAllChild(parent);
-        responseArray.forEach(item => {
-          callDeep(item, 'destroy', true, true);
+        asyncCall(() => {
+          responseArray.forEach(item => {
+            callDeep(item, 'destroy', true, true);
+          });
         });
       }
       responseArray = value;
@@ -88,20 +85,25 @@ export function fdFor<F extends any[]>(
       (responseArray as any)._parent = parent;
       return;
     }
-    if (responseArray.length === 0) {
+    if (oldLength === 0) {
       responseArray = value.map((item: any, index) => {
         const el = mapFn(item, itemFn, inputs, index, keyFn);
         mapKeyFnIndex.set(el.fdKey, index);
         return el;
       });
+      const frArr = [] as Array<HTMLElement>;
       responseArray.forEach(item => {
-        parent.appendChild(generateNode(item));
+        frArr.push(generateNode(item) as HTMLElement);
       });
+      renderList(parent, frArr);
       (responseArray as any)._parent = parent;
       return;
     }
     const newArr = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
-    const arr = Array(responseArray.length).fill(false);
+    const arr = [];
+    for (let i = 0; i < oldLength; i++) {
+      arr.push(false);
+    }
     const tempArr = newArr.map(item => {
       const index = mapKeyFnIndex.get(item.fdKey);
       if (index !== undefined) {
@@ -118,15 +120,18 @@ export function fdFor<F extends any[]>(
     arr.forEach((item, index) => {
       if (!item) {
         parent.removeChild(responseArray[index].domNode);
-        callDeep(responseArray[index], 'destroy', true, true);
+        asyncCall(() => {
+          callDeep(responseArray[index], 'destroy', true, true);
+        });
       }
     });
     let increaseIndex = 0;
+    const fragmentArr = [] as Array<HTMLElement>;
     tempArr.forEach((el, index) => {
       const item = el[0] as FastDomNode;
       const oldIndex = el[1] as number;
       if (oldIndex === -1) {
-        parent.appendChild(generateNode(item));
+        fragmentArr.push(generateNode(item) as HTMLElement);
         increaseIndex += 1;
         return;
       }
@@ -138,6 +143,7 @@ export function fdFor<F extends any[]>(
         increaseIndex += 1;
       }
     });
+    renderList(parent, fragmentArr);
     mapKeyFnIndex.clear();
     newArr.forEach((item, index) => {
       item.domNode = parent.children[index] as HTMLElement;
@@ -146,5 +152,6 @@ export function fdFor<F extends any[]>(
     responseArray = newArr;
     (responseArray as any)._parent = parent;
   });
+
   return responseArray;
 }
