@@ -1,11 +1,4 @@
-import {
-  callDeep,
-  insertChildAtIndex,
-  isPrimitive,
-  removeAllChild,
-  removeChildAtIndex,
-  renderList,
-} from './misc';
+import { asyncCall, callDeep, isPrimitive, removeAllChild, renderList } from './misc';
 
 import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
@@ -81,8 +74,10 @@ export function fdFor<F extends any[]>(
     if (value.length === 0) {
       if (oldLength) {
         removeAllChild(parent);
-        responseArray.forEach(item => {
-          callDeep(item, 'destroy', true, true);
+        asyncCall(() => {
+          responseArray.forEach(item => {
+            callDeep(item, 'destroy', true, true);
+          });
         });
       }
       responseArray = value;
@@ -125,7 +120,9 @@ export function fdFor<F extends any[]>(
     arr.forEach((item, index) => {
       if (!item) {
         parent.removeChild(responseArray[index].domNode);
-        callDeep(responseArray[index], 'destroy', true, true);
+        asyncCall(() => {
+          callDeep(responseArray[index], 'destroy', true, true);
+        });
       }
     });
     let increaseIndex = 0;

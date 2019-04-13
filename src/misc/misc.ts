@@ -1,6 +1,4 @@
 import { FastDomNode } from '../interfaces/node';
-import { Observer } from '../observer/observer';
-import { Router } from '../generators/index';
 import { RouterPath } from '../interfaces/router';
 
 // Thank you, very much https://github.com/krasimir/navigo
@@ -16,6 +14,8 @@ const isPushStateAvailable = !!(
   window.history &&
   window.history.pushState
 );
+
+export const asyncCall = (window as any).requestIdleCallback || requestAnimationFrame || setTimeout;
 
 export function setNodeStyle(node: HTMLElement, styles: { [key: string]: string } | string) {
   if (typeof styles === 'string') {
@@ -229,6 +229,11 @@ export function isPrimitive(i: any) {
   return i === null || (type !== 'object' && type !== 'function');
 }
 
+/**
+ * Render list of elements using fragment
+ * @param parent Parent element
+ * @param children Array of child
+ */
 export function renderList(
   parent: HTMLElement | DocumentFragment,
   children: Array<HTMLElement | Comment | Array<any>>,

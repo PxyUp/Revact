@@ -12,7 +12,7 @@ import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
 import { fdObject } from '../observer/fdObject';
 
-const instance = Symbol('instance');
+const instance = 'instance';
 
 export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
   if (node.show === false) {
