@@ -19,11 +19,15 @@ const isPushStateAvailable = !!(
 
 export function setNodeStyle(node: HTMLElement, styles: { [key: string]: string } | string) {
   if (typeof styles === 'string') {
-    (node as HTMLElement).style.cssText = styles;
+    requestAnimationFrame(() => {
+      (node as HTMLElement).style.cssText = styles;
+    });
     return;
   }
-  Object.keys(styles).forEach((key: string) => {
-    (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+  requestAnimationFrame(() => {
+    Object.keys(styles).forEach((key: string) => {
+      (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+    });
   });
 }
 

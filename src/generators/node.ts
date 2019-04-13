@@ -42,27 +42,31 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.tag !== 'textNode') {
     if (node.classList) {
-      if (Array.isArray(node.classList)) {
-        node.classList.forEach(item => {
-          (rootNode as HTMLElement).classList.add(item);
-        });
+      if (typeof node.classList === 'string') {
+        (rootNode as HTMLElement).className = node.classList;
       } else {
-        fdClassesNode = node.classList;
-        const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
-        Object.keys(clsObs.value).forEach(key => {
-          const value = clsObs.value[key];
-          return value
-            ? (rootNode as HTMLElement).classList.add(key)
-            : (rootNode as HTMLElement).classList.remove(key);
-        });
-        clsObs.addSubscriber(newClasses => {
-          Object.keys(newClasses).forEach(key => {
-            const value = newClasses[key];
+        if (Array.isArray(node.classList)) {
+          node.classList.forEach(item => {
+            (rootNode as HTMLElement).classList.add(item);
+          });
+        } else {
+          fdClassesNode = node.classList;
+          const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
+          Object.keys(clsObs.value).forEach(key => {
+            const value = clsObs.value[key];
             return value
               ? (rootNode as HTMLElement).classList.add(key)
               : (rootNode as HTMLElement).classList.remove(key);
           });
-        });
+          clsObs.addSubscriber(newClasses => {
+            Object.keys(newClasses).forEach(key => {
+              const value = newClasses[key];
+              return value
+                ? (rootNode as HTMLElement).classList.add(key)
+                : (rootNode as HTMLElement).classList.remove(key);
+            });
+          });
+        }
       }
     }
 
