@@ -107,7 +107,7 @@ export function fdFor<F extends any[]>(
     const newArr = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
     const arr = [];
     for (let i = 0; i < oldLength; i++) {
-      arr[i] = false;
+      arr.push(false);
     }
     const tempArr = newArr.map(item => {
       const index = mapKeyFnIndex.get(item.fdKey);
