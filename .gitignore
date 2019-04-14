@@ -2,3 +2,5 @@ node_modules
 lib
 .rpt2_cache
 .DS_Store
+medium
+rollup.config.medium.js

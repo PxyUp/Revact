@@ -997,6 +997,11 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+faster-dom@^0.0.41-alpha:
+  version "0.0.41-alpha"
+  resolved "https://registry.yarnpkg.com/faster-dom/-/faster-dom-0.0.41-alpha.tgz#ffc59aac6481eb2c7d736d40700839019a99e1ad"
+  integrity sha512-mx3pSKm8M6LoyC3zdqH4Pqsmt+LfOW3LhdzNi+TSikW5u09MEAB3ghzQ48LXjnpb9Sn7is2Ks/bRhj2u8f93mg==
+
 figures@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"

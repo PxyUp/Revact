@@ -11,10 +11,7 @@ import { generateNode } from './node';
     import { createMyComponent } from './MyComponent'
     import { MyComponentPropOne, MyComponentPropTwo } from './types'
 
-    bootstrap<[
-      MyComponentPropOne,
-      MyComponentPropTwo
-    ]>('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
+    bootstrap('#root', createMyComponent, 'my prop one', { mySecondProp: 'foo bar' })
 
  *
  */

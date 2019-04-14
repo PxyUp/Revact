@@ -158,8 +158,26 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
 
   if (node.instance) {
     (rootNode as any)[instance] = node.instance;
-    node.instance.onInit();
   }
+
+  const fakeDestroy = () => {
+    if (node.tag !== 'textNode') {
+      removeNodeListener(rootNode as HTMLElement, node.listeners);
+    }
+    if (fdAttrsNode) {
+      fdAttrsNode.destroy();
+    }
+    if (fdPropsNode) {
+      fdPropsNode.destroy();
+    }
+    if (fdClassesNode) {
+      fdClassesNode.destroy();
+    }
+    if (fdStyleNode) {
+      fdClassesNode.destroy();
+    }
+    callDeep(node, 'destroy', true);
+  };
 
   if (typeof node.show === 'object') {
     const comment = document.createComment('');
@@ -189,22 +207,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         }
       } else {
         if (parent) {
-          if (node.tag !== 'textNode') {
-            removeNodeListener(rootNode as HTMLElement, node.listeners);
-          }
-          if (fdAttrsNode) {
-            fdAttrsNode.destroy();
-          }
-          if (fdPropsNode) {
-            fdPropsNode.destroy();
-          }
-          if (fdClassesNode) {
-            fdClassesNode.destroy();
-          }
-          if (fdStyleNode) {
-            fdClassesNode.destroy();
-          }
-          callDeep(node, 'destroy', true);
+          fakeDestroy();
           if (rootNode.parentNode === parent) {
             parent.replaceChild(comment, rootNode);
           }
@@ -213,10 +216,18 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     });
 
     if (node.show.value) {
+      if (node.instance) {
+        node.instance.onInit();
+      }
       return rootNode;
     } else {
+      fakeDestroy();
       return comment;
     }
+  }
+
+  if (node.instance) {
+    node.instance.onInit();
   }
 
   return rootNode;
