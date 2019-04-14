@@ -74,8 +74,9 @@ export function fdFor<F extends any[]>(
     if (value.length === 0) {
       if (oldLength) {
         removeAllChild(parent);
+        const arrToDestroy = responseArray.slice();
         asyncCall(() => {
-          responseArray.forEach(item => {
+          arrToDestroy.forEach(item => {
             callDeep(item, 'destroy', true, true);
           });
         });
@@ -99,6 +100,7 @@ export function fdFor<F extends any[]>(
       (responseArray as any)._parent = parent;
       return;
     }
+    const arrForDestroy = [] as Array<any>;
     const newArr = value.map((item: any, index) => mapFn(item, itemFn, inputs, index, keyFn));
     const arr = [];
     for (let i = 0; i < oldLength; i++) {
@@ -120,10 +122,13 @@ export function fdFor<F extends any[]>(
     arr.forEach((item, index) => {
       if (!item) {
         parent.removeChild(responseArray[index].domNode);
-        asyncCall(() => {
-          callDeep(responseArray[index], 'destroy', true, true);
-        });
+        arrForDestroy.push(responseArray[index]);
       }
+    });
+    asyncCall(() => {
+      arrForDestroy.forEach(item => {
+        callDeep(item, 'destroy', true, true);
+      });
     });
     let increaseIndex = 0;
     const fragmentArr = [] as Array<HTMLElement>;
