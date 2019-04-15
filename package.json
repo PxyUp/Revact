@@ -1,6 +1,6 @@
 {
   "name": "faster-dom",
-  "version": "0.0.42-alpha",
+  "version": "0.0.43-alpha",
   "main": "faster-dom.umd.js",
   "module": "faster-dom.es5.js",
   "es2015": "faster-dom.es2015.js",
@@ -9,9 +9,6 @@
   "repository": "git@github.com:PxyUp/test.git",
   "author": "Iurii Panarin <tduble94@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "faster-dom": "^0.0.41-alpha"
-  },
   "keywords": [
     "dom",
     "fast",
