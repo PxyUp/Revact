@@ -8,7 +8,7 @@ export interface FastDomNode {
   props?: { [key: string]: any } | fdObject<any>;
   styles?: string | { [key: string]: any } | fdObject<any>;
   parent?: HTMLElement;
-  classList?: Array<string> | fdObject<boolean>;
+  classList?: string | Array<string> | fdObject<boolean>;
   children?: Array<FastDomNode | HTMLElement | Comment | Array<any>>;
   listeners?: { [key: string]: any | Array<any> };
   textValue?: Observer<any> | string;

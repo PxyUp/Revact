@@ -5,7 +5,8 @@ import typescript from "rollup-plugin-typescript2";
 export default {
     output: {
         file: "./tests/build/bundle.js",
-        format: 'umd',
+        format: 'iife',
+        name: 'testBundle',
     },
     plugins: [
         typescript(),

@@ -1,6 +1,8 @@
 describe('Test list render', function () {
     before(() => {
         cy.exec("yarn rollup ./tests/integration/listRender/index.ts --config ./rollup.config.tests.js")
+    })
+    beforeEach(() => {
         cy.visit('/')
     })
     it('Should render simple list', () =>  {
@@ -11,5 +13,27 @@ describe('Test list render', function () {
         cy.get('div > span').eq(4).contains('5')
         cy.get('div > span').eq(5).contains('6')
         cy.get('div > span').eq(6).contains('7')
+    })
+    it('Should render list of component without keyFn', () => {
+        cy.get('div.list').children().should('have.length', 0)
+        cy.wait(3000)
+        cy.get('div.list').children().should('have.length', 5)
+        cy.get('div.list > button').eq(0).contains('1')
+        cy.get('div.list > button').eq(0).click().contains('2')
+        cy.wait(3000)
+        cy.get('div.list').children().should('have.length', 1)
+        cy.get('div.list > button').eq(0).contains('1')
+        cy.get('div.list > button').eq(0).click().contains('2')
+    })
+    it('Should render list of component with keyFn', () => {
+        cy.get('div.list_fn').children().should('have.length', 0)
+        cy.wait(3000)
+        cy.get('div.list_fn').children().should('have.length', 5)
+        cy.get('div.list_fn > button').eq(0).contains('1')
+        cy.get('div.list_fn > button').eq(0).click().contains('2')
+        cy.wait(3000)
+        cy.get('div.list_fn').children().should('have.length', 1)
+        cy.get('div.list_fn > button').eq(0).contains('2')
+        cy.get('div.list_fn > button').eq(0).click().contains('3')
     })
 })
