@@ -1,15 +1,25 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: ~/app
     docker:
-      - image: circleci/node:latest
-      - image: cypress/base:8
+      - image: cypress/base:10
+        environment:
+          TERM: xterm
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-deps-{{ .Branch }}
+            - v1-deps
       - run:
-          name: install-yarn
-          command: 'sudo npm install -g yarn'
+          name: Install dep
+          command: yarn install
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache
       - run:
-          name: install-dep
-          command: yarn install && yarn test:ci
+          name: Run tests
+          command: yarn test:ci
