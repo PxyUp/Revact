@@ -25,7 +25,7 @@
     "build:lib": "rollup --config rollup.config.lib.js",
     "format:code": "prettier --write \"src/**/*.{ts,js,?css}\"",
     "lint": "tslint -c tslint.json -p tsconfig.lib.json",
-    "test": "cypress run --browser chrome",
+    "test": "cypress run",
     "start:ci": "http-server ./tests/build/ -c-1 --silent",
     "test:ci": "run-p --race start:ci test",
     "ct": "git-cz"
