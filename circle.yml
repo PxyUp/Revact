@@ -1,11 +1,10 @@
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@1.5.1
 jobs:
   build:
-    working_directory: ~/mern-starter
+    working_directory: ~/repo
     docker:
       - image: circleci/node:latest
+      - image: cypress/base:8
     steps:
       - checkout
       - run:
