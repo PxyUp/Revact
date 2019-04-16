@@ -25,6 +25,9 @@
     "build:lib": "rollup --config rollup.config.lib.js",
     "format:code": "prettier --write \"src/**/*.{ts,js,?css}\"",
     "lint": "tslint -c tslint.json -p tsconfig.lib.json",
+    "test": "cypress run",
+    "start:ci": "http-server ./tests/build/ -c-1 --silent",
+    "test:ci": "run-p --race start:ci test",
     "ct": "git-cz"
   },
   "husky": {
@@ -43,8 +46,11 @@
     "@commitlint/config-conventional": "^7.5.0",
     "commitizen": "^3.0.7",
     "commitlint": "^7.5.2",
+    "cypress": "^3.2.0",
+    "http-server": "^0.11.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.16.4",
     "rollup": "^1.7.0",
     "rollup-plugin-bundle-html": "^0.1.5",

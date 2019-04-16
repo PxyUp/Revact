@@ -1,4 +1,4 @@
-# Faster Dom ![npm](https://img.shields.io/npm/v/faster-dom.svg)
+# Faster Dom ![npm](https://img.shields.io/npm/v/faster-dom.svg) [![CircleCI](https://circleci.com/gh/PxyUp/FastDom/tree/master.svg?style=svg)](https://circleci.com/gh/PxyUp/FastDom/tree/master)
 
 Lightweight replacement of React + MobX + React Router (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero.
 
