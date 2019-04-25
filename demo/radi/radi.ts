@@ -13,14 +13,13 @@ class Dot extends Component {
     private hover = fdIf(false)
     private privateText = Composite([this.hover, this.text], (hover, text) => {
         if (hover) {
-            return `${text}`
+            return `*${text}*`
         }
         return text
     })
 
     private styles = Composite([this.hover], (hover) => {
         let s = this.size * 1.3
-        console.log(s)
         return {
             ...dotStyle,
             width: s + 'px',
