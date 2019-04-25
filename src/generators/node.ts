@@ -51,7 +51,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
           });
         } else {
           fdClassesNode = node.classList;
-          const clsObs = node.classList.value as Observer<{ [key: string]: boolean }>;
+          const clsObs = node.classList.observer;
           Object.keys(clsObs.value).forEach(key => {
             const value = clsObs.value[key];
             return value
@@ -75,7 +75,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         setProps(rootNode as HTMLElement, node.props);
       } else {
         fdPropsNode = node.props;
-        const propsObs = node.props.value as Observer<{ [key: string]: any }>;
+        const propsObs = node.props.observer;
         setProps(rootNode as HTMLElement, propsObs.value);
         propsObs.addSubscriber(newProps => {
           setProps(rootNode as HTMLElement, newProps);
@@ -96,7 +96,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         }
       } else {
         fdStyleNode = node.styles;
-        const styleObs = fdStyleNode.value as Observer<{ [key: string]: any }>;
+        const styleObs = fdStyleNode.observer;
         setNodeStyle(rootNode as HTMLElement, styleObs.value);
         styleObs.addSubscriber(newStyles => {
           setNodeStyle(rootNode as HTMLElement, newStyles);
@@ -109,7 +109,7 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
         setNodeAttrs(rootNode as HTMLElement, node.attrs);
       } else {
         fdAttrsNode = node.attrs;
-        const attrsObs = node.attrs.value as Observer<{ [key: string]: any }>;
+        const attrsObs = node.attrs.observer;
         setNodeAttrs(rootNode as HTMLElement, attrsObs.value);
         attrsObs.addSubscriber(newAttrs => {
           setNodeAttrs(rootNode as HTMLElement, newAttrs);

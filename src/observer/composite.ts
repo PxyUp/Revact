@@ -1,4 +1,5 @@
 import { Observer } from './observer';
+import { fdObject } from './fdObject';
 
 /**
  *
@@ -13,7 +14,7 @@ export function Composite(
     return;
   }
 
-  const getValue = (list: Array<Observer<any>>) => {
+  const getValue = (list: Array<Observer<any> | fdObject<any>>) => {
     return results(...list.map(e => e.value));
   };
 
