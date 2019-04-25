@@ -13,6 +13,7 @@ import { createStyles } from "./styles/styles";
 import { createTextNode } from "./textNode/textNode";
 import { createTimer } from "./timer/timer";
 import { createTodo } from "./todo/todo";
+import { createTriaApp } from "./radi/radi";
 
 // Simple Styles
 bootstrap('#styles', createStyles);
@@ -57,3 +58,5 @@ bootstrap('#text_node', createTextNode);
 bootstrap('#router', createExampleRouter);
 
 bootstrap("#composite", createComposite)
+
+bootstrap("#radi", createTriaApp)
