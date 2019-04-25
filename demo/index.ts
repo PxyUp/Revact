@@ -1,6 +1,6 @@
 import { bootstrap, fdValue } from "../src";
 
-import { Observer } from "../src/observer/observer";
+import { createComposite } from "./composite/composite";
 import { createCounter } from "./simple_counter/counter";
 import { createCounters } from "./simple_counters_one_input/counters";
 import { createExampleAttr } from "./attrs/attrs";
@@ -55,3 +55,5 @@ bootstrap('#text_node', createTextNode);
 
 // Simple Router
 bootstrap('#router', createExampleRouter);
+
+bootstrap("#composite", createComposite)
