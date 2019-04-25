@@ -7,7 +7,7 @@ import { fdObject } from './fdObject';
  * @param results function for calculate
  */
 export function Composite(
-  arr: Array<Observer<any>>,
+  arr: Array<Observer<any> | fdObject<any>>,
   results: (...args: any[]) => any,
 ): Observer<any> {
   if (arr.length === 0) {
@@ -22,9 +22,15 @@ export function Composite(
   const resultsObs = new Observer(initValue);
 
   arr.forEach(item => {
-    item.addSubscriber(() => {
-      resultsObs.value = getValue(arr);
-    });
+    if (item instanceof Observer) {
+      item.addSubscriber(() => {
+        resultsObs.value = getValue(arr);
+      });
+    } else {
+      item.observer.addSubscriber(() => {
+        resultsObs.value = getValue(arr);
+      });
+    }
   });
 
   return resultsObs;
