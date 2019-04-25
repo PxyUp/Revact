@@ -1,4 +1,4 @@
-import { Component, Composite, bootstrap, createComponent, fdObject, fdValue } from '../../src';
+import { Component, composite, createComponent, fdValue } from '../../src';
 
 class CompositeComp extends Component {
     private a = fdValue(0);
@@ -7,7 +7,7 @@ class CompositeComp extends Component {
     reactive = {
         a: this.a,
         b: this.b,
-        sum: Composite([this.a, this.b], (a, b) => a + b)
+        sum: composite([this.a, this.b], (a, b) => a + b)
     }
 
     template = {

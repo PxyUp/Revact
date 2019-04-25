@@ -6,7 +6,7 @@ import { fdObject } from './fdObject';
  * @param arr Array of observer
  * @param results function for calculate
  */
-export function Composite(
+export function composite(
   arr: Array<Observer<any> | fdObject<any>>,
   results: (...args: any[]) => any,
 ): Observer<any> {

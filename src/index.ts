@@ -11,4 +11,4 @@ export { fdIf, fdValue, fdFor } from './misc/directives';
 export { fdObject } from './observer/fdObject';
 export { matchRoute } from './misc/misc';
 export { Observer } from './observer/observer';
-export { Composite } from './observer/composite';
+export { composite } from './observer/composite';

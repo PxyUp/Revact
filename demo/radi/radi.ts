@@ -1,4 +1,4 @@
-import { Component, Composite, Observer, createComponent, fdIf, fdObject, fdValue } from '../../src';
+import { Component, Observer, composite, createComponent, fdIf, fdObject, fdValue } from '../../src';
 const dotStyle = {
     position: 'absolute',
     background: '#61dafb',
@@ -11,14 +11,14 @@ const targetSize = 25;
 
 class Dot extends Component {
     private hover = fdIf(false)
-    private privateText = Composite([this.hover, this.text], (hover, text) => {
+    private privateText = composite([this.hover, this.text], (hover, text) => {
         if (hover) {
             return `*${text}*`
         }
         return text
     })
 
-    private styles = Composite([this.hover], (hover) => {
+    private styles = composite([this.hover], (hover) => {
         let s = this.size * 1.3
         return {
             ...dotStyle,
@@ -88,7 +88,7 @@ class ApplicationTria extends Component {
     scale = fdValue(0)
     elapsed = fdValue(0)
 
-    style = Composite([this.scale], (scale) => {
+    style = composite([this.scale], (scale) => {
         return {
             position: 'absolute',
             'transform-origin': '0px 0px',

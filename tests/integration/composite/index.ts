@@ -1,4 +1,4 @@
-import { Composite, fdValue, generateNode } from '../../../src';
+import { composite, fdValue, generateNode } from '../../../src';
 
 const first = fdValue(0)
 const second = fdValue(0)
@@ -28,7 +28,7 @@ const element = generateNode({
         },
         {
             tag: "p",
-            textValue: Composite([first, second], (a, b) => a + b)
+            textValue: composite([first, second], (a, b) => a + b)
         }
     ]
 })
