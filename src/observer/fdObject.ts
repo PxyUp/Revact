@@ -23,6 +23,10 @@ export class fdObject<T> {
   }
 
   get value() {
+    return this.obs.value;
+  }
+
+  get observer() {
     return this.obs;
   }
 
