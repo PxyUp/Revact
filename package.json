@@ -1,12 +1,12 @@
 {
-  "name": "faster-dom",
-  "version": "0.0.48-alpha",
-  "main": "faster-dom.umd.js",
-  "module": "faster-dom.es5.js",
-  "es2015": "faster-dom.es2015.js",
+  "name": "revact",
+  "version": "0.0.1-beta",
+  "main": "revact.umd.js",
+  "module": "revact.es5.js",
+  "es2015": "revact.es2015.js",
   "types": "index.d.ts",
   "typings": "index.d.ts",
-  "repository": "git@github.com:PxyUp/test.git",
+  "repository": "https://github.com/PxyUp/Revact",
   "author": "Iurii Panarin <tduble94@gmail.com>",
   "license": "MIT",
   "keywords": [

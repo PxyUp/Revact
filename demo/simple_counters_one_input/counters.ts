@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent } from "../../src";
+import { Component, RevactNode, createComponent } from "../../src";
 
 import { Observer } from "../../src/observer/observer";
 
@@ -20,7 +20,7 @@ class CountersShared extends Component {
         console.log("destroy CountersShared")
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "button",
         textValue: this.counter,
         listeners: {

@@ -1,35 +1,26 @@
 import { ClassConstructor } from '../interfaces/component';
-import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
-import { fdObject } from '../observer/fdObject';
+import { RevactNode } from '../interfaces/node';
 import { removeAllListenersComponent } from '../misc/misc';
 
 export function createComponent<T extends ClassConstructor<any>>(
   classProvider: T,
   ...args: T extends new (...args: infer A) => any ? A : never
-): FastDomNode {
+): RevactNode {
   const instance = new classProvider(...args);
   instance.template.instance = instance;
   return instance.template;
 }
 
 export class Component {
-  public reactive: { [key: string]: Observer<any> } = {};
-  public fdObjects: { [key: string]: fdObject<any> } = {};
-  public fdStyles: { [key: string]: fdObject<any> | Observer<string> } = {};
-  public template: FastDomNode;
+  public rValues: { [key: string]: Observer<any> } = {};
+  public template: RevactNode;
   protected onDestroy() {}
   protected onInit() {}
 
   reInit() {
-    Object.keys(this.fdStyles).forEach(key => {
-      this.fdStyles[key].reInit();
-    });
-    Object.keys(this.fdObjects).forEach(key => {
-      this.fdObjects[key].reInit();
-    });
-    Object.keys(this.reactive).forEach(key => {
-      this.reactive[key].reInit();
+    Object.keys(this.rValues).forEach(key => {
+      this.rValues[key].reInit();
     });
     this.onInit();
   }
@@ -39,15 +30,6 @@ export class Component {
     if (force === true) {
       removeAllListenersComponent(this.template);
     }
-    Object.keys(this.fdObjects).forEach(key => {
-      this.fdObjects[key].destroy(...args);
-    });
-    Object.keys(this.reactive).forEach(key => {
-      this.reactive[key].destroy(...args);
-    });
-    Object.keys(this.fdStyles).forEach(key => {
-      this.fdStyles[key].destroy(...args);
-    });
     this.onDestroy();
   }
 }

@@ -1,10 +1,10 @@
-import { Component, composite, createComponent, fdValue } from '../../src';
+import { Component, composite, createComponent, rValue } from '../../src';
 
 class CompositeComp extends Component {
-    private a = fdValue(0);
-    private b = fdValue(0);
+    private a = rValue(0);
+    private b = rValue(0);
     
-    reactive = {
+    rValues = {
         a: this.a,
         b: this.b,
         sum: composite([this.a, this.b], (a, b) => a + b)
@@ -33,13 +33,9 @@ class CompositeComp extends Component {
             },
             {
                 tag: "p",
-                textValue: this.reactive.sum
+                textValue: this.rValues.sum
             }
         ]
-    }
-
-    onInit() {
-
     }
 }
 

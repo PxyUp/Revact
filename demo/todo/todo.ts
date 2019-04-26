@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdObject, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rList, rValue } from "../../src";
 
 import { Observer } from "../../src/observer/observer";
 
@@ -11,7 +11,7 @@ class TodoItem extends Component {
         this.todoList.value = this.todoList.value.filter((item: any) => item !== this.value)
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {
@@ -39,37 +39,28 @@ export function createTodo() {
 
 class Todo extends Component {
 
-    reactive = {
-        inputValue: fdValue(''),
-        todoList: fdValue([])
-    }
-
-    fdObjects = {
-        inputValueProp: new fdObject({
-            value: this.inputValue,
+    rValues = {
+        inputProps: rValue({
+            value: '',
         }),
-    }
-
-
-    get inputValue() {
-        return this.reactive.inputValue
-    }
-
-    get todoList() {
-        return this.reactive.todoList
+        todoList: rValue([])
     }
 
     onInput = (e: any) => {
-        this.inputValue.value = e.target.value;
+        this.rValues.inputProps.value = {
+            value: e.target.value
+        };
     }
 
 
     onClick = () => {
-        if (!this.inputValue.value) {
+        if (!this.rValues.inputProps.value.value) {
             return;
         }
-        this.todoList.value = [...this.todoList.value, { label: this.inputValue.value}]
-        this.inputValue.value = '';
+        this.rValues.todoList.value = [...this.rValues.todoList.value, { label: this.rValues.inputProps.value.value}]
+        this.rValues.inputProps.value = {
+            value: ''
+        };
     }
 
     inputBlock = {
@@ -77,13 +68,13 @@ class Todo extends Component {
         attrs: {
             placeholder: "Write here",
         },
-        props: this.fdObjects.inputValueProp,
+        props: this.rValues.inputProps,
         listeners: {
             input: this.onInput,
         }
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {
@@ -102,8 +93,8 @@ class Todo extends Component {
             {
                 tag: "div",
                 children: [
-                    fdFor(this.todoList, createTodoItem, [
-                        this.todoList,
+                    rList(this.rValues.todoList, createTodoItem, [
+                        this.rValues.todoList,
                         (e: any) => e
                     ])
                 ]

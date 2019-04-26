@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdIf, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rValue } from "../../src";
 
 import { createTimer } from "../timer/timer";
 
@@ -7,17 +7,17 @@ export function createIf() {
 }
 
 class IfWithChild extends Component {
-    reactive = {
-        show: fdIf(true),
-        text: fdValue("Here timer")
+    rValues = {
+        show: rValue(true),
+        text: rValue("Here timer")
     }
 
     get show() {
-        return this.reactive.show;
+        return this.rValues.show;
     }
 
     get text() {
-        return this.reactive.text
+        return this.rValues.text
     }
 
     onClick = () => {
@@ -25,7 +25,7 @@ class IfWithChild extends Component {
         this.text.value = this.show.value ? "Here timer" : "Sorry not timer"
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
        tag: "div",
        children: [
            {

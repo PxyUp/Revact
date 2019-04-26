@@ -1,32 +1,24 @@
-import { Component, FastDomNode, createComponent, fdIf, fdObject, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rValue } from "../../src";
 
 class Timer extends Component {
     private timer: number;
     
-    reactive = {
-        counter: fdValue(0),
-        classOdd: fdIf(true),
+    rValues = {
+        counter: rValue(0),
+        clsList: rValue({
+            "odd": true
+        })
     }
-
-    fdObjects = {
-        classList: new fdObject<boolean>({
-            "odd": this.currentClass
-        }),
-    }
-
-    get counter() {
-        return this.reactive.counter;
-    }
-
-    get currentClass(){
-        return this.reactive.classOdd
-    }
-
+    
     onInit() {
         const timer = () => {
             this.timer = window.setTimeout(() => {
-                this.counter.value +=1
-                this.currentClass.value = this.counter.value % 2 === 0 ? true : false 
+                this.rValues.counter.value +=1
+                this.rValues.clsList.value = this.rValues.counter.value % 2 === 0 ? {
+                    "odd": true
+                } : {
+                    "odd": false
+                }
                 timer()
             }, 1000)
         }
@@ -37,10 +29,10 @@ class Timer extends Component {
         clearTimeout(this.timer)
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
-        classList: this.fdObjects.classList,
-        textValue: this.counter,
+        classList: this.rValues.clsList,
+        textValue: this.rValues.counter,
     }
 }
 

@@ -1,9 +1,9 @@
-import { fdFor, generateNode, Component, FastDomNode, Observer, fdValue, createComponent } from '../../../src';
+import { Component, Observer, RevactNode, createComponent, generateNode, rList, rValue } from '../../../src';
 
 const element = generateNode({
     tag: "div",
     children: [
-        fdFor([1,2,3,4,5,6,7], {
+        rList([1,2,3,4,5,6,7], {
             tag: "span",
             textValue: (e: any) => e,
         } as any)
@@ -29,7 +29,7 @@ class CountersShared extends Component {
         console.log("destroy CountersShared")
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "button",
         textValue: this.counter,
         listeners: {
@@ -41,8 +41,8 @@ class CountersShared extends Component {
     }
 }
 
-const obs = fdValue([])
-const obsFn = fdValue([])
+const obs = rValue([])
+const obsFn = rValue([])
 
 export function createObsFor() {
     return {
@@ -50,7 +50,7 @@ export function createObsFor() {
         classList: 'list',
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            fdFor(obs, createCounters, [(e: any) => fdValue(e)]) // we do map from obs to reactive value
+            rList(obs, createCounters, [(e: any) => rValue(e)]) // we do map from obs to reactive value
         ]
     };
 }
@@ -63,7 +63,7 @@ export function createkeyFnObsFor() {
         classList: 'list_fn',
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            fdFor(obs, createCounters, [(e: any) => fdValue(e)], (item: any) => item) // we do map from obs to reactive value
+            rList(obs, createCounters, [(e: any) => rValue(e)], (item: any) => item) // we do map from obs to reactive value
         ]
     };
 }

@@ -7,9 +7,9 @@ export default [
     {
         input: "src/index.ts",
         output: {
-            file: "./lib/faster-dom.umd.js",
+            file: "./lib/revact.umd.js",
             format: 'umd',
-            name: 'faster-dom',
+            name: 'revact',
         },
         plugins: [
             typescript({

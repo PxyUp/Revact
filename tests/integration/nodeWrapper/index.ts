@@ -1,7 +1,7 @@
-import { composite, fdValue, generateNode, nodeWrapper } from '../../../src';
+import { composite, generateNode, nodeWrapper, rValue } from '../../../src';
 
-const first = fdValue(0)
-const second = fdValue(0)
+const first = rValue(0)
+const second = rValue(0)
 
 const element = generateNode(nodeWrapper(
     {

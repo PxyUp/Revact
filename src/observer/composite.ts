@@ -1,5 +1,4 @@
 import { Observer } from './observer';
-import { fdObject } from './fdObject';
 
 /**
  *
@@ -7,14 +6,14 @@ import { fdObject } from './fdObject';
  * @param results function for calculate
  */
 export function composite(
-  arr: Array<Observer<any> | fdObject<any>>,
+  arr: Array<Observer<any>>,
   results: (...args: any[]) => any,
 ): Observer<any> {
   if (arr.length === 0) {
     return;
   }
 
-  const getValue = (list: Array<Observer<any> | fdObject<any>>) => {
+  const getValue = (list: Array<Observer<any>>) => {
     return results(...list.map(e => e.value));
   };
 
@@ -22,15 +21,9 @@ export function composite(
   const resultsObs = new Observer(initValue);
 
   arr.forEach(item => {
-    if (item instanceof Observer) {
-      item.addSubscriber(() => {
-        resultsObs.value = getValue(arr);
-      });
-    } else {
-      item.observer.addSubscriber(() => {
-        resultsObs.value = getValue(arr);
-      });
-    }
+    item.addSubscriber(() => {
+      resultsObs.value = getValue(arr);
+    });
   });
 
   return resultsObs;

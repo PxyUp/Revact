@@ -1,19 +1,19 @@
-import { Component, FastDomNode, createComponent, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rValue } from "../../src";
 
 class TextComponent extends Component {
-    reactive = {
-        counter: fdValue(-10),
+    rValues = {
+        counter: rValue(-10),
     }
 
     get counter() {
-        return this.reactive.counter;
+        return this.rValues.counter;
     }
 
     onClick = () => {
         this.counter.value += 1
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {

@@ -3,25 +3,26 @@ import {
   callDeep,
   removeNodeListener,
   renderList,
+  setClassList,
   setNodeAttrs,
   setNodeStyle,
   setProps,
+  setTextContent,
 } from '../misc/misc';
 
-import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
-import { fdObject } from '../observer/fdObject';
+import { RevactNode } from '../interfaces/node';
 
 const instance = 'instance';
 
-export function nodeWrapper(...args: any[]): FastDomNode {
+export function nodeWrapper(...args: any[]): RevactNode {
   return {
     tag: 'fragment',
     children: args,
   };
 }
 
-export function generateNode(node: FastDomNode): HTMLElement | DocumentFragment | Comment | null {
+export function generateNode(node: RevactNode): HTMLElement | DocumentFragment | Comment | null {
   if (node.show === false) {
     return null;
   }
@@ -41,98 +42,58 @@ export function generateNode(node: FastDomNode): HTMLElement | DocumentFragment 
 
   node.domNode = rootNode;
 
-  if (node.textValue !== null || node.textValue !== undefined) {
-    if (typeof node.textValue === 'object') {
-      const obs = node.textValue;
-      obs.addSubscriber(value => {
-        rootNode.textContent = value;
-      });
-      rootNode.textContent = obs.value;
-    } else {
-      rootNode.textContent = node.textValue;
+  const listSharedFn = {
+    textValue: setTextContent,
+  } as { [key: string]: (node: HTMLElement, value: any) => void };
+
+  const listSharedObservers = {
+    textValue: null,
+  } as { [key: string]: null | Observer<any> };
+
+  const listNodeFn = {
+    styles: setNodeStyle,
+    classList: setClassList,
+    props: setProps,
+    attrs: setNodeAttrs,
+  } as { [key: string]: (node: HTMLElement, value: any) => void };
+
+  const listNodeObservers = {
+    styles: null,
+    classList: null,
+    props: null,
+    attrs: null,
+  } as { [key: string]: null | Observer<any> };
+  // That can be apply for all type
+  Object.keys(listSharedObservers).forEach((key: string) => {
+    if ((node as any)[key]) {
+      if ((node as any)[key] instanceof Observer) {
+        const obs = (node as any)[key] as Observer<any>;
+        listSharedFn[key](rootNode as HTMLElement, obs.value);
+        obs.addSubscriber(newValue => {
+          listSharedFn[key](rootNode as HTMLElement, newValue);
+        });
+        listSharedObservers[key] = obs;
+        return;
+      }
+      listSharedFn[key](rootNode as HTMLElement, (node as any)[key]);
     }
-  }
-  let fdClassesNode: fdObject<boolean>;
-  let fdAttrsNode: fdObject<any>;
-  let fdPropsNode: fdObject<any>;
-  let fdStyleNode: fdObject<any> | Observer<string>;
+  });
 
   if (node.tag !== 'textNode') {
-    if (node.classList) {
-      if (typeof node.classList === 'string') {
-        (rootNode as HTMLElement).className = node.classList;
-      } else {
-        if (Array.isArray(node.classList)) {
-          node.classList.forEach(item => {
-            (rootNode as HTMLElement).classList.add(item);
+    Object.keys(listNodeObservers).forEach((key: string) => {
+      if ((node as any)[key]) {
+        if ((node as any)[key] instanceof Observer) {
+          const obs = (node as any)[key] as Observer<any>;
+          listNodeFn[key](rootNode as HTMLElement, obs.value);
+          obs.addSubscriber(newValue => {
+            listNodeFn[key](rootNode as HTMLElement, newValue);
           });
-        } else {
-          fdClassesNode = node.classList;
-          const clsObs = node.classList.observer;
-          Object.keys(clsObs.value).forEach(key => {
-            const value = clsObs.value[key];
-            return value
-              ? (rootNode as HTMLElement).classList.add(key)
-              : (rootNode as HTMLElement).classList.remove(key);
-          });
-          clsObs.addSubscriber(newClasses => {
-            Object.keys(newClasses).forEach(key => {
-              const value = newClasses[key];
-              return value
-                ? (rootNode as HTMLElement).classList.add(key)
-                : (rootNode as HTMLElement).classList.remove(key);
-            });
-          });
+          listNodeObservers[key] = obs;
+          return;
         }
+        listNodeFn[key](rootNode as HTMLElement, (node as any)[key]);
       }
-    }
-
-    if (node.props) {
-      if (!(node.props instanceof fdObject)) {
-        setProps(rootNode as HTMLElement, node.props);
-      } else {
-        fdPropsNode = node.props;
-        const propsObs = node.props.observer;
-        setProps(rootNode as HTMLElement, propsObs.value);
-        propsObs.addSubscriber(newProps => {
-          setProps(rootNode as HTMLElement, newProps);
-        });
-      }
-    }
-
-    if (node.styles) {
-      if (!(node.styles instanceof fdObject)) {
-        if (node.styles instanceof Observer) {
-          fdStyleNode = node.styles;
-          setNodeStyle(rootNode as HTMLElement, fdStyleNode.value);
-          fdStyleNode.addSubscriber(newStyles => {
-            setNodeStyle(rootNode as HTMLElement, newStyles);
-          });
-        } else {
-          setNodeStyle(rootNode as HTMLElement, node.styles);
-        }
-      } else {
-        fdStyleNode = node.styles;
-        const styleObs = fdStyleNode.observer;
-        setNodeStyle(rootNode as HTMLElement, styleObs.value);
-        styleObs.addSubscriber(newStyles => {
-          setNodeStyle(rootNode as HTMLElement, newStyles);
-        });
-      }
-    }
-
-    if (node.attrs) {
-      if (!(node.attrs instanceof fdObject)) {
-        setNodeAttrs(rootNode as HTMLElement, node.attrs);
-      } else {
-        fdAttrsNode = node.attrs;
-        const attrsObs = node.attrs.observer;
-        setNodeAttrs(rootNode as HTMLElement, attrsObs.value);
-        attrsObs.addSubscriber(newAttrs => {
-          setNodeAttrs(rootNode as HTMLElement, newAttrs);
-        });
-      }
-    }
+    });
 
     if (node.children) {
       const tempArr = [] as Array<HTMLElement | DocumentFragment | Comment | Array<any>>;
@@ -181,18 +142,18 @@ export function generateNode(node: FastDomNode): HTMLElement | DocumentFragment 
     if (node.tag !== 'textNode') {
       removeNodeListener(rootNode as HTMLElement, node.listeners);
     }
-    if (fdAttrsNode) {
-      fdAttrsNode.destroy();
-    }
-    if (fdPropsNode) {
-      fdPropsNode.destroy();
-    }
-    if (fdClassesNode) {
-      fdClassesNode.destroy();
-    }
-    if (fdStyleNode) {
-      fdClassesNode.destroy();
-    }
+
+    Object.keys(listSharedObservers).forEach(key => {
+      if (listSharedObservers[key]) {
+        listSharedObservers[key].destroy();
+      }
+    });
+
+    Object.keys(listNodeObservers).forEach(key => {
+      if (listNodeObservers[key]) {
+        listNodeObservers[key].destroy();
+      }
+    });
     callDeep(node, 'destroy', true);
   };
 
@@ -206,18 +167,18 @@ export function generateNode(node: FastDomNode): HTMLElement | DocumentFragment 
             parent.replaceChild(rootNode, comment);
           }
           callDeep(node, 'reInit', false);
-          if (fdStyleNode) {
-            fdClassesNode.reInit();
-          }
-          if (fdClassesNode) {
-            fdClassesNode.reInit();
-          }
-          if (fdPropsNode) {
-            fdPropsNode.reInit();
-          }
-          if (fdAttrsNode) {
-            fdAttrsNode.reInit();
-          }
+          // List for observer textValue
+          Object.keys(listSharedObservers).forEach(key => {
+            if (listSharedObservers[key]) {
+              listSharedObservers[key].reInit();
+            }
+          });
+          // List for observer for node
+          Object.keys(listNodeObservers).forEach(key => {
+            if (listNodeObservers[key]) {
+              listNodeObservers[key].reInit();
+            }
+          });
           if (node.tag !== 'textNode') {
             addNodeListener(rootNode as HTMLElement, node.listeners);
           }

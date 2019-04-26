@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdObject, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rValue } from "../../src";
 
 export function createCounter() {
     return createComponent(Counter);
@@ -7,19 +7,19 @@ export function createCounter() {
 class Counter extends Component {
     width = 100;
 
-    reactive = {
-        counter: fdValue(0),
+    rValues = {
+        counter: rValue(0),
     }
 
     get counter() {
-        return this.reactive.counter;
+        return this.rValues.counter;
     }
 
     onClick = () => {
         this.counter.value += 1;
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "button",
         textValue: this.counter,
         listeners: {

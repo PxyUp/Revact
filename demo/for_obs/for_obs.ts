@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdFor, fdIf, fdValue, generateNode } from "../../src";
+import { Component, RevactNode, createComponent, rList, rValue } from "../../src";
 
 import { Observer } from "../../src/observer/observer";
 import { createCounters } from "../simple_counters_one_input/counters";
@@ -9,7 +9,7 @@ function createDiv(counter: Observer<number>) {
 
 class DivBlock extends Component {
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {
@@ -33,14 +33,14 @@ class DivBlock extends Component {
     }
 }
 
-const obs = fdValue([])
+const obs = rValue([])
 
 export function createObsFor() {
     return {
         tag: "div",
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            fdFor(obs, createDiv, [(e: any) => fdValue(e)], (item: any) => item) // we do map from obs to reactive value
+            rList(obs, createDiv, [(e: any) => rValue(e)], (item: any) => item) // we do map from obs to rValues value
         ]
     }
 }

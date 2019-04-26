@@ -1,4 +1,4 @@
-# Faster Dom ![npm](https://img.shields.io/npm/v/faster-dom.svg) [![CircleCI](https://circleci.com/gh/PxyUp/FastDom/tree/master.svg?style=svg)](https://circleci.com/gh/PxyUp/FastDom/tree/master)
+# Revact ![npm](https://img.shields.io/npm/v/revact.svg) [![CircleCI](https://circleci.com/gh/PxyUp/Revact/tree/master.svg?style=svg)](https://circleci.com/gh/PxyUp/Revact/tree/master)
 
 Lightweight replacement of React + MobX + React Router (I hope in future Angular/Vue), which does not use the virtual DOM comparison, but the re-render of only the changed parts. Abandon the HTML template in favor of their interpretation in JS, give to us tree-shaking is components/templates and the speed of work increases since the time to parse the template is zero.
 
@@ -8,94 +8,28 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add faster-dom@0.0.48-alpha
+yarn add revact@0.0.1-beta
 ```
 
-*index.html*
-```html
-<div id="timer"></div>
-```
+```typescript
+import { bootstrap, rValue } from 'revact';
 
-*timer.ts*
-```ts
-import {
-    Component,
-    FastDomNode,
-    createComponent,
-    fdObject,
-    fdIf,
-    fdValue,
-} from 'faster-dom';
-// Extends your class from Component
-class Timer extends Component {
-    private timer: number;
-
-    // Put here all reactive values, when component will be destroyed
-    // They will be destroy automatically
-    protected reactive = {
-        // create reactive value
-        // if you provide here object/array, you on change need always return new one, not link on previous
-        counter: fdValue(0),
-        // create reactive for true/false
-        classOdd: fdIf(true),
-    }
-    // All fdObjects(for attrs/prop/classList binding) must be here for auto destroy
-    fdObjects = {
-        classList: new fdObject<boolean>({
-            "odd": this.currentClass
-        }),
-    }
-
-    // Create shortcuts, not required
-    get counter () {
-        return this.reactive.counter;
-    }
-    // Create shortcuts, not required
-    get currentClass () {
-        return this.reactive.classOdd;
-    }
-
-    onInit () {
-        const timer = () => {
-            this.timer = window.setTimeout(() => {
-                this.counter.value += 1; // increase counter on '1'
-                // If counter value odd then 'true'
-                this.currentClass.value = this.counter.value % 2 === 0 ? true : false;
-                timer();
-            }, 1000);
+bootstrap('#app', () => {
+  const counter = rValue(0)
+    return {
+      tag: "div",
+      textValue: counter,
+      listeners: {
+        click: () => {
+          counter.value +=1
         }
-
-        timer();
+      }
     }
-
-    onDestroy () {
-        // Use destroy hook for clear timeout
-        clearTimeout(this.timer);
-    }
-    // Provide template
-    template: FastDomNode = {
-        tag: 'div',
-        // Create reactive class
-        classList: this.fdObjects.classList,
-        // Create reactive textValue
-        textValue: this.counter,
-    }
-}
-
-export function createTimer() {
-    return createComponent(Timer);
-}
+  }
+)
 ```
 
-*index.ts*
-```ts
-import { bootstrap } from 'faster-dom';
-import { createTimer } from './timer';
-
-bootstrap('#timer', createTimer);
-```
-
-**[📺 DEMO](https://pxyup.github.io/FastDom/)**
+**[📺 DEMO](https://pxyup.github.io/Revact/)**
 **[📺 DEMO at StackBlitz](https://stackblitz.com/edit/typescript-wgjbzf)**
 
 ## Features
