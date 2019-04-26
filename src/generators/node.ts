@@ -14,13 +14,30 @@ import { fdObject } from '../observer/fdObject';
 
 const instance = 'instance';
 
-export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
+export function nodeWrapper(...args: any[]): FastDomNode {
+  return {
+    tag: 'fragment',
+    children: args,
+  };
+}
+
+export function generateNode(node: FastDomNode): HTMLElement | DocumentFragment | Comment | null {
   if (node.show === false) {
     return null;
   }
+  let rootNode: HTMLElement | Text | DocumentFragment;
 
-  const rootNode =
-    node.tag !== 'textNode' ? document.createElement(node.tag) : document.createTextNode('');
+  if (node.tag === 'textNode') {
+    rootNode = document.createTextNode('');
+  }
+
+  if (node.tag === 'fragment') {
+    rootNode = document.createDocumentFragment();
+  }
+
+  if (node.tag !== 'textNode' && node.tag !== 'fragment') {
+    rootNode = document.createElement(node.tag);
+  }
 
   node.domNode = rootNode;
 
@@ -118,13 +135,13 @@ export function generateNode(node: FastDomNode): HTMLElement | Comment | null {
     }
 
     if (node.children) {
-      const tempArr = [] as Array<HTMLElement | Comment | Array<any>>;
+      const tempArr = [] as Array<HTMLElement | DocumentFragment | Comment | Array<any>>;
       node.children.forEach((item: any) => {
         if (!item) {
           return;
         }
         if (Array.isArray(item)) {
-          const tempSubArr = [] as Array<HTMLElement | Comment>;
+          const tempSubArr = [] as Array<HTMLElement | Comment | DocumentFragment>;
           item.forEach(el => {
             if (!el.tag) {
               tempSubArr.push(el as HTMLHtmlElement);

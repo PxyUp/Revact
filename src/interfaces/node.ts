@@ -13,5 +13,5 @@ export interface FastDomNode {
   listeners?: { [key: string]: any | Array<any> };
   textValue?: Observer<any> | string;
   instance?: any;
-  domNode?: HTMLElement | Text;
+  domNode?: HTMLElement | Text | DocumentFragment;
 }

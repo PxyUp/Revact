@@ -1,4 +1,4 @@
-import { Component, Observer, composite, createComponent, fdIf, fdObject, fdValue } from '../../src';
+import { Component, Observer, composite, createComponent, fdIf, fdObject, fdValue, nodeWrapper } from '../../src';
 const dotStyle = {
     position: 'absolute',
     background: '#61dafb',
@@ -60,19 +60,12 @@ function createDot(x: number, y: number, size: number, text: Observer<number>) {
 }
 
 class SierpinskiTriangle extends Component {
-    template = this.s <= targetSize ? {
-        tag: "div",
-        children: [
-            createDot(this.x - targetSize / 2, this.y - targetSize / 2, targetSize, this.second) as any
-        ]
-    } : {
-            tag: "div",
-            children: [
-                createSierpinskiTriangle(this.x, this.y - this.s / 4, this.s / 2, this.second) as any,
-                createSierpinskiTriangle(this.x - this.s / 2, this.y + this.s / 4, this.s / 2, this.second) as any,
-                createSierpinskiTriangle(this.x + this.s / 2, this.y + this.s / 4, this.s / 2, this.second) as any,
-            ]
-        }
+    template = this.s <= targetSize ? nodeWrapper(createDot(this.x - targetSize / 2, this.y - targetSize / 2, targetSize, this.second))
+        : nodeWrapper(
+            createSierpinskiTriangle(this.x, this.y - this.s / 4, this.s / 2, this.second) as any,
+            createSierpinskiTriangle(this.x - this.s / 2, this.y + this.s / 4, this.s / 2, this.second) as any,
+            createSierpinskiTriangle(this.x + this.s / 2, this.y + this.s / 4, this.s / 2, this.second) as any,
+        );
     constructor(private x: number, private y: number, private s: number, private second: Observer<number>) {
         super();
     }
