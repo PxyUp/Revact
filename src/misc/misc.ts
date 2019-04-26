@@ -47,27 +47,21 @@ export function setClassList(
   }
 
   if (typeof classList === 'string') {
-    requestAnimationFrame(() => {
-      node.className = classList;
-    });
+    node.className = classList;
     return;
   }
 
   if (Array.isArray(classList)) {
-    requestAnimationFrame(() => {
-      node.className = classList.join(' ');
-    });
+    node.className = classList.join(' ');
     return;
   }
-  requestAnimationFrame(() => {
-    Object.keys(classList).forEach(key => {
-      const value = classList[key];
-      if (value) {
-        node.classList.add(key);
-        return;
-      }
-      node.classList.remove(key);
-    });
+  Object.keys(classList).forEach(key => {
+    const value = classList[key];
+    if (value) {
+      node.classList.add(key);
+      return;
+    }
+    node.classList.remove(key);
   });
 }
 
