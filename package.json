@@ -1,6 +1,6 @@
 {
   "name": "faster-dom",
-  "version": "0.0.47-alpha",
+  "version": "0.0.48-alpha",
   "main": "faster-dom.umd.js",
   "module": "faster-dom.es5.js",
   "es2015": "faster-dom.es2015.js",
