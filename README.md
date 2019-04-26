@@ -4,7 +4,7 @@ Lightweight replacement of React + MobX + React Router (I hope in future Angular
 
 The library allows you to create quick and responsive interfaces using only JS / TS. With this you will get the minimum application size, speed and ease of development.
 
-**[OFFICIAL BENCHMARK RESULTS](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
+**[OFFICIAL BENCHMARK RESULTS(old name faster-dom)](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
 
 ## Usage
 ```sh
@@ -42,11 +42,9 @@ bootstrap('#app', () => {
 
 ## Performance
 
-**Right now directive fdFor not optimized, on each change full rerender, and this have so much effect on (swap, remove, append)**
-
 **[CODE OF THE TESTS](https://github.com/PxyUp/js-framework-benchmark/pull/1/files)**
 
-**[OFFICIAL BENCHMARK RESULTS](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
+**[OFFICIAL BENCHMARK RESULTS(old name faster-dom](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)**
 
 ## How it works
 > Here will be good api
@@ -69,7 +67,6 @@ bootstrap('#app', () => {
 6. Supports router
 
 ### TODO (contributing is appreciated)
-1. Proper types annotation
-2. Html transpiler
+1. Html transpiler (https://github.com/RyuuGan/html2FastDom)
 
 > Help me please if you are interested.
