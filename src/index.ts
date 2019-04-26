@@ -5,6 +5,7 @@ export {
   createRouter,
   Router,
   bootstrap,
+  nodeWrapper,
 } from './generators/index';
 export { FastDomNode } from './interfaces/index';
 export { fdIf, fdValue, fdFor } from './misc/directives';

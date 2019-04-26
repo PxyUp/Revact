@@ -236,7 +236,7 @@ export function isPrimitive(i: any) {
  */
 export function renderList(
   parent: HTMLElement | DocumentFragment,
-  children: Array<HTMLElement | Comment | Array<any>>,
+  children: Array<HTMLElement | Comment | DocumentFragment | Array<any>>,
 ) {
   if (children.length === 0) {
     return;
