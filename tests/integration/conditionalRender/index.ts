@@ -1,6 +1,6 @@
-import { fdIf, generateNode } from '../../../src';
+import { generateNode, rValue } from '../../../src';
 
-const counter = fdIf(false)
+const counter = rValue(false)
 
 const element = generateNode({
     tag: "div",

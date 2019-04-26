@@ -1,20 +1,16 @@
 import { asyncCall, callDeep, isPrimitive, removeAllChild, renderList } from './misc';
 
-import { FastDomNode } from '../interfaces/node';
 import { Observer } from '../observer/observer';
+import { RevactNode } from '../interfaces/node';
 import { generateNode } from '../generators/node';
 
-export function fdIf(value?: boolean) {
-  return fdValue(value);
-}
-
-export function fdValue(value: any, force = false) {
+export function rValue(value: any, force = false) {
   return new Observer(value, force);
 }
 
 function mapFn<F extends Array<any>>(
   item: any,
-  itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
+  itemFn: (...args: Array<any>) => RevactNode,
   inputs: F = [] as any,
   index: number,
   keyFn?: (item: any) => string,
@@ -45,15 +41,15 @@ function mapFn<F extends Array<any>>(
     };
   }
   return {
-    ...(itemFn as FastDomNode),
+    ...(itemFn as RevactNode),
     textValue: (itemFn as any).textValue(isPrim ? newItem.value : item),
     fdKey: skopedKeyFn(newItem),
   };
 }
 
-export function fdFor<F extends any[]>(
+export function rList<F extends any[]>(
   iteration: Observer<Array<any>> | Array<any>,
-  itemFn: (...args: Array<any>) => FastDomNode | FastDomNode,
+  itemFn: (...args: Array<any>) => RevactNode,
   inputs: F = [] as any,
   keyFn?: (e: any) => string,
 ) {
@@ -133,7 +129,7 @@ export function fdFor<F extends any[]>(
     let increaseIndex = 0;
     const fragmentArr = [] as Array<HTMLElement>;
     tempArr.forEach((el, index) => {
-      const item = el[0] as FastDomNode;
+      const item = el[0] as RevactNode;
       const oldIndex = el[1] as number;
       if (oldIndex === -1) {
         fragmentArr.push(generateNode(item) as HTMLElement);

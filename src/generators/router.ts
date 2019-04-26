@@ -1,10 +1,10 @@
-import { FastDomNode, Paths } from '../interfaces/index';
+import { Paths, RevactNode } from '../interfaces/index';
 import { RouteParams, RouterPath } from '../interfaces/router';
 import { callDeep, clean, matchRoute, removeAllChild } from '../misc/misc';
 
 import { Component } from './component';
-import { fdValue } from '../misc/directives';
 import { generateNode } from './node';
+import { rValue } from '../misc/directives';
 
 function getUrlDepth(url: string) {
   return url.replace(/\/$/, '').split('/').length;
@@ -16,11 +16,11 @@ function compareUrlDepth(urlA: RouterPath, urlB: RouterPath) {
 
 export class ModuleRouter extends Component {
   private _arrPaths: Array<RouterPath> = [];
-  private _cUrl = fdValue('');
-  private _cState = fdValue('');
-  private _currentComp: FastDomNode = null;
+  private _cUrl = rValue('');
+  private _cState = rValue('');
+  private _currentComp: RevactNode = null;
 
-  template: FastDomNode = {
+  template: RevactNode = {
     tag: 'div',
     classList: ['router-view'],
   };

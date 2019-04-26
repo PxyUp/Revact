@@ -1,46 +1,37 @@
-import { Component, FastDomNode, createComponent, fdIf, fdObject, fdValue } from "../../src";
+import { Component, RevactNode, composite, createComponent, rValue } from "../../src";
 
 export function createExampleAttr() {
     return createComponent(DynamicAttr)
 }
 
 class DynamicAttr extends Component {
+    imgAttrs = rValue({ src: "https://www.w3schools.com/html/pic_trulli.jpg" });
+    btnAttrs = rValue({ disabled: false });
 
-    reactive = {
-        src: fdValue("https://www.w3schools.com/html/pic_trulli.jpg"),
-        disabled: fdIf(false),
-    }
-
-    fdObjects = {
-        imgAttrs: new fdObject({
-            src: this.src
-        }),
-        btnAttrs: new fdObject({
-            disabled: this.disabled
-        }),
-    }
-
-    get src() {
-        return this.reactive.src
-    }
-
-    get disabled() {
-        return this.reactive.disabled
-    }
+    rValues = {
+        imgAttrs: this.imgAttrs,
+        btnAttrs: this.btnAttrs,
+        imgSrc: composite([this.imgAttrs], (attrs) => attrs.src),
+        disabledValue: composite([this.btnAttrs], (attrs) => attrs.disabled),
+    } as any;
 
     onClick = () => {
-        this.src.value = "https://www.w3schools.com/html/img_girl.jpg"
+        this.rValues.imgAttrs.value = {
+            src: "https://www.w3schools.com/html/img_girl.jpg"
+        }
     }
 
     changeBtnClick = () => {
-        this.disabled.value = !this.disabled.value
+        this.rValues.btnAttrs.value = {
+            disabled: !this.rValues.btnAttrs.value.disabled
+        }
     }
 
     btnClick = () => {
         alert("hey")
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {
@@ -52,11 +43,11 @@ class DynamicAttr extends Component {
                     },
                     {
                         tag: "span",
-                        textValue: this.disabled
+                        textValue: this.rValues.disabledValue
                     },
                     {
                         tag: "button",
-                        attrs: this.fdObjects.btnAttrs,
+                        attrs: this.rValues.btnAttrs,
                         textValue: "I am button",
                         listeners: {
                             click: this.btnClick
@@ -80,14 +71,14 @@ class DynamicAttr extends Component {
             },
             {
                 tag: "span",
-                textValue: this.src
+                textValue: this.rValues.imgSrc
             },
             {
                 tag: "div",
                 children: [
                     {
                         tag: "img",
-                        attrs: this.fdObjects.imgAttrs
+                        attrs: this.rValues.imgAttrs
                     }
                 ]
             }

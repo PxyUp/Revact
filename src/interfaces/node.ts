@@ -1,15 +1,14 @@
 import { Observer } from '../observer/observer';
-import { fdObject } from '../observer/fdObject';
 
-export interface FastDomNode {
+export interface RevactNode {
   tag: string | 'textNode';
   show?: Observer<boolean> | boolean;
-  attrs?: { [key: string]: any } | fdObject<any>;
-  props?: { [key: string]: any } | fdObject<any>;
-  styles?: string | { [key: string]: any } | fdObject<any>;
+  attrs?: { [key: string]: any } | Observer<any>;
+  props?: { [key: string]: any } | Observer<any>;
+  styles?: string | { [key: string]: any } | Observer<any>;
   parent?: HTMLElement;
-  classList?: string | Array<string> | fdObject<boolean>;
-  children?: Array<FastDomNode | HTMLElement | Comment | Array<any>>;
+  classList?: string | Array<string> | { [key: string]: boolean } | Observer<any>;
+  children?: Array<RevactNode | HTMLElement | Comment | Array<any>>;
   listeners?: { [key: string]: any | Array<any> };
   textValue?: Observer<any> | string;
   instance?: any;

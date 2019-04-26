@@ -1,4 +1,4 @@
-import { bootstrap, fdValue } from "../src";
+import { bootstrap, rValue } from "../src";
 
 import { createComposite } from "./composite/composite";
 import { createCounter } from "./simple_counter/counter";
@@ -29,7 +29,7 @@ bootstrap('#counter', createCounter);
 bootstrap('#counter', createCounter);
 
 // Simple counters with one input
-const sharedValue = fdValue(0);
+const sharedValue = rValue(0);
 bootstrap('#counter_input', createCounters, sharedValue );
 bootstrap('#counter_input', createCounters, sharedValue );
 bootstrap('#counter_input', createCounters, sharedValue );

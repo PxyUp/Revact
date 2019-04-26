@@ -1,4 +1,4 @@
-import { Component, FastDomNode, Router, createComponent, createRouter, fdFor, fdIf, fdObject, matchRoute } from "../../src";
+import { Component, RevactNode, Router, createComponent, createRouter, rList, rValue, } from "../../src";
 
 import { RouteParams } from "../../src/interfaces/router";
 import { createCounter } from "../simple_counter/counter";
@@ -17,7 +17,7 @@ export function createTextNode(inputs = {}) {
 
 class TextNode extends Component {
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "textNode",
         textValue: this.inputs.id,
     }
@@ -74,20 +74,20 @@ class ExampleRouter extends Component {
         },
     ];
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
-            fdFor(this.list, (item) => {
-                const obs = fdIf(false);
+            rList(this.list, (item) => {
+                const obs = rValue({
+                    current: false
+                });
                 Router.getCurrentRoute().addSubscriber((value) => {
-                    obs.value = Router.isCurrentRoute(item.path);
+                    obs.value = { current: Router.isCurrentRoute(item.path) };
                 })
                 return {
                     tag: "button",
                     textValue: item.name,
-                    classList: new fdObject({
-                        current: obs,
-                    }),
+                    classList: obs,
                     listeners: {
                         click: () => item.click()
                     }

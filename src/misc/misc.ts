@@ -1,4 +1,4 @@
-import { FastDomNode } from '../interfaces/node';
+import { RevactNode } from '../interfaces/node';
 import { RouterPath } from '../interfaces/router';
 
 // Thank you, very much https://github.com/krasimir/navigo
@@ -27,6 +27,46 @@ export function setNodeStyle(node: HTMLElement, styles: { [key: string]: string 
   requestAnimationFrame(() => {
     Object.keys(styles).forEach((key: string) => {
       (node as HTMLElement).style.setProperty(key, (styles as any)[key]);
+    });
+  });
+}
+
+export function setTextContent(node: HTMLElement | Element, text: string) {
+  if (!node) {
+    return;
+  }
+  node.textContent = text;
+}
+
+export function setClassList(
+  node: HTMLElement | Element,
+  classList: string | Array<string> | { [key: string]: boolean },
+) {
+  if (!node) {
+    return;
+  }
+
+  if (typeof classList === 'string') {
+    requestAnimationFrame(() => {
+      node.className = classList;
+    });
+    return;
+  }
+
+  if (Array.isArray(classList)) {
+    requestAnimationFrame(() => {
+      node.className = classList.join(' ');
+    });
+    return;
+  }
+  requestAnimationFrame(() => {
+    Object.keys(classList).forEach(key => {
+      const value = classList[key];
+      if (value) {
+        node.classList.add(key);
+        return;
+      }
+      node.classList.remove(key);
     });
   });
 }
@@ -108,12 +148,12 @@ export function removeAllChild(node: HTMLElement) {
   }
 }
 
-export function removeAllListenersComponent(fdNodes: FastDomNode) {
+export function removeAllListenersComponent(fdNodes: RevactNode) {
   if (fdNodes.listeners) {
     removeNodeListener(fdNodes.domNode as HTMLElement, fdNodes.listeners);
   }
   if (fdNodes.children) {
-    fdNodes.children.forEach((item: FastDomNode) => {
+    fdNodes.children.forEach((item: RevactNode) => {
       if (!item.instance && item.tag) {
         removeAllListenersComponent(item);
       }
@@ -121,7 +161,7 @@ export function removeAllListenersComponent(fdNodes: FastDomNode) {
   }
 }
 
-export function callDeep(node: FastDomNode, method: string, direction: boolean, ...args: any) {
+export function callDeep(node: RevactNode, method: string, direction: boolean, ...args: any) {
   if (!node) {
     return;
   }

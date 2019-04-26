@@ -1,4 +1,4 @@
-import { Component, FastDomNode, createComponent, fdObject, fdValue } from "../../src";
+import { Component, RevactNode, createComponent, rValue } from "../../src";
 
 export function createStyles() {
     return createComponent(StylesComponent)
@@ -6,33 +6,31 @@ export function createStyles() {
 
 class StylesComponent extends Component {
 
-    reactive = {
-        bgFirstColor: fdValue("#" + ((1 << 24) * Math.random() | 0).toString(16)),
-        bgSecondColor: fdValue("background-color: #" + ((1 << 24) * Math.random() | 0).toString(16) + ";user-select: none;")
-    }
-
-    fdStyles = {
-        divFirstStyle: new fdObject({
-            'background-color': this.reactive.bgFirstColor,
+    rValues = {
+        divFirstStyle: rValue({
+            'background-color': "#" + ((1 << 24) * Math.random() | 0).toString(16),
             'user-select': 'none',
         }),
-        divSecondStyle: this.reactive.bgSecondColor,
+        divSecondStyle: rValue("background-color: #" + ((1 << 24) * Math.random() | 0).toString(16) + ";user-select: none;")
     }
 
     onClick = () => {
-        this.reactive.bgFirstColor.value = "#" + ((1 << 24) * Math.random() | 0).toString(16);
+        this.rValues.divFirstStyle.value = {
+            ...this.rValues.divFirstStyle.value,
+            'background-color': "#" + ((1 << 24) * Math.random() | 0).toString(16)
+        }
     }
 
     onClickSecond = () => {
-        this.reactive.bgSecondColor.value = "background-color: #"  + ((1 << 24) * Math.random() | 0).toString(16) + ";user-select: none;";
+        this.rValues.divSecondStyle.value = "background-color: #"  + ((1 << 24) * Math.random() | 0).toString(16) + ";user-select: none;";
     }
 
-    template: FastDomNode = {
+    template: RevactNode = {
         tag: "div",
         children: [
             {
                 tag: "div",
-                styles: this.fdStyles.divFirstStyle,
+                styles: this.rValues.divFirstStyle,
                 textValue: "Click me(change styles  object)",
                 listeners: {
                     click: this.onClick
@@ -40,7 +38,7 @@ class StylesComponent extends Component {
             },
             {
                 tag: "div",
-                styles: this.fdStyles.divSecondStyle,
+                styles: this.rValues.divSecondStyle,
                 textValue: "Click me(change css string)",
                 listeners: {
                     click: this.onClickSecond

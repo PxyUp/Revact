@@ -1,4 +1,4 @@
-import { Component, Observer, composite, createComponent, fdIf, fdObject, fdValue, nodeWrapper } from '../../src';
+import { Component, Observer, composite, createComponent, nodeWrapper, rValue } from '../../src';
 const dotStyle = {
     position: 'absolute',
     background: '#61dafb',
@@ -10,7 +10,7 @@ const dotStyle = {
 const targetSize = 25;
 
 class Dot extends Component {
-    private hover = fdIf(false)
+    private hover = rValue(false)
     private privateText = composite([this.hover, this.text], (hover, text) => {
         if (hover) {
             return `*${text}*`
@@ -77,9 +77,9 @@ function createSierpinskiTriangle(x: number, y: number, s: number, second: Obser
 
 class ApplicationTria extends Component {
     private start = Date.now();
-    seconds = fdValue(0)
-    scale = fdValue(0)
-    elapsed = fdValue(0)
+    seconds = rValue(0)
+    scale = rValue(0)
+    elapsed = rValue(0)
 
     style = composite([this.scale], (scale) => {
         return {
