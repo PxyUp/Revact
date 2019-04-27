@@ -58,11 +58,7 @@ export function rList<F extends any[]>(
   }
 
   const mapKeyFnIndex = new Map<any, number>();
-  let responseArray = iteration.value.map((item: any, index: number) => {
-    const el = mapFn(item, itemFn, inputs, index, keyFn);
-    mapKeyFnIndex.set(el.fdKey, index);
-    return el;
-  });
+  let responseArray: any[] = [];
 
   iteration.addSubscriber(value => {
     const parent: HTMLElement = (responseArray as any)._parent;

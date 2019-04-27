@@ -15,17 +15,6 @@ import { RevactNode } from '../interfaces/node';
 
 const instance = 'instance';
 
-const listSharedFn = {
-  textValue: setTextContent,
-} as { [key: string]: (node: HTMLElement, value: any) => void };
-
-const listNodeFn = {
-  styles: setNodeStyle,
-  classList: setClassList,
-  props: setProps,
-  attrs: setNodeAttrs,
-} as { [key: string]: (node: HTMLElement, value: any) => void };
-
 export function nodeWrapper(...args: any[]): RevactNode {
   return {
     tag: 'fragment',
@@ -51,47 +40,67 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
 
   node.domNode = rootNode;
 
-  const listSharedObservers = {
-    textValue: null,
-  } as { [key: string]: null | Observer<any> };
+  let textNodeSubscriber: (e: any) => void;
+  let styleSubscriber: (e: any) => void;
+  let classListSubscriber: (e: any) => void;
+  let propsSubscriber: (e: any) => void;
+  let attrsSubscriber: (e: any) => void;
 
-  const listNodeObservers = {
-    styles: null,
-    classList: null,
-    props: null,
-    attrs: null,
-  } as { [key: string]: null | Observer<any> };
-  // That can be apply for all type
-  Object.keys(listSharedObservers).forEach((key: string) => {
-    if ((node as any)[key]) {
-      if ((node as any)[key] instanceof Observer) {
-        const obs = (node as any)[key] as Observer<any>;
-        listSharedFn[key](rootNode as HTMLElement, obs.value);
-        obs.addSubscriber(newValue => {
-          listSharedFn[key](rootNode as HTMLElement, newValue);
-        });
-        listSharedObservers[key] = obs;
-        return;
-      }
-      listSharedFn[key](rootNode as HTMLElement, (node as any)[key]);
+  if (node.textValue) {
+    if (node.textValue instanceof Observer) {
+      textNodeSubscriber = newTextValue => {
+        setTextContent(rootNode as HTMLElement, newTextValue);
+      };
+      node.textValue.addSubscriber(textNodeSubscriber);
+    } else {
+      setTextContent(rootNode as HTMLElement, node.textValue);
     }
-  });
+  }
 
   if (node.tag !== 'textNode') {
-    Object.keys(listNodeObservers).forEach((key: string) => {
-      if ((node as any)[key]) {
-        if ((node as any)[key] instanceof Observer) {
-          const obs = (node as any)[key] as Observer<any>;
-          listNodeFn[key](rootNode as HTMLElement, obs.value);
-          obs.addSubscriber(newValue => {
-            listNodeFn[key](rootNode as HTMLElement, newValue);
-          });
-          listNodeObservers[key] = obs;
-          return;
-        }
-        listNodeFn[key](rootNode as HTMLElement, (node as any)[key]);
+    if (node.classList) {
+      if (node.classList instanceof Observer) {
+        classListSubscriber = newClassListValue => {
+          setClassList(rootNode as HTMLElement, newClassListValue);
+        };
+        node.classList.addSubscriber(classListSubscriber);
+      } else {
+        setClassList(rootNode as HTMLElement, node.classList);
       }
-    });
+    }
+
+    if (node.props) {
+      if (node.props instanceof Observer) {
+        propsSubscriber = newPropsValue => {
+          setProps(rootNode as HTMLElement, newPropsValue);
+        };
+        node.props.addSubscriber(propsSubscriber);
+      } else {
+        setProps(rootNode as HTMLElement, node.props);
+      }
+    }
+
+    if (node.styles) {
+      if (node.styles instanceof Observer) {
+        styleSubscriber = newStylesValue => {
+          setNodeStyle(rootNode as HTMLElement, newStylesValue);
+        };
+        node.styles.addSubscriber(styleSubscriber);
+      } else {
+        setNodeStyle(rootNode as HTMLElement, node.styles);
+      }
+    }
+
+    if (node.attrs) {
+      if (node.attrs instanceof Observer) {
+        attrsSubscriber = newAttrsValue => {
+          setNodeAttrs(rootNode as HTMLElement, newAttrsValue);
+        };
+        node.attrs.addSubscriber(attrsSubscriber);
+      } else {
+        setNodeAttrs(rootNode as HTMLElement, node.attrs);
+      }
+    }
 
     if (node.children) {
       const tempArr = [] as Array<HTMLElement | DocumentFragment | Comment | Array<any>>;
@@ -137,22 +146,31 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
   }
 
   const fakeDestroy = () => {
+    callDeep(node, 'destroy', true);
+
     if (node.tag !== 'textNode') {
       removeNodeListener(rootNode as HTMLElement, node.listeners);
     }
 
-    Object.keys(listSharedObservers).forEach(key => {
-      if (listSharedObservers[key]) {
-        listSharedObservers[key].destroy();
-      }
-    });
+    if (textNodeSubscriber) {
+      (node.textValue as Observer<any>).removeSubscriber(textNodeSubscriber);
+    }
 
-    Object.keys(listNodeObservers).forEach(key => {
-      if (listNodeObservers[key]) {
-        listNodeObservers[key].destroy();
-      }
-    });
-    callDeep(node, 'destroy', true);
+    if (attrsSubscriber) {
+      (node.attrs as Observer<any>).removeSubscriber(attrsSubscriber);
+    }
+
+    if (propsSubscriber) {
+      (node.props as Observer<any>).removeSubscriber(propsSubscriber);
+    }
+
+    if (classListSubscriber) {
+      (node.classList as Observer<any>).removeSubscriber(classListSubscriber);
+    }
+
+    if (styleSubscriber) {
+      (node.styles as Observer<any>).removeSubscriber(styleSubscriber);
+    }
   };
 
   if (typeof node.show === 'object') {
@@ -165,18 +183,22 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
             parent.replaceChild(rootNode, comment);
           }
           callDeep(node, 'reInit', false);
-          // List for observer textValue
-          Object.keys(listSharedObservers).forEach(key => {
-            if (listSharedObservers[key]) {
-              listSharedObservers[key].reInit();
-            }
-          });
-          // List for observer for node
-          Object.keys(listNodeObservers).forEach(key => {
-            if (listNodeObservers[key]) {
-              listNodeObservers[key].reInit();
-            }
-          });
+
+          if (styleSubscriber) {
+            (node.styles as Observer<any>).addSubscriber(styleSubscriber);
+          }
+          if (classListSubscriber) {
+            (node.classList as Observer<any>).addSubscriber(classListSubscriber);
+          }
+          if (propsSubscriber) {
+            (node.props as Observer<any>).addSubscriber(propsSubscriber);
+          }
+          if (attrsSubscriber) {
+            (node.attrs as Observer<any>).addSubscriber(attrsSubscriber);
+          }
+          if (textNodeSubscriber) {
+            (node.textValue as Observer<any>).addSubscriber(textNodeSubscriber);
+          }
           if (node.tag !== 'textNode') {
             addNodeListener(rootNode as HTMLElement, node.listeners);
           }
@@ -192,9 +214,6 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
     });
 
     if (node.show.value) {
-      if (node.instance) {
-        node.instance.onInit();
-      }
       return rootNode;
     } else {
       fakeDestroy();
