@@ -44,6 +44,33 @@ class CountersShared extends Component {
 const obs = rValue([])
 const obsFn = rValue([])
 
+let firstClickfr = true;
+const btnFirst = document.createElement("button")
+btnFirst.className = 'first'
+btnFirst.addEventListener('click', () => {
+    if (firstClickfr) {
+        obs.value = [1, 2, 3, 4, 5]
+        firstClickfr = false;
+        return;
+    }
+    obs.value = [1]
+})
+
+let firstClicksc = true;
+const btnSecond = document.createElement("button")
+btnSecond.className = 'second'
+btnSecond.addEventListener('click', () => {
+    if (firstClicksc) {
+        obsFn.value = [1, 2, 3, 4, 5]
+        firstClicksc = false;
+        return;
+    }
+    obsFn.value = [1]
+})
+document.body.appendChild(btnFirst)
+
+document.body.appendChild(btnSecond)
+
 export function createObsFor() {
     return {
         tag: "div",
@@ -63,24 +90,9 @@ export function createkeyFnObsFor() {
         classList: 'list_fn',
         children: [
             // Here we will on each changes obs, create createDiv with inputs { value: ...}
-            rList(obs, createCounters, [(e: any) => rValue(e)], (item: any) => item) // we do map from obs to reactive value
+            rList(obsFn, createCounters, [(e: any) => rValue(e)], (item: any) => item) // we do map from obs to reactive value
         ]
     };
 }
 
 document.body.appendChild(generateNode(createkeyFnObsFor()));
-
-setTimeout(() => {
-    obs.value = [1, 2, 3, 4, 5]
-    setTimeout(() => {
-        obs.value = [1]
-    }, 3000)
-}, 3000)
-
-
-setTimeout(() => {
-    obsFn.value = [1, 2, 3, 4, 5]
-    setTimeout(() => {
-        obsFn.value = [1]
-    }, 3000)
-}, 3000)

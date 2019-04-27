@@ -11,6 +11,7 @@ class Timer extends Component {
     }
     
     onInit() {
+        this.rValues.counter.value = 0;
         const timer = () => {
             this.timer = window.setTimeout(() => {
                 this.rValues.counter.value +=1

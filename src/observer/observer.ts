@@ -1,5 +1,5 @@
 export class Observer<T> {
-  private subscribers: Array<(e: T) => void> = [];
+  private _subs: Set<(e: T) => void> = new Set();
   private firstState: T;
   private isDestroy = false;
   constructor(private _value?: T, private forces: boolean = false) {
@@ -15,7 +15,7 @@ export class Observer<T> {
       return;
     }
     if (force) {
-      this.subscribers = [];
+      this._subs.clear();
     }
     this.isDestroy = true;
   }
@@ -29,13 +29,13 @@ export class Observer<T> {
     if (this.isDestroy) {
       return;
     }
-    this.subscribers.push(subscriber);
+    this._subs.add(subscriber);
+    subscriber(this._value);
   }
 
   removeSubscriber(subscriber: (e: T) => void) {
-    const index = this.subscribers.indexOf(subscriber);
-    if (index > -1) {
-      this.subscribers.splice(index, 1);
+    if (this._subs.has(subscriber)) {
+      this._subs.delete(subscriber);
     }
   }
 
@@ -47,10 +47,6 @@ export class Observer<T> {
       return;
     }
     this._value = value;
-    if (this.subscribers.length) {
-      this.subscribers.forEach(sub => {
-        sub(value);
-      });
-    }
+    this._subs.forEach(sub => sub(value));
   }
 }

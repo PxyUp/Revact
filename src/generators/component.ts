@@ -1,7 +1,8 @@
+import { asyncCall, removeAllListenersComponent } from '../misc/misc';
+
 import { ClassConstructor } from '../interfaces/component';
 import { Observer } from '../observer/observer';
 import { RevactNode } from '../interfaces/node';
-import { removeAllListenersComponent } from '../misc/misc';
 
 export function createComponent<T extends ClassConstructor<any>>(
   classProvider: T,
@@ -27,9 +28,14 @@ export class Component {
 
   destroy(...args: any) {
     const force = args[0];
+    Object.keys(this.rValues).forEach(key => {
+      this.rValues[key].destroy(...args);
+    });
+    this.onDestroy();
     if (force === true) {
       removeAllListenersComponent(this.template);
+      delete this.rValues;
+      delete this.template;
     }
-    this.onDestroy();
   }
 }
