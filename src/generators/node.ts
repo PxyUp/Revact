@@ -15,6 +15,17 @@ import { RevactNode } from '../interfaces/node';
 
 const instance = 'instance';
 
+const listSharedFn = {
+  textValue: setTextContent,
+} as { [key: string]: (node: HTMLElement, value: any) => void };
+
+const listNodeFn = {
+  styles: setNodeStyle,
+  classList: setClassList,
+  props: setProps,
+  attrs: setNodeAttrs,
+} as { [key: string]: (node: HTMLElement, value: any) => void };
+
 export function nodeWrapper(...args: any[]): RevactNode {
   return {
     tag: 'fragment',
@@ -28,34 +39,21 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
   }
   let rootNode: HTMLElement | Text | DocumentFragment;
 
-  if (node.tag === 'textNode') {
-    rootNode = document.createTextNode('');
-  }
-
-  if (node.tag === 'fragment') {
-    rootNode = document.createDocumentFragment();
-  }
-
   if (node.tag !== 'textNode' && node.tag !== 'fragment') {
     rootNode = document.createElement(node.tag);
+  } else {
+    if (node.tag === 'textNode') {
+      rootNode = document.createTextNode('');
+    } else {
+      rootNode = document.createDocumentFragment();
+    }
   }
 
   node.domNode = rootNode;
 
-  const listSharedFn = {
-    textValue: setTextContent,
-  } as { [key: string]: (node: HTMLElement, value: any) => void };
-
   const listSharedObservers = {
     textValue: null,
   } as { [key: string]: null | Observer<any> };
-
-  const listNodeFn = {
-    styles: setNodeStyle,
-    classList: setClassList,
-    props: setProps,
-    attrs: setNodeAttrs,
-  } as { [key: string]: (node: HTMLElement, value: any) => void };
 
   const listNodeObservers = {
     styles: null,
