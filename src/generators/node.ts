@@ -28,16 +28,14 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
   }
   let rootNode: HTMLElement | Text | DocumentFragment;
 
-  if (node.tag === 'textNode') {
-    rootNode = document.createTextNode('');
-  }
-
-  if (node.tag === 'fragment') {
-    rootNode = document.createDocumentFragment();
-  }
-
   if (node.tag !== 'textNode' && node.tag !== 'fragment') {
     rootNode = document.createElement(node.tag);
+  } else {
+    if (node.tag === 'textNode') {
+      rootNode = document.createTextNode('');
+    } else {
+      rootNode = document.createDocumentFragment();
+    }
   }
 
   node.domNode = rootNode;
