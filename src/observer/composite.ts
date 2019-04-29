@@ -17,8 +17,7 @@ export function composite(
     return results(...list.map(e => e.value));
   };
 
-  const initValue = getValue(arr);
-  const resultsObs = new Observer(initValue);
+  const resultsObs = new Observer();
 
   arr.forEach(item => {
     item.addSubscriber(() => {

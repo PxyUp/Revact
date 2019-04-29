@@ -5,7 +5,7 @@ export function createStyles() {
 }
 
 class StylesComponent extends Component {
-
+    
     rValues = {
         divFirstStyle: rValue({
             'background-color': "#" + ((1 << 24) * Math.random() | 0).toString(16),

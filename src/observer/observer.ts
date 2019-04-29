@@ -34,9 +34,11 @@ export class Observer<T> {
   }
 
   removeSubscriber(subscriber: (e: T) => void) {
-    if (this._subs.has(subscriber)) {
-      this._subs.delete(subscriber);
-    }
+    this._subs.delete(subscriber);
+  }
+
+  trigger() {
+    this._subs.forEach(sub => sub(this._value));
   }
 
   set value(value: T) {
@@ -47,6 +49,6 @@ export class Observer<T> {
       return;
     }
     this._value = value;
-    this._subs.forEach(sub => sub(value));
+    this.trigger();
   }
 }

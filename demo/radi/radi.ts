@@ -7,7 +7,7 @@ const dotStyle = {
     cursor: 'pointer',
 };
 
-const targetSize = 25;
+const targetSize = 6;
 
 class Dot extends Component {
     private hover = rValue(false)
