@@ -25,12 +25,14 @@ export class Observer<T> {
     this.value = this.firstState;
   }
 
-  addSubscriber(subscriber: (e: T) => void) {
+  addSubscriber(subscriber: (e: T) => void, emit = true) {
     if (this.isDestroy) {
       return;
     }
     this._subs.add(subscriber);
-    subscriber(this._value);
+    if (emit) {
+      subscriber(this._value);
+    }
   }
 
   removeSubscriber(subscriber: (e: T) => void) {

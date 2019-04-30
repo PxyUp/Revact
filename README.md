@@ -8,7 +8,7 @@ The library allows you to create quick and responsive interfaces using only JS /
 
 ## Usage
 ```sh
-yarn add revact@0.0.5-beta
+yarn add revact@0.0.6-beta
 ```
 
 ```typescript
