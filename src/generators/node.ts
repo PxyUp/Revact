@@ -12,6 +12,7 @@ import {
 
 import { Observer } from '../observer/observer';
 import { RevactNode } from '../interfaces/node';
+import { rList } from '../directives/rList';
 
 const instance = 'instance';
 
@@ -108,29 +109,18 @@ export function generateNode(node: RevactNode): HTMLElement | DocumentFragment |
         if (!item) {
           return;
         }
-        if (Array.isArray(item)) {
-          const tempSubArr = [] as Array<HTMLElement | Comment | DocumentFragment>;
-          item.forEach(el => {
-            if (!el.tag) {
-              tempSubArr.push(el as HTMLHtmlElement);
-              return;
-            }
-            const arrChild = generateNode(Object.assign(el, { parent: rootNode as any }) as any);
-            if (arrChild) {
-              tempSubArr.push(arrChild);
-            }
-          });
-          (item as any)._parent = rootNode;
-          tempArr.push(tempSubArr);
+
+        if (item instanceof rList) {
+          item.setParent(rootNode as HTMLElement);
           return;
         }
+
         if (!item.tag) {
-          tempArr.push(item);
-          return;
+          tempArr.push(item as HTMLHtmlElement);
         }
-        const child = generateNode(Object.assign(item, { parent: rootNode as any }));
-        if (child) {
-          tempArr.push(child);
+        const arrChild = generateNode(Object.assign(item, { parent: rootNode as any }) as any);
+        if (arrChild) {
+          tempArr.push(arrChild);
         }
       });
       renderList(rootNode as HTMLElement, tempArr);
